@@ -235,7 +235,353 @@
     },
     "other_videos": [],
     "scores": [],
+    "lyricist_name": "みなも",
     "commentary": null,
+    "tags": [
+      "CeVIO",
+      "vocal",
+      "pops"
+    ],
+    "featured": false,
+    "published": true,
+    "sample": false
+  },
+  {
+    "id": "minami-boshi-yori",
+    "slug": "minami-boshi-yori",
+    "type": "original",
+    "title_ja": "みなみ星より",
+    "title_en": "From the Southern Star",
+    "category": "pops",
+    "composition_year": null,
+    "published_date": "2017-12-30",
+    "ensemble": "pops",
+    "instrumentation_ja": "CeVIO ONE（歌唱）",
+    "instrumentation_en": "CeVIO ONE voice",
+    "instruments": [
+      "voice"
+    ],
+    "duration_seconds": 258,
+    "video": {
+      "youtube": "HuawSyr6AKs",
+      "niconico": null,
+      "fallback_url": "https://www.youtube.com/watch?v=HuawSyr6AKs"
+    },
+    "other_videos": [],
+    "scores": [],
+    "lyricist_name": "ふたみん",
+    "commentary": null,
+    "tags": [
+      "CeVIO",
+      "vocal",
+      "pops"
+    ],
+    "featured": false,
+    "published": true,
+    "sample": false
+  },
+  {
+    "id": "yumeminu-tsuki",
+    "slug": "yumeminu-tsuki",
+    "type": "original",
+    "title_ja": "夢見ぬ月",
+    "title_en": "Dreamless Moon",
+    "category": "pops",
+    "composition_year": null,
+    "published_date": "2018-02-23",
+    "ensemble": "pops",
+    "instrumentation_ja": "CeVIO ONE（歌唱）",
+    "instrumentation_en": "CeVIO ONE voice",
+    "instruments": [
+      "voice"
+    ],
+    "duration_seconds": 184,
+    "video": {
+      "youtube": "NPUUD995fEc",
+      "niconico": null,
+      "fallback_url": "https://www.youtube.com/watch?v=NPUUD995fEc"
+    },
+    "other_videos": [],
+    "scores": [],
+    "commentary": null,
+    "tags": [
+      "CeVIO",
+      "vocal",
+      "pops"
+    ],
+    "featured": false,
+    "published": true,
+    "sample": false
+  },
+  {
+    "id": "rururu",
+    "slug": "rururu",
+    "type": "original",
+    "title_ja": "るるる",
+    "title_en": "Rururu",
+    "category": "pops",
+    "composition_year": null,
+    "published_date": "2018-12-08",
+    "ensemble": "pops",
+    "instrumentation_ja": "CeVIO ONE（歌唱）",
+    "instrumentation_en": "CeVIO ONE voice",
+    "instruments": [
+      "voice"
+    ],
+    "duration_seconds": 234,
+    "video": {
+      "youtube": "qDdFMZr2ohY",
+      "niconico": null,
+      "fallback_url": "https://www.youtube.com/watch?v=qDdFMZr2ohY"
+    },
+    "other_videos": [],
+    "scores": [],
+    "lyricist_name": "湯島結代",
+    "commentary": null,
+    "tags": [
+      "CeVIO",
+      "vocal",
+      "pops"
+    ],
+    "featured": false,
+    "published": true,
+    "sample": false
+  },
+  {
+    "id": "hotaru",
+    "slug": "hotaru",
+    "type": "original",
+    "title_ja": "蛍",
+    "title_en": "Firefly",
+    "category": "pops",
+    "composition_year": null,
+    "published_date": "2019-02-17",
+    "ensemble": "pops",
+    "instrumentation_ja": "CeVIO さとうささら（歌唱）",
+    "instrumentation_en": "CeVIO Sato Sasara voice",
+    "instruments": [
+      "voice"
+    ],
+    "duration_seconds": 137,
+    "video": {
+      "youtube": "op7joP1Hza8",
+      "niconico": null,
+      "fallback_url": "https://www.youtube.com/watch?v=op7joP1Hza8"
+    },
+    "other_videos": [],
+    "scores": [],
+    "lyricist_name": "遠野音",
+    "commentary": null,
+    "tags": [
+      "CeVIO",
+      "vocal",
+      "pops"
+    ],
+    "featured": false,
+    "published": true,
+    "sample": false
+  },
+  {
+    "id": "kizuato-tsunagi",
+    "slug": "kizuato-tsunagi",
+    "type": "original",
+    "title_ja": "傷跡つなぎ",
+    "title_en": "Connecting Scars",
+    "category": "pops",
+    "composition_year": null,
+    "published_date": "2019-02-19",
+    "ensemble": "pops",
+    "instrumentation_ja": "CeVIO さとうささら（歌唱）",
+    "instrumentation_en": "CeVIO Sato Sasara voice",
+    "instruments": [
+      "voice"
+    ],
+    "duration_seconds": 243,
+    "video": {
+      "youtube": "VLfhgS-i3iw",
+      "niconico": null,
+      "fallback_url": "https://www.youtube.com/watch?v=VLfhgS-i3iw"
+    },
+    "other_videos": [],
+    "scores": [],
+    "lyricist_name": "souffle",
+    "commentary": null,
+    "tags": [
+      "CeVIO",
+      "vocal",
+      "pops"
+    ],
+    "featured": false,
+    "published": true,
+    "sample": false
+  },
+  {
+    "id": "sozo-no-kujira",
+    "slug": "sozo-no-kujira",
+    "type": "original",
+    "title_ja": "想像のくじら",
+    "title_en": "Imaginary Whale",
+    "category": "pops",
+    "composition_year": null,
+    "published_date": "2019-02-22",
+    "ensemble": "pops",
+    "instrumentation_ja": "CeVIO さとうささら（歌唱）",
+    "instrumentation_en": "CeVIO Sato Sasara voice",
+    "instruments": [
+      "voice"
+    ],
+    "duration_seconds": 150,
+    "video": {
+      "youtube": "MAljIQrj-Ow",
+      "niconico": null,
+      "fallback_url": "https://www.youtube.com/watch?v=MAljIQrj-Ow"
+    },
+    "other_videos": [],
+    "scores": [],
+    "lyricist_name": "TUCCA",
+    "commentary": null,
+    "tags": [
+      "CeVIO",
+      "vocal",
+      "pops"
+    ],
+    "featured": false,
+    "published": true,
+    "sample": false
+  },
+  {
+    "id": "shin",
+    "slug": "shin",
+    "type": "original",
+    "title_ja": "shin",
+    "title_en": "shin",
+    "category": "pops",
+    "composition_year": null,
+    "published_date": "2019-03-26",
+    "ensemble": "pops",
+    "instrumentation_ja": "CeVIO さとうささら（歌唱）",
+    "instrumentation_en": "CeVIO Sato Sasara voice",
+    "instruments": [
+      "voice"
+    ],
+    "duration_seconds": 83,
+    "video": {
+      "youtube": "p-WMqdx-qLA",
+      "niconico": null,
+      "fallback_url": "https://www.youtube.com/watch?v=p-WMqdx-qLA"
+    },
+    "other_videos": [],
+    "scores": [],
+    "lyricist_name": "TUCCA",
+    "commentary": null,
+    "tags": [
+      "CeVIO",
+      "vocal",
+      "pops"
+    ],
+    "featured": false,
+    "published": true,
+    "sample": false
+  },
+  {
+    "id": "yudachi",
+    "slug": "yudachi",
+    "type": "original",
+    "title_ja": "夕立",
+    "title_en": "Evening Shower",
+    "category": "pops",
+    "composition_year": null,
+    "published_date": "2019-04-21",
+    "ensemble": "pops",
+    "instrumentation_ja": "CeVIO さとうささら（歌唱）",
+    "instrumentation_en": "CeVIO Sato Sasara voice",
+    "instruments": [
+      "voice"
+    ],
+    "duration_seconds": 129,
+    "video": {
+      "youtube": "Ml2w3s3xUPs",
+      "niconico": null,
+      "fallback_url": "https://www.youtube.com/watch?v=Ml2w3s3xUPs"
+    },
+    "other_videos": [],
+    "scores": [],
+    "lyricist_name": "TUCCA",
+    "commentary": "commentary",
+    "commentary_ja": "途中で声がこもったように聞こえる箇所では、Cubaseのオートメーション機能を使って音色を切り替えています。",
+    "commentary_en": "In the passage where the voice takes on a muffled quality, Cubase automation is used to switch the vocal tone.",
+    "commentary_source": "https://www.youtube.com/watch?v=Ml2w3s3xUPs",
+    "tags": [
+      "CeVIO",
+      "vocal",
+      "pops"
+    ],
+    "featured": false,
+    "published": true,
+    "sample": false
+  },
+  {
+    "id": "doshin",
+    "slug": "doshin",
+    "type": "original",
+    "title_ja": "童心",
+    "title_en": "Childlike Heart",
+    "category": "pops",
+    "composition_year": null,
+    "published_date": "2019-05-02",
+    "ensemble": "pops",
+    "instrumentation_ja": "CeVIO さとうささら（歌唱）",
+    "instrumentation_en": "CeVIO Sato Sasara voice",
+    "instruments": [
+      "voice"
+    ],
+    "duration_seconds": 105,
+    "video": {
+      "youtube": "Nec7k2on7v0",
+      "niconico": null,
+      "fallback_url": "https://www.youtube.com/watch?v=Nec7k2on7v0"
+    },
+    "other_videos": [],
+    "scores": [],
+    "lyricist_name": "TUCCA",
+    "commentary": null,
+    "tags": [
+      "CeVIO",
+      "vocal",
+      "pops"
+    ],
+    "featured": false,
+    "published": true,
+    "sample": false
+  },
+  {
+    "id": "hi-ga-shizumu-hate-no-hoshi-kara",
+    "slug": "hi-ga-shizumu-hate-no-hoshi-kara",
+    "type": "original",
+    "title_ja": "日が沈む果ての星から",
+    "title_en": "From a Star Beyond Sunset",
+    "category": "pops",
+    "composition_year": null,
+    "published_date": "2019-08-22",
+    "ensemble": "pops",
+    "instrumentation_ja": "CeVIO ONE（歌唱）",
+    "instrumentation_en": "CeVIO ONE voice",
+    "instruments": [
+      "voice"
+    ],
+    "duration_seconds": 215,
+    "video": {
+      "youtube": "20CDLd-B4_4",
+      "niconico": null,
+      "fallback_url": "https://www.youtube.com/watch?v=20CDLd-B4_4"
+    },
+    "other_videos": [],
+    "scores": [],
+    "lyricist_name": "ふたみん",
+    "commentary": "commentary",
+    "commentary_ja": "角張ったテクノ風のバース（Aメロ・Bメロ）と、叙情的なサビの対比を軸にした作品です。",
+    "commentary_en": "The song is built around the contrast between angular, techno-like verse sections and a lyrical chorus.",
+    "commentary_source": "https://www.youtube.com/watch?v=20CDLd-B4_4",
     "tags": [
       "CeVIO",
       "vocal",
@@ -367,6 +713,7 @@
     },
     "other_videos": [],
     "scores": [],
+    "lyricist_name": "TUCCA",
     "commentary": null,
     "tags": [
       "CeVIO",
@@ -399,6 +746,7 @@
     },
     "other_videos": [],
     "scores": [],
+    "lyricist_name": "TUCCA",
     "commentary": null,
     "tags": [
       "CeVIO",
@@ -431,6 +779,40 @@
     },
     "other_videos": [],
     "scores": [],
+    "lyricist_name": "TUCCA",
+    "commentary": null,
+    "tags": [
+      "CeVIO",
+      "art-song"
+    ],
+    "featured": false,
+    "published": true,
+    "sample": false
+  },
+  {
+    "id": "akishigure-no-2",
+    "slug": "akishigure-no-2",
+    "type": "original",
+    "title_ja": "七篇の詩による「秋雨」より 二",
+    "title_en": "Autumn Rain, after Seven Poems — II",
+    "category": "classical",
+    "composition_year": null,
+    "published_date": "2019-03-24",
+    "ensemble": "art-song",
+    "instrumentation_ja": "CeVIO さとうささら（歌唱）",
+    "instrumentation_en": "CeVIO Sato Sasara voice",
+    "instruments": [
+      "voice"
+    ],
+    "duration_seconds": 56,
+    "video": {
+      "youtube": "g-moeWzsN5E",
+      "niconico": null,
+      "fallback_url": "https://www.youtube.com/watch?v=g-moeWzsN5E"
+    },
+    "other_videos": [],
+    "scores": [],
+    "lyricist_name": "TUCCA",
     "commentary": null,
     "tags": [
       "CeVIO",
