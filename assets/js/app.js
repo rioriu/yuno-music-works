@@ -35,7 +35,8 @@ const ENSEMBLES = {
   mixed: {ja: '混成アンサンブル', en: 'Mixed Ensemble'},
   orchestra: {ja: 'オーケストラ', en: 'Orchestra'},
   wind: {ja: '吹奏楽', en: 'Wind Ensemble'},
-  vocal: {ja: '歌曲・ボーカル作品', en: 'Vocal Works'},
+  'art-song': {ja: '歌曲', en: 'Art Song'},
+  pops: {ja: 'POPS', en: 'POPS'},
   choral: {ja: '合唱', en: 'Choral Works'},
 };
 

@@ -221,7 +221,7 @@
     "category": "pops",
     "composition_year": null,
     "published_date": "2017-07-16",
-    "ensemble": "vocal",
+    "ensemble": "pops",
     "instrumentation_ja": "CeVIO ONE（歌唱）",
     "instrumentation_en": "CeVIO ONE voice",
     "instruments": [
@@ -238,7 +238,8 @@
     "commentary": null,
     "tags": [
       "CeVIO",
-      "vocal"
+      "vocal",
+      "pops"
     ],
     "featured": false,
     "published": true,
@@ -349,10 +350,10 @@
     "type": "original",
     "title_ja": "七篇の詩による「秋雨」より 四",
     "title_en": "Autumn Rain, after Seven Poems — IV",
-    "category": "pops",
+    "category": "classical",
     "composition_year": null,
     "published_date": "2019-03-01",
-    "ensemble": "vocal",
+    "ensemble": "art-song",
     "instrumentation_ja": "CeVIO さとうささら（歌唱）",
     "instrumentation_en": "CeVIO Sato Sasara voice",
     "instruments": [
@@ -369,7 +370,7 @@
     "commentary": null,
     "tags": [
       "CeVIO",
-      "vocal"
+      "art-song"
     ],
     "featured": false,
     "published": true,
@@ -381,10 +382,10 @@
     "type": "original",
     "title_ja": "七篇の詩による「秋雨」より 六",
     "title_en": "Autumn Rain, after Seven Poems — VI",
-    "category": "pops",
+    "category": "classical",
     "composition_year": null,
     "published_date": "2019-03-12",
-    "ensemble": "vocal",
+    "ensemble": "art-song",
     "instrumentation_ja": "CeVIO さとうささら（歌唱）",
     "instrumentation_en": "CeVIO Sato Sasara voice",
     "instruments": [
@@ -401,7 +402,7 @@
     "commentary": null,
     "tags": [
       "CeVIO",
-      "vocal"
+      "art-song"
     ],
     "featured": false,
     "published": true,
@@ -413,10 +414,10 @@
     "type": "original",
     "title_ja": "七篇の詩による「秋雨」より 一",
     "title_en": "Autumn Rain, after Seven Poems — I",
-    "category": "pops",
+    "category": "classical",
     "composition_year": null,
     "published_date": "2019-02-28",
-    "ensemble": "vocal",
+    "ensemble": "art-song",
     "instrumentation_ja": "CeVIO さとうささら（歌唱）",
     "instrumentation_en": "CeVIO Sato Sasara voice",
     "instruments": [
@@ -433,7 +434,7 @@
     "commentary": null,
     "tags": [
       "CeVIO",
-      "vocal"
+      "art-song"
     ],
     "featured": false,
     "published": true,
@@ -630,7 +631,7 @@
     "category": "classical",
     "composition_year": 2020,
     "published_date": "2020-02-12",
-    "ensemble": "vocal",
+    "ensemble": "art-song",
     "instrumentation_ja": "CeVIO さとうささら＋ピアノ",
     "instrumentation_en": "CeVIO Sato Sasara voice and piano",
     "instruments": [
@@ -748,7 +749,7 @@
     "category": "classical",
     "composition_year": 2021,
     "published_date": "2021-02-13",
-    "ensemble": "vocal",
+    "ensemble": "art-song",
     "instrumentation_ja": "独唱＋ピアノ",
     "instrumentation_en": "Solo voice and piano",
     "instruments": [
@@ -781,7 +782,7 @@
     "category": "classical",
     "composition_year": 2021,
     "published_date": "2021-02-13",
-    "ensemble": "vocal",
+    "ensemble": "art-song",
     "instrumentation_ja": "独唱＋ピアノ",
     "instrumentation_en": "Solo voice and piano",
     "instruments": [
@@ -814,7 +815,7 @@
     "category": "classical",
     "composition_year": 2021,
     "published_date": "2021-02-13",
-    "ensemble": "vocal",
+    "ensemble": "art-song",
     "instrumentation_ja": "独唱＋ピアノ",
     "instrumentation_en": "Solo voice and piano",
     "instruments": [
@@ -847,7 +848,7 @@
     "category": "classical",
     "composition_year": 2021,
     "published_date": "2021-02-13",
-    "ensemble": "vocal",
+    "ensemble": "art-song",
     "instrumentation_ja": "独唱＋ピアノ",
     "instrumentation_en": "Solo voice and piano",
     "instruments": [
