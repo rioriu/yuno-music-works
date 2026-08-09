@@ -33,14 +33,14 @@
     "sample": false
   },
   {
-    "id": "brass-quartet-sonata-mov-1",
-    "slug": "brass-quartet-sonata-mov-1",
+    "id": "brass-quartet-sonata",
+    "slug": "brass-quartet-sonata",
     "type": "original",
-    "title_ja": "金管四重奏のためのソナタ 第1楽章",
-    "title_en": "Sonata for Brass Quartet — I",
+    "title_ja": "金管四重奏のためのソナタ",
+    "title_en": "Sonata for Brass Quartet",
     "category": "classical",
     "composition_year": 2013,
-    "published_date": "2017-04-18",
+    "published_date": "2021-10-30",
     "ensemble": "brass",
     "instrumentation_ja": "トランペット、ホルン、トロンボーン、チューバ",
     "instrumentation_en": "Trumpet, horn, trombone and tuba",
@@ -50,11 +50,11 @@
       "trombone",
       "tuba"
     ],
-    "duration_seconds": 311,
+    "duration_seconds": 927,
     "video": {
-      "youtube": "rO0jeuCsbA0",
+      "youtube": null,
       "niconico": null,
-      "fallback_url": "https://www.youtube.com/watch?v=rO0jeuCsbA0"
+      "fallback_url": null
     },
     "other_videos": [],
     "scores": [],
@@ -67,7 +67,67 @@
     ],
     "featured": false,
     "published": true,
-    "sample": false
+    "sample": false,
+    "parts_label_ja": "全3楽章",
+    "parts_label_en": "3 movements",
+    "parts_heading_ja": "楽章",
+    "parts_heading_en": "Movements",
+    "parts": [
+      {
+        "id": "brass-quartet-sonata-mov-1",
+        "slug": "brass-quartet-sonata-mov-1",
+        "title_ja": "第1楽章",
+        "title_en": "I",
+        "composition_year": 2013,
+        "published_date": "2017-04-18",
+        "duration_seconds": 311,
+        "video": {
+          "youtube": "rO0jeuCsbA0",
+          "niconico": null,
+          "fallback_url": "https://www.youtube.com/watch?v=rO0jeuCsbA0"
+        },
+        "other_videos": [],
+        "scores": [],
+        "commentary": null
+      },
+      {
+        "id": "brass-quartet-sonata-mov-2",
+        "slug": "brass-quartet-sonata-mov-2",
+        "title_ja": "第2楽章",
+        "title_en": "II",
+        "composition_year": 2013,
+        "published_date": "2021-01-03",
+        "duration_seconds": 353,
+        "video": {
+          "youtube": "pi9fNS_cdkM",
+          "niconico": null,
+          "fallback_url": "https://www.youtube.com/watch?v=pi9fNS_cdkM"
+        },
+        "other_videos": [],
+        "scores": [],
+        "commentary": "commentary",
+        "commentary_ja": "牧歌的な主部、少し雰囲気の異なる中間部、主部をおおむねなぞりながら別の展開を見せる再現部からなる三部形式。",
+        "commentary_en": "A ternary-form movement with a pastoral main section, a contrasting middle, and a return that broadly retraces the opening while developing differently.",
+        "commentary_source": "https://www.youtube.com/watch?v=pi9fNS_cdkM"
+      },
+      {
+        "id": "brass-quartet-sonata-mov-3",
+        "slug": "brass-quartet-sonata-mov-3",
+        "title_ja": "第3楽章 ロンド",
+        "title_en": "III. Rondo",
+        "composition_year": 2013,
+        "published_date": "2021-10-30",
+        "duration_seconds": 263,
+        "video": {
+          "youtube": "QKKoy1KxuNs",
+          "niconico": null,
+          "fallback_url": "https://www.youtube.com/watch?v=QKKoy1KxuNs"
+        },
+        "other_videos": [],
+        "scores": [],
+        "commentary": null
+      }
+    ]
   },
   {
     "id": "austrian-anthem-variations",
@@ -113,25 +173,25 @@
     "sample": false
   },
   {
-    "id": "piano-sonata-no-2-mov-2",
-    "slug": "piano-sonata-no-2-mov-2",
+    "id": "piano-sonata-no-2",
+    "slug": "piano-sonata-no-2",
     "type": "original",
-    "title_ja": "ピアノ・ソナタ第2番 第2楽章",
-    "title_en": "Piano Sonata No. 2 — II",
+    "title_ja": "ピアノ・ソナタ第2番",
+    "title_en": "Piano Sonata No. 2",
     "category": "classical",
-    "composition_year": 2016,
-    "published_date": "2017-04-20",
+    "composition_year": null,
+    "published_date": "2018-03-15",
     "ensemble": "piano",
     "instrumentation_ja": "ピアノ独奏",
     "instrumentation_en": "Piano solo",
     "instruments": [
       "piano"
     ],
-    "duration_seconds": 458,
+    "duration_seconds": 1337,
     "video": {
-      "youtube": "IEFR1QXn04c",
+      "youtube": null,
       "niconico": null,
-      "fallback_url": "https://www.youtube.com/watch?v=IEFR1QXn04c"
+      "fallback_url": null
     },
     "other_videos": [],
     "scores": [],
@@ -141,7 +201,70 @@
     ],
     "featured": false,
     "published": true,
-    "sample": false
+    "sample": false,
+    "parts_label_ja": "全3楽章",
+    "parts_label_en": "3 movements",
+    "parts_heading_ja": "楽章",
+    "parts_heading_en": "Movements",
+    "parts": [
+      {
+        "id": "piano-sonata-no-2-mov-1",
+        "slug": "piano-sonata-no-2-mov-1",
+        "title_ja": "第1楽章",
+        "title_en": "I",
+        "composition_year": 2013,
+        "published_date": "2013-03-26",
+        "duration_seconds": 513,
+        "video": {
+          "youtube": null,
+          "niconico": "sm20439717",
+          "fallback_url": "https://www.nicovideo.jp/watch/sm20439717"
+        },
+        "other_videos": [],
+        "scores": [],
+        "commentary": null
+      },
+      {
+        "id": "piano-sonata-no-2-mov-2",
+        "slug": "piano-sonata-no-2-mov-2",
+        "title_ja": "第2楽章 Largo",
+        "title_en": "II. Largo",
+        "composition_year": 2016,
+        "published_date": "2017-04-20",
+        "duration_seconds": 458,
+        "video": {
+          "youtube": "IEFR1QXn04c",
+          "niconico": null,
+          "fallback_url": "https://www.youtube.com/watch?v=IEFR1QXn04c"
+        },
+        "other_videos": [
+          {
+          "label_ja": "ニコニコ動画版",
+            "label_en": "Niconico version",
+            "url": "https://www.nicovideo.jp/watch/sm30354640"
+          }
+        ],
+        "scores": [],
+        "commentary": null
+      },
+      {
+        "id": "piano-sonata-no-2-mov-3",
+        "slug": "piano-sonata-no-2-mov-3",
+        "title_ja": "第3楽章 Allegretto",
+        "title_en": "III. Allegretto",
+        "composition_year": null,
+        "published_date": "2018-03-15",
+        "duration_seconds": 366,
+        "video": {
+          "youtube": null,
+          "niconico": "sm32890543",
+          "fallback_url": "https://www.nicovideo.jp/watch/sm32890543"
+        },
+        "other_videos": [],
+        "scores": [],
+        "commentary": null
+      }
+    ]
   },
   {
     "id": "sonata-cello-piano",
@@ -232,7 +355,7 @@
     },
     "other_videos": [],
     "scores": [],
-    "lyricist_name": "みなも",
+    "lyricist_name": "みなも様",
     "commentary": null,
     "tags": [
       "CeVIO",
@@ -266,7 +389,7 @@
     },
     "other_videos": [],
     "scores": [],
-    "lyricist_name": "ふたみん",
+    "lyricist_name": "ふたみん様",
     "commentary": null,
     "tags": [
       "CeVIO",
@@ -333,7 +456,7 @@
     },
     "other_videos": [],
     "scores": [],
-    "lyricist_name": "湯島結代",
+    "lyricist_name": "湯島結代様",
     "commentary": null,
     "tags": [
       "CeVIO",
@@ -367,7 +490,7 @@
     },
     "other_videos": [],
     "scores": [],
-    "lyricist_name": "遠野音",
+    "lyricist_name": "遠野音様",
     "commentary": null,
     "tags": [
       "CeVIO",
@@ -401,7 +524,7 @@
     },
     "other_videos": [],
     "scores": [],
-    "lyricist_name": "souffle",
+    "lyricist_name": "souffle様",
     "commentary": null,
     "tags": [
       "CeVIO",
@@ -435,7 +558,7 @@
     },
     "other_videos": [],
     "scores": [],
-    "lyricist_name": "TUCCA",
+    "lyricist_name": "TUCCA様",
     "commentary": null,
     "tags": [
       "CeVIO",
@@ -469,7 +592,7 @@
     },
     "other_videos": [],
     "scores": [],
-    "lyricist_name": "TUCCA",
+    "lyricist_name": "TUCCA様",
     "commentary": null,
     "tags": [
       "CeVIO",
@@ -503,7 +626,7 @@
     },
     "other_videos": [],
     "scores": [],
-    "lyricist_name": "TUCCA",
+    "lyricist_name": "TUCCA様",
     "commentary": null,
     "tags": [
       "CeVIO",
@@ -537,7 +660,7 @@
     },
     "other_videos": [],
     "scores": [],
-    "lyricist_name": "TUCCA",
+    "lyricist_name": "TUCCA様",
     "commentary": null,
     "tags": [
       "CeVIO",
@@ -571,7 +694,7 @@
     },
     "other_videos": [],
     "scores": [],
-    "lyricist_name": "ふたみん",
+    "lyricist_name": "ふたみん様",
     "commentary": "commentary",
     "commentary_ja": "角張ったテクノ風のバース（Aメロ・Bメロ）と、叙情的なサビの対比を軸にした作品。",
     "commentary_en": "The song is built around the contrast between angular, techno-like verse sections and a lyrical chorus.",
@@ -685,110 +808,11 @@
     "sample": false
   },
   {
-    "id": "akishigure-no-4",
-    "slug": "akishigure-no-4",
+    "id": "akishigure",
+    "slug": "akishigure",
     "type": "original",
-    "title_ja": "七篇の詩による「秋雨」より 四",
-    "title_en": "Autumn Rain, after Seven Poems — IV",
-    "category": "classical",
-    "composition_year": null,
-    "published_date": "2019-03-01",
-    "ensemble": "art-song",
-    "instrumentation_ja": "CeVIO さとうささら（歌唱）",
-    "instrumentation_en": "CeVIO Sato Sasara voice",
-    "instruments": [
-      "voice"
-    ],
-    "duration_seconds": 55,
-    "video": {
-      "youtube": "Jwuelc9P9UE",
-      "niconico": null,
-      "fallback_url": "https://www.youtube.com/watch?v=Jwuelc9P9UE"
-    },
-    "other_videos": [],
-    "scores": [],
-    "lyricist_name": "TUCCA",
-    "commentary": null,
-    "tags": [
-      "CeVIO",
-      "art-song"
-    ],
-    "featured": false,
-    "published": true,
-    "sample": false
-  },
-  {
-    "id": "akishigure-no-6",
-    "slug": "akishigure-no-6",
-    "type": "original",
-    "title_ja": "七篇の詩による「秋雨」より 六",
-    "title_en": "Autumn Rain, after Seven Poems — VI",
-    "category": "classical",
-    "composition_year": null,
-    "published_date": "2019-03-12",
-    "ensemble": "art-song",
-    "instrumentation_ja": "CeVIO さとうささら（歌唱）",
-    "instrumentation_en": "CeVIO Sato Sasara voice",
-    "instruments": [
-      "voice"
-    ],
-    "duration_seconds": 39,
-    "video": {
-      "youtube": "WupYUaahjBo",
-      "niconico": null,
-      "fallback_url": "https://www.youtube.com/watch?v=WupYUaahjBo"
-    },
-    "other_videos": [],
-    "scores": [],
-    "lyricist_name": "TUCCA",
-    "commentary": null,
-    "tags": [
-      "CeVIO",
-      "art-song"
-    ],
-    "featured": false,
-    "published": true,
-    "sample": false
-  },
-  {
-    "id": "akishigure-no-1",
-    "slug": "akishigure-no-1",
-    "type": "original",
-    "title_ja": "七篇の詩による「秋雨」より 一",
-    "title_en": "Autumn Rain, after Seven Poems — I",
-    "category": "classical",
-    "composition_year": null,
-    "published_date": "2019-02-28",
-    "ensemble": "art-song",
-    "instrumentation_ja": "CeVIO さとうささら（歌唱）",
-    "instrumentation_en": "CeVIO Sato Sasara voice",
-    "instruments": [
-      "voice"
-    ],
-    "duration_seconds": 103,
-    "video": {
-      "youtube": "gBTbemYGqRQ",
-      "niconico": null,
-      "fallback_url": "https://www.youtube.com/watch?v=gBTbemYGqRQ"
-    },
-    "other_videos": [],
-    "scores": [],
-    "lyricist_name": "TUCCA",
-    "commentary": null,
-    "tags": [
-      "CeVIO",
-      "art-song"
-    ],
-    "featured": false,
-    "published": true,
-    "sample": false
-  },
-  {
-    "id": "akishigure-no-2",
-    "slug": "akishigure-no-2",
-    "type": "original",
-    "title_ja": "七篇の詩による「秋雨」より 二",
-    "title_en": "Autumn Rain, after Seven Poems — II",
+    "title_ja": "七篇の詩による「秋雨」",
+    "title_en": "Autumn Rain, after Seven Poems",
     "category": "classical",
     "composition_year": null,
     "published_date": "2019-03-24",
@@ -798,11 +822,11 @@
     "instruments": [
       "voice"
     ],
-    "duration_seconds": 56,
+    "duration_seconds": 253,
     "video": {
-      "youtube": "g-moeWzsN5E",
+      "youtube": null,
       "niconico": null,
-      "fallback_url": "https://www.youtube.com/watch?v=g-moeWzsN5E"
+      "fallback_url": null
     },
     "other_videos": [],
     "scores": [],
@@ -814,7 +838,81 @@
     ],
     "featured": false,
     "published": true,
-    "sample": false
+    "sample": false,
+    "parts_label_ja": "4曲公開",
+    "parts_label_en": "4 songs available",
+    "parts_heading_ja": "公開曲",
+    "parts_heading_en": "Available songs",
+    "parts": [
+      {
+        "id": "akishigure-no-1",
+        "slug": "akishigure-no-1",
+        "title_ja": "一",
+        "title_en": "I",
+        "composition_year": null,
+        "published_date": "2019-02-28",
+        "duration_seconds": 103,
+        "video": {
+          "youtube": "gBTbemYGqRQ",
+          "niconico": null,
+          "fallback_url": "https://www.youtube.com/watch?v=gBTbemYGqRQ"
+        },
+        "other_videos": [],
+        "scores": [],
+        "commentary": null
+      },
+      {
+        "id": "akishigure-no-2",
+        "slug": "akishigure-no-2",
+        "title_ja": "二",
+        "title_en": "II",
+        "composition_year": null,
+        "published_date": "2019-03-24",
+        "duration_seconds": 56,
+        "video": {
+          "youtube": "g-moeWzsN5E",
+          "niconico": null,
+          "fallback_url": "https://www.youtube.com/watch?v=g-moeWzsN5E"
+        },
+        "other_videos": [],
+        "scores": [],
+        "commentary": null
+      },
+      {
+        "id": "akishigure-no-4",
+        "slug": "akishigure-no-4",
+        "title_ja": "四",
+        "title_en": "IV",
+        "composition_year": null,
+        "published_date": "2019-03-01",
+        "duration_seconds": 55,
+        "video": {
+          "youtube": "Jwuelc9P9UE",
+          "niconico": null,
+          "fallback_url": "https://www.youtube.com/watch?v=Jwuelc9P9UE"
+        },
+        "other_videos": [],
+        "scores": [],
+        "commentary": null
+      },
+      {
+        "id": "akishigure-no-6",
+        "slug": "akishigure-no-6",
+        "title_ja": "六",
+        "title_en": "VI",
+        "composition_year": null,
+        "published_date": "2019-03-12",
+        "duration_seconds": 39,
+        "video": {
+          "youtube": "WupYUaahjBo",
+          "niconico": null,
+          "fallback_url": "https://www.youtube.com/watch?v=WupYUaahjBo"
+        },
+        "other_videos": [],
+        "scores": [],
+        "commentary": null
+      }
+    ]
   },
   {
     "id": "waltz-for-violin-piano",
@@ -1032,46 +1130,6 @@
     "sample": false
   },
   {
-    "id": "brass-quartet-sonata-mov-2",
-    "slug": "brass-quartet-sonata-mov-2",
-    "type": "original",
-    "title_ja": "金管四重奏のためのソナタ 第2楽章",
-    "title_en": "Sonata for Brass Quartet — II",
-    "category": "classical",
-    "composition_year": 2013,
-    "published_date": "2021-01-03",
-    "ensemble": "brass",
-    "instrumentation_ja": "トランペット、ホルン、トロンボーン、チューバ",
-    "instrumentation_en": "Trumpet, horn, trombone and tuba",
-    "instruments": [
-      "trumpet",
-      "horn",
-      "trombone",
-      "tuba"
-    ],
-    "duration_seconds": 353,
-    "video": {
-      "youtube": "pi9fNS_cdkM",
-      "niconico": null,
-      "fallback_url": "https://www.youtube.com/watch?v=pi9fNS_cdkM"
-    },
-    "other_videos": [],
-    "scores": [],
-    "commentary": "commentary",
-    "commentary_ja": "牧歌的な主部、少し雰囲気の異なる中間部、主部をおおむねなぞりながら別の展開を見せる再現部からなる三部形式。",
-    "commentary_en": "A ternary-form movement with a pastoral main section, a contrasting middle, and a return that broadly retraces the opening while developing differently.",
-    "commentary_source": "https://www.youtube.com/watch?v=pi9fNS_cdkM",
-    "tags": [
-      "trumpet",
-      "horn",
-      "trombone",
-      "tuba"
-    ],
-    "featured": false,
-    "published": true,
-    "sample": false
-  },
-  {
     "id": "mizu-kagami",
     "slug": "mizu-kagami",
     "type": "original",
@@ -1114,11 +1172,11 @@
     "sample": false
   },
   {
-    "id": "portrait-introduction",
-    "slug": "portrait-introduction",
+    "id": "portrait",
+    "slug": "portrait",
     "type": "original",
-    "title_ja": "歌曲集「肖像画」より 1. 序",
-    "title_en": "Portrait, a Song Cycle — I. Introduction",
+    "title_ja": "歌曲集「肖像画」",
+    "title_en": "Portrait, a Song Cycle",
     "category": "classical",
     "composition_year": 2021,
     "published_date": "2021-02-13",
@@ -1129,11 +1187,11 @@
       "voice",
       "piano"
     ],
-    "duration_seconds": 194,
+    "duration_seconds": 723,
     "video": {
-      "youtube": "mzhDGDFpLjY",
+      "youtube": null,
       "niconico": null,
-      "fallback_url": "https://www.youtube.com/watch?v=mzhDGDFpLjY"
+      "fallback_url": null
     },
     "other_videos": [],
     "scores": [],
@@ -1144,106 +1202,81 @@
     ],
     "featured": false,
     "published": true,
-    "sample": false
-  },
-  {
-    "id": "portrait-sketch",
-    "slug": "portrait-sketch",
-    "type": "original",
-    "title_ja": "歌曲集「肖像画」より 3. スケッチ",
-    "title_en": "Portrait, a Song Cycle — III. Sketch",
-    "category": "classical",
-    "composition_year": 2021,
-    "published_date": "2021-02-13",
-    "ensemble": "art-song",
-    "instrumentation_ja": "独唱＋ピアノ",
-    "instrumentation_en": "Solo voice and piano",
-    "instruments": [
-      "voice",
-      "piano"
-    ],
-    "duration_seconds": 133,
-    "video": {
-      "youtube": "ymCVjhDW5dQ",
-      "niconico": null,
-      "fallback_url": "https://www.youtube.com/watch?v=ymCVjhDW5dQ"
-    },
-    "other_videos": [],
-    "scores": [],
-    "commentary": null,
-    "tags": [
-      "voice",
-      "piano"
-    ],
-    "featured": false,
-    "published": true,
-    "sample": false
-  },
-  {
-    "id": "portrait-daydream",
-    "slug": "portrait-daydream",
-    "type": "original",
-    "title_ja": "歌曲集「肖像画」より 2. 白昼夢（トローニー）",
-    "title_en": "Portrait, a Song Cycle — II. Daydream (Tronie)",
-    "category": "classical",
-    "composition_year": 2021,
-    "published_date": "2021-02-13",
-    "ensemble": "art-song",
-    "instrumentation_ja": "独唱＋ピアノ",
-    "instrumentation_en": "Solo voice and piano",
-    "instruments": [
-      "voice",
-      "piano"
-    ],
-    "duration_seconds": 194,
-    "video": {
-      "youtube": "jYWPOyB479A",
-      "niconico": null,
-      "fallback_url": "https://www.youtube.com/watch?v=jYWPOyB479A"
-    },
-    "other_videos": [],
-    "scores": [],
-    "commentary": null,
-    "tags": [
-      "voice",
-      "piano"
-    ],
-    "featured": false,
-    "published": true,
-    "sample": false
-  },
-  {
-    "id": "portrait-night-watch",
-    "slug": "portrait-night-watch",
-    "type": "original",
-    "title_ja": "歌曲集「肖像画」より 4. 夜警",
-    "title_en": "Portrait, a Song Cycle — IV. Night Watch",
-    "category": "classical",
-    "composition_year": 2021,
-    "published_date": "2021-02-13",
-    "ensemble": "art-song",
-    "instrumentation_ja": "独唱＋ピアノ",
-    "instrumentation_en": "Solo voice and piano",
-    "instruments": [
-      "voice",
-      "piano"
-    ],
-    "duration_seconds": 202,
-    "video": {
-      "youtube": "8pHS6hIZgpY",
-      "niconico": null,
-      "fallback_url": "https://www.youtube.com/watch?v=8pHS6hIZgpY"
-    },
-    "other_videos": [],
-    "scores": [],
-    "commentary": null,
-    "tags": [
-      "voice",
-      "piano"
-    ],
-    "featured": false,
-    "published": true,
-    "sample": false
+    "sample": false,
+    "parts_label_ja": "全4曲",
+    "parts_label_en": "4 songs",
+    "parts_heading_ja": "曲目",
+    "parts_heading_en": "Songs",
+    "parts": [
+      {
+        "id": "portrait-introduction",
+        "slug": "portrait-introduction",
+        "title_ja": "1. 序",
+        "title_en": "I. Introduction",
+        "composition_year": 2021,
+        "published_date": "2021-02-13",
+        "duration_seconds": 194,
+        "video": {
+          "youtube": "mzhDGDFpLjY",
+          "niconico": null,
+          "fallback_url": "https://www.youtube.com/watch?v=mzhDGDFpLjY"
+        },
+        "other_videos": [],
+        "scores": [],
+        "commentary": null
+      },
+      {
+        "id": "portrait-daydream",
+        "slug": "portrait-daydream",
+        "title_ja": "2. 白昼夢（トローニー）",
+        "title_en": "II. Daydream (Tronie)",
+        "composition_year": 2021,
+        "published_date": "2021-02-13",
+        "duration_seconds": 194,
+        "video": {
+          "youtube": "jYWPOyB479A",
+          "niconico": null,
+          "fallback_url": "https://www.youtube.com/watch?v=jYWPOyB479A"
+        },
+        "other_videos": [],
+        "scores": [],
+        "commentary": null
+      },
+      {
+        "id": "portrait-sketch",
+        "slug": "portrait-sketch",
+        "title_ja": "3. スケッチ",
+        "title_en": "III. Sketch",
+        "composition_year": 2021,
+        "published_date": "2021-02-13",
+        "duration_seconds": 133,
+        "video": {
+          "youtube": "ymCVjhDW5dQ",
+          "niconico": null,
+          "fallback_url": "https://www.youtube.com/watch?v=ymCVjhDW5dQ"
+        },
+        "other_videos": [],
+        "scores": [],
+        "commentary": null
+      },
+      {
+        "id": "portrait-night-watch",
+        "slug": "portrait-night-watch",
+        "title_ja": "4. 夜警",
+        "title_en": "IV. Night Watch",
+        "composition_year": 2021,
+        "published_date": "2021-02-13",
+        "duration_seconds": 202,
+        "video": {
+          "youtube": "8pHS6hIZgpY",
+          "niconico": null,
+          "fallback_url": "https://www.youtube.com/watch?v=8pHS6hIZgpY"
+        },
+        "other_videos": [],
+        "scores": [],
+        "commentary": null
+      }
+    ]
   },
   {
     "id": "bumble-mumbo",
@@ -1271,43 +1304,6 @@
     "commentary": null,
     "tags": [
       "horn"
-    ],
-    "featured": false,
-    "published": true,
-    "sample": false
-  },
-  {
-    "id": "brass-quartet-sonata-mov-3",
-    "slug": "brass-quartet-sonata-mov-3",
-    "type": "original",
-    "title_ja": "金管四重奏のためのソナタ 第3楽章 ロンド",
-    "title_en": "Sonata for Brass Quartet — III. Rondo",
-    "category": "classical",
-    "composition_year": 2013,
-    "published_date": "2021-10-30",
-    "ensemble": "brass",
-    "instrumentation_ja": "トランペット、ホルン、トロンボーン、チューバ",
-    "instrumentation_en": "Trumpet, horn, trombone and tuba",
-    "instruments": [
-      "trumpet",
-      "horn",
-      "trombone",
-      "tuba"
-    ],
-    "duration_seconds": 263,
-    "video": {
-      "youtube": "QKKoy1KxuNs",
-      "niconico": null,
-      "fallback_url": "https://www.youtube.com/watch?v=QKKoy1KxuNs"
-    },
-    "other_videos": [],
-    "scores": [],
-    "commentary": null,
-    "tags": [
-      "trumpet",
-      "horn",
-      "trombone",
-      "tuba"
     ],
     "featured": false,
     "published": true,
@@ -1454,42 +1450,11 @@
     "sample": false
   },
   {
-    "id": "kaze-no-ryotei-kaze-tatsu",
-    "slug": "kaze-no-ryotei-kaze-tatsu",
+    "id": "kaze-no-ryotei",
+    "slug": "kaze-no-ryotei",
     "type": "original",
-    "title_ja": "混声合唱組曲「風の旅程」より 1. 風発つ",
-    "title_en": "The Journey of the Wind — I. Kaze Tatsu",
-    "category": "classical",
-    "composition_year": 2019,
-    "published_date": "2022-05-28",
-    "ensemble": "choral",
-    "instrumentation_ja": "混声合唱",
-    "instrumentation_en": "Mixed choir",
-    "instruments": [
-      "choir"
-    ],
-    "duration_seconds": 342,
-    "video": {
-      "youtube": "NOZ2QSszF5s",
-      "niconico": null,
-      "fallback_url": "https://www.youtube.com/watch?v=NOZ2QSszF5s"
-    },
-    "other_videos": [],
-    "scores": [],
-    "commentary": null,
-    "tags": [
-      "choir"
-    ],
-    "featured": false,
-    "published": true,
-    "sample": false
-  },
-  {
-    "id": "kaze-no-ryotei-asa-yorokobi",
-    "slug": "kaze-no-ryotei-asa-yorokobi",
-    "type": "original",
-    "title_ja": "混声合唱組曲「風の旅程」より 2. 朝、歓びとともに",
-    "title_en": "The Journey of the Wind — II. Morning, with Joy",
+    "title_ja": "混声合唱組曲「風の旅程」",
+    "title_en": "The Journey of the Wind",
     "category": "classical",
     "composition_year": null,
     "published_date": "2023-05-26",
@@ -1499,11 +1464,11 @@
     "instruments": [
       "choir"
     ],
-    "duration_seconds": 207,
+    "duration_seconds": 746,
     "video": {
-      "youtube": "ZjkSCc7Xoyw",
+      "youtube": null,
       "niconico": null,
-      "fallback_url": "https://www.youtube.com/watch?v=ZjkSCc7Xoyw"
+      "fallback_url": null
     },
     "other_videos": [],
     "scores": [],
@@ -1513,38 +1478,64 @@
     ],
     "featured": false,
     "published": true,
-    "sample": false
-  },
-  {
-    "id": "kaze-no-ryotei-sora-egaku",
-    "slug": "kaze-no-ryotei-sora-egaku",
-    "type": "original",
-    "title_ja": "混声合唱組曲「風の旅程」より そらえがく",
-    "title_en": "The Journey of the Wind — Sora Egaku",
-    "category": "classical",
-    "composition_year": null,
-    "published_date": "2022-10-15",
-    "ensemble": "choral",
-    "instrumentation_ja": "混声合唱",
-    "instrumentation_en": "Mixed choir",
-    "instruments": [
-      "choir"
-    ],
-    "duration_seconds": 197,
-    "video": {
-      "youtube": "5WwOlZEWEk4",
-      "niconico": null,
-      "fallback_url": "https://www.youtube.com/watch?v=5WwOlZEWEk4"
-    },
-    "other_videos": [],
-    "scores": [],
-    "commentary": null,
-    "tags": [
-      "choir"
-    ],
-    "featured": false,
-    "published": true,
-    "sample": false
+    "sample": false,
+    "parts_label_ja": "3曲",
+    "parts_label_en": "3 pieces",
+    "parts_heading_ja": "曲目",
+    "parts_heading_en": "Pieces",
+    "parts": [
+      {
+        "id": "kaze-no-ryotei-kaze-tatsu",
+        "slug": "kaze-no-ryotei-kaze-tatsu",
+        "title_ja": "1. 風発つ",
+        "title_en": "I. Kaze Tatsu",
+        "composition_year": 2019,
+        "published_date": "2022-05-28",
+        "duration_seconds": 342,
+        "video": {
+          "youtube": "NOZ2QSszF5s",
+          "niconico": null,
+          "fallback_url": "https://www.youtube.com/watch?v=NOZ2QSszF5s"
+        },
+        "other_videos": [],
+        "scores": [],
+        "commentary": null
+      },
+      {
+        "id": "kaze-no-ryotei-asa-yorokobi",
+        "slug": "kaze-no-ryotei-asa-yorokobi",
+        "title_ja": "2. 朝、歓びとともに",
+        "title_en": "II. Morning, with Joy",
+        "composition_year": null,
+        "published_date": "2023-05-26",
+        "duration_seconds": 207,
+        "video": {
+          "youtube": "ZjkSCc7Xoyw",
+          "niconico": null,
+          "fallback_url": "https://www.youtube.com/watch?v=ZjkSCc7Xoyw"
+        },
+        "other_videos": [],
+        "scores": [],
+        "commentary": null
+      },
+      {
+        "id": "kaze-no-ryotei-sora-egaku",
+        "slug": "kaze-no-ryotei-sora-egaku",
+        "title_ja": "そらえがく",
+        "title_en": "Sora Egaku",
+        "composition_year": null,
+        "published_date": "2022-10-15",
+        "duration_seconds": 197,
+        "video": {
+          "youtube": "5WwOlZEWEk4",
+          "niconico": null,
+          "fallback_url": "https://www.youtube.com/watch?v=5WwOlZEWEk4"
+        },
+        "other_videos": [],
+        "scores": [],
+        "commentary": null
+      }
+    ]
   },
   {
     "id": "shuka-no-uta",
