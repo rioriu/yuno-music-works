@@ -115,7 +115,7 @@ function card(work) {
     : credits ? `<p class="arrangement-origin">${credits}</p>` : '';
   const actions = [
     ...(work.other_videos || []).map(item => `<a${ext(item.url)}>${esc(label(item, 'label'))}</a>`),
-    ...(work.scores || []).map(item => `<a${ext(item.url)}>${esc(label(item, 'label'))} · ${esc(item.vendor)}</a>`),
+    ...(work.scores || []).map(item => `<a${ext(item.url)}>${esc(label(item, 'label'))}</a>`),
     ...(work.commentary ? [`<a href="${rootLink(`${work.commentary}/?work=${encodeURIComponent(work.id)}`)}">${t('commentary')}</a>`] : []),
   ];
   const ensemble = ENSEMBLES[work.ensemble]?.[state.lang];
