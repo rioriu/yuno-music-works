@@ -119,8 +119,8 @@ function card(work) {
     ...(work.commentary ? [`<a href="${rootLink(`${work.commentary}/?work=${encodeURIComponent(work.id)}`)}">${t('commentary')}</a>`] : []),
   ];
   const ensemble = ENSEMBLES[work.ensemble]?.[state.lang];
-  return `<article class="work">
-    <header class="work-heading"><div><h2>${esc(label(work, 'title'))}</h2>${secondaryTitle}</div></header>
+  return `<article class="work" id="${esc(work.slug)}">
+    <header class="work-heading"><div><h2><a href="#${esc(work.slug)}">${esc(label(work, 'title'))}</a></h2>${secondaryTitle}</div></header>
     ${origin}
     <div class="work-meta">
       ${Number.isInteger(work.composition_year) ? `<span>${work.composition_year}${state.lang === 'ja' ? '年' : ''}</span>` : ''}
@@ -170,6 +170,18 @@ async function renderCatalog() {
   if (category && params.has('category')) category.value = params.get('category');
   if (ensemble && params.has('ensemble')) ensemble.value = params.get('ensemble');
 
+  const scrollToHash = () => {
+    if (!location.hash) return;
+    let slug;
+    try {
+      slug = decodeURIComponent(location.hash.slice(1));
+    } catch {
+      return;
+    }
+    const work = document.getElementById(slug);
+    if (work?.classList.contains('work')) work.scrollIntoView();
+  };
+
   const render = () => {
     const items = all.filter(work => (!category || !category.value || work.category === category.value) && (!ensemble || !ensemble.value || work.ensemble === ensemble.value));
     items.sort((a, b) => {
@@ -188,8 +200,10 @@ async function renderCatalog() {
       history.replaceState(null, '', next);
     }
     lazyVideos();
+    requestAnimationFrame(scrollToHash);
   };
   [category, ensemble, sort].filter(Boolean).forEach(control => control.addEventListener('change', render));
+  window.addEventListener('hashchange', scrollToHash);
   render();
 }
 
