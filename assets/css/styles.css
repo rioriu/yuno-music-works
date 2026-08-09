@@ -34,6 +34,13 @@ a:focus-visible,button:focus-visible,select:focus-visible{outline:3px solid var(
 .entry-link{display:block;border-top:2px solid var(--accent);padding-top:1rem;color:var(--text);text-decoration:none}
 .entry-link strong{display:block;font:1.65rem var(--serif)}
 .entry-link span{color:var(--muted);font-size:.92rem}
+.intro-grid .entry-link{position:relative;display:flex;flex-direction:column;justify-content:center;min-height:10.5rem;padding:1.5rem 5rem 1.5rem 1.5rem;border:1px solid var(--rule);border-top:3px solid var(--accent);background:radial-gradient(circle at 100% 0%,rgba(12,95,99,.1),transparent 42%),linear-gradient(135deg,#fffdf8 0%,#eef3ef 100%);overflow:hidden;transition:transform .18s ease,background-color .18s ease,border-color .18s ease,box-shadow .18s ease}
+.intro-grid .entry-link:after{content:'→';position:absolute;top:50%;right:1.35rem;display:grid;place-items:center;width:2.65rem;height:2.65rem;border:1px solid var(--accent);border-radius:50%;color:var(--accent);font-size:1.25rem;line-height:1;transform:translateY(-50%);transition:background-color .18s ease,color .18s ease,transform .18s ease}
+.intro-grid .entry-link:hover{opacity:1;border-color:var(--accent);background:radial-gradient(circle at 100% 0%,rgba(12,95,99,.18),transparent 45%),linear-gradient(135deg,#fffdf8 0%,#e5efeb 100%);box-shadow:0 1rem 2rem rgba(26,26,26,.1);transform:translateY(-.3rem)}
+.intro-grid .entry-link:hover:after{background:var(--accent);color:var(--bg);transform:translateY(-50%) translateX(.15rem)}
+.intro-grid .entry-link:active{transform:translateY(-.05rem)}
+.intro-grid .entry-link strong{margin-bottom:.45rem;font-size:clamp(1.5rem,2.7vw,2rem)}
+.intro-grid .entry-link span{line-height:1.5}
 .text-link{font-weight:600}
 .updates{border-top:1px solid var(--rule)}
 .update{display:grid;grid-template-columns:7.5rem 1fr;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--rule)}
