@@ -39,8 +39,7 @@ a:focus-visible,button:focus-visible,select:focus-visible{outline:3px solid var(
 .intro-grid .entry-link:hover{opacity:1;border-color:var(--accent);background:radial-gradient(circle at 100% 0%,rgba(12,95,99,.18),transparent 45%),linear-gradient(135deg,#fffdf8 0%,#e5efeb 100%);box-shadow:0 1rem 2rem rgba(26,26,26,.1);transform:translateY(-.3rem)}
 .intro-grid .entry-link:hover:after{background:var(--accent);color:var(--bg);transform:translateY(-50%) translateX(.15rem)}
 .intro-grid .entry-link:active{transform:translateY(-.05rem)}
-.intro-grid .entry-link strong{margin-bottom:.45rem;font-size:clamp(1.5rem,2.7vw,2rem)}
-.intro-grid .entry-link span{line-height:1.5}
+.intro-grid .entry-link strong{font-size:clamp(1.5rem,2.7vw,2rem)}
 .text-link{font-weight:600}
 .updates{border-top:1px solid var(--rule)}
 .update{display:grid;grid-template-columns:7.5rem 1fr;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--rule)}
