@@ -67,6 +67,7 @@ select{max-width:100%;background:var(--bg);border:1px solid var(--text);border-r
 .contact-form{display:grid;gap:1.25rem;margin:2.5rem 0 1.5rem;padding:1.5rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
 .contact-field{display:grid;gap:.35rem}
 .contact-field label{font-size:.85rem;font-weight:700}
+.required-mark{color:#b42318;margin-left:.2rem}
 .contact-field input,.contact-field textarea{width:100%;border:1px solid var(--rule);border-radius:0;background:#fff;color:var(--text);font:inherit;padding:.65rem .75rem}
 .contact-field input{min-height:2.75rem}
 .contact-field textarea{min-height:12rem;resize:vertical}
