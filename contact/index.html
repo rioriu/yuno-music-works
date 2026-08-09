@@ -1,1 +1,54 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Contact — YUNO</title><link rel="stylesheet" href="../assets/css/styles.css"><script type="module" src="../assets/js/app.js"></script></head><body data-page="contact"><header class="site-header" data-site-header></header><main class="shell prose" id="main"><header class="page-heading"><div class="eyebrow">Contact</div><h1 data-ja="お問い合わせ" data-en="Contact">お問い合わせ</h1></header><p data-ja="お問い合わせに関する最新の案内は、以下の公式プロフィールでご確認ください。" data-en="Please check the official profiles below for the current contact details.">お問い合わせに関する最新の案内は、以下の公式プロフィールでご確認ください。</p><h2 data-ja="公式の公開先" data-en="Official public channels">公式の公開先</h2><ul><li><a href="https://www.youtube.com/@YUNO926535" target="_blank" rel="noopener">YouTube</a></li><li><a href="https://store.piascore.com/search?c=786" target="_blank" rel="noopener">Piascore</a></li><li><a href="https://www.nicovideo.jp/mylist/63081091" target="_blank" rel="noopener">ニコニコ動画</a></li></ul></main><footer class="site-footer" data-site-footer></footer></body></html>
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Contact — YUNO</title>
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <script type="module" src="../assets/js/app.js"></script>
+</head>
+<body data-page="contact">
+  <header class="site-header" data-site-header></header>
+
+  <main class="shell prose" id="main">
+    <header class="page-heading">
+      <div class="eyebrow">Contact</div>
+      <h1 data-ja="お問い合わせ" data-en="Contact">お問い合わせ</h1>
+    </header>
+
+    <p data-ja="お問い合わせはこちらのフォームからお送りください。内容を確認のうえ、必要に応じて返信いたします。" data-en="Please use the form below to get in touch. We will review your message and reply when necessary.">お問い合わせはこちらのフォームからお送りください。内容を確認のうえ、必要に応じて返信いたします。</p>
+
+    <form class="contact-form" action="https://formspree.io/f/meajewlw" method="post">
+      <div class="contact-field">
+        <label for="contact-name"><span data-ja="お名前" data-en="Name">お名前</span></label>
+        <input id="contact-name" name="name" type="text" autocomplete="name" required>
+      </div>
+
+      <div class="contact-field">
+        <label for="contact-email"><span data-ja="メールアドレス" data-en="Email address">メールアドレス</span></label>
+        <input id="contact-email" name="email" type="email" autocomplete="email" required>
+        <p class="contact-field-note" data-ja="返信が必要な場合に使用します。" data-en="We will use this address if a reply is needed.">返信が必要な場合に使用します。</p>
+      </div>
+
+      <div class="contact-field">
+        <label for="contact-message"><span data-ja="お問い合わせ内容" data-en="Message">お問い合わせ内容</span></label>
+        <textarea id="contact-message" name="message" rows="8" required></textarea>
+      </div>
+
+      <input type="hidden" name="_subject" value="YUNO Website Contact">
+      <button class="contact-submit" type="submit"><span data-ja="送信" data-en="Send">送信</span></button>
+    </form>
+
+    <p class="contact-note" data-ja="送信内容はフォームサービスを経由して通知されます。機密性の高い情報は入力しないでください。" data-en="Submissions are handled through a form service. Please do not include highly sensitive information.">送信内容はフォームサービスを経由して通知されます。機密性の高い情報は入力しないでください。</p>
+
+    <h2 data-ja="公式の公開チャンネル" data-en="Official public channels">公式の公開チャンネル</h2>
+    <ul>
+      <li><a href="https://www.youtube.com/@YUNO926535" target="_blank" rel="noopener">YouTube</a></li>
+      <li><a href="https://store.piascore.com/search?c=786" target="_blank" rel="noopener">Piascore</a></li>
+      <li><a href="https://www.nicovideo.jp/mylist/63081091" target="_blank" rel="noopener">ニコニコ動画</a></li>
+    </ul>
+  </main>
+
+  <footer class="site-footer" data-site-footer></footer>
+</body>
+</html>
