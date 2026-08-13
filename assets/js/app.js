@@ -51,6 +51,7 @@ function buildWorkIndex(works) {
 }
 function detailHref(parent, hash = '') { return `${rootLink(`originals/work/?work=${encodeURIComponent(parent.id)}`)}${hash ? `#${encodeURIComponent(hash)}` : ''}`; }
 function catalogHref(work) { return rootLink(`originals/list/?ensemble=${encodeURIComponent(work.ensemble)}`); }
+function catalogWorkHref(work) { return `${catalogHref(work)}#${encodeURIComponent(work.slug)}`; }
 function commentaryHref(work) { return rootLink(`${String(work.commentary).replace(/^\/+|\/+$/g,'')}/?work=${encodeURIComponent(work.id)}`); }
 function videoMarkup(work) {
   const video = work.video || {}; let src = null;
@@ -94,7 +95,7 @@ function originalTable(items) {
   const years = [...groups.keys()].sort((a,b) => a === null ? 1 : b === null ? -1 : b - a);
   return years.map(year => {
     const id = year === null ? 'year-unknown' : `year-${year}`, heading = year === null ? (state.lang === 'ja' ? '作曲年不明' : 'Year unknown') : `${year}${state.lang === 'ja' ? '年' : ''}`;
-    const rows = groups.get(year).sort((a,b) => label(a,'title').localeCompare(label(b,'title'),state.lang)).map(work => `<tr><th scope="row"><a href="${detailHref(work)}">${esc(label(work,'title'))}</a></th><td>${esc(label(work,'instrumentation'))}</td></tr>`).join('');
+    const rows = groups.get(year).sort((a,b) => label(a,'title').localeCompare(label(b,'title'),state.lang)).map(work => `<tr><th scope="row"><a href="${catalogWorkHref(work)}">${esc(label(work,'title'))}</a></th><td>${esc(label(work,'instrumentation'))}</td></tr>`).join('');
     const columns = state.lang === 'ja' ? ['作品名','編成'] : ['Title','Instrumentation'];
     return `<section class="year-group" aria-labelledby="${id}"><h2 id="${id}">${heading}</h2><div class="year-table-wrap" tabindex="0"><table class="work-index"><thead><tr><th scope="col">${columns[0]}</th><th scope="col">${columns[1]}</th></tr></thead><tbody>${rows}</tbody></table></div></section>`;
   }).join('');
@@ -113,16 +114,21 @@ async function renderCatalog() {
   const works = await getJson('works.json'), index = buildWorkIndex(works), all = works.filter(work => work.published && work.type === document.body.dataset.catalog);
   const category = document.querySelector('[name=category]'), ensemble = document.querySelector('[name=ensemble]'), sort = document.querySelector('[name=sort]'), params = new URLSearchParams(location.search);
   if (category && params.has('category')) category.value = params.get('category'); if (ensemble && params.has('ensemble')) ensemble.value = params.get('ensemble');
-  if (document.body.dataset.catalog === 'original' && location.hash) { let slug; try { slug = decodeURIComponent(location.hash.slice(1)); } catch {} const hit = index.bySlug.get(slug); if (hit?.parent?.published && hit.parent.type === 'original') { location.replace(detailHref(hit.parent, hit.work.slug)); return; } if (hit && !hit.parent && hit.work.published && hit.work.type === 'original') { location.replace(detailHref(hit.work)); return; } }
+  if (document.body.dataset.catalog === 'original' && location.hash) { let slug; try { slug = decodeURIComponent(location.hash.slice(1)); } catch {} const hit = index.bySlug.get(slug); if (hit?.parent?.published && hit.parent.type === 'original') { location.replace(detailHref(hit.parent, hit.work.slug)); return; } }
   const render = () => {
     const items = all.filter(work => (!category || !category.value || work.category === category.value) && (!ensemble || !ensemble.value || work.ensemble === ensemble.value));
-    if (document.body.dataset.catalog === 'original') output.innerHTML = items.length ? originalTable(items) : `<p class="empty-state">${t('noWorks')}</p>`;
-    else { items.sort((a,b) => { if (sort?.value === 'title') return label(a,'title').localeCompare(label(b,'title'),state.lang); if (!a.published_date && !b.published_date) return 0; if (!a.published_date) return 1; if (!b.published_date) return -1; return sort?.value === 'oldest' ? a.published_date.localeCompare(b.published_date) : b.published_date.localeCompare(a.published_date); }); output.innerHTML = items.length ? items.map(card).join('') : `<p class="empty-state">${t('noWorks')}</p>`; }
+    items.sort((a,b) => { if (sort?.value === 'title') return label(a,'title').localeCompare(label(b,'title'),state.lang); if (!a.published_date && !b.published_date) return 0; if (!a.published_date) return 1; if (!b.published_date) return -1; return sort?.value === 'oldest' ? a.published_date.localeCompare(b.published_date) : b.published_date.localeCompare(a.published_date); });
+    output.innerHTML = items.length ? items.map(card).join('') : `<p class="empty-state">${t('noWorks')}</p>`;
     const summary = document.querySelector('[data-filter-summary]'); if (summary) summary.textContent = ensemble?.value && ENSEMBLES[ensemble.value] ? ENSEMBLES[ensemble.value][state.lang] : t('all');
     if (document.body.dataset.catalog === 'original') { const next = new URL(location.href); if (ensemble?.value) next.searchParams.set('ensemble',ensemble.value); else next.searchParams.delete('ensemble'); history.replaceState(null,'',next); }
-    if (document.body.dataset.catalog !== 'original') lazyVideos(); requestAnimationFrame(focusHash);
+    lazyVideos(); requestAnimationFrame(focusHash);
   };
   [category,ensemble,sort].filter(Boolean).forEach(control => control.addEventListener('change',render)); window.addEventListener('hashchange',focusHash); render();
+}
+async function renderOriginalOverview() {
+  const output = document.querySelector('[data-original-overview]'); if (!output) return;
+  const works = await getJson('works.json'), originals = works.filter(work => work.published && work.type === 'original');
+  output.innerHTML = originals.length ? originalTable(originals) : `<p class="empty-state">${t('noWorks')}</p>`;
 }
 function partMarkup(parent, part) {
   const links = actions(part);
@@ -131,10 +137,9 @@ function partMarkup(parent, part) {
 async function renderWorkDetail() {
   const output = document.querySelector('[data-work-detail]'); if (!output) return;
   const works = await getJson('works.json'), index = buildWorkIndex(works), id = new URLSearchParams(location.search).get('work'), hit = index.byId.get(id);
-  if (!hit || hit.parent || !hit.work.published || hit.work.type !== 'original') { output.innerHTML = `<p class="empty-state">${t('notFound')}</p><p><a href="${rootLink('originals/list/')}">${t('backToWorks')}</a></p>`; return; }
+  if (!hit || hit.parent || !hit.work.published || !isMultipart(hit.work)) { output.innerHTML = `<p class="empty-state">${t('notFound')}</p><p><a href="${rootLink('originals/list/')}">${t('backToWorks')}</a></p>`; return; }
   const work = hit.work; document.title = `${label(work,'title')} — YUNO`;
-  const links = actions(work), content = isMultipart(work) ? `<section class="parts" aria-labelledby="parts-heading"><h2 id="parts-heading">${esc(label(work,'parts_heading') || t('parts'))}</h2>${work.parts.map(part => partMarkup(work,part)).join('')}</section>` : `<section class="work-detail-content">${videoMarkup(work)}${links.length ? `<div class="work-actions">${links.join('')}</div>` : ''}</section>`;
-  output.innerHTML = `<header class="page-heading"><div class="eyebrow">Original Works</div><h1>${esc(label(work,'title'))}</h1>${credits(work) ? `<p>${credits(work)}</p>` : ''}${metadata(work,isMultipart(work) ? label(work,'parts_label') : '')}</header>${content}<p class="catalog-back"><a href="${catalogHref(work)}">${t('backToWorks')}</a></p>`;
+  output.innerHTML = `<header class="page-heading"><div class="eyebrow">Original Works</div><h1>${esc(label(work,'title'))}</h1>${credits(work) ? `<p>${credits(work)}</p>` : ''}${metadata(work,label(work,'parts_label'))}</header><section class="parts" aria-labelledby="parts-heading"><h2 id="parts-heading">${esc(label(work,'parts_heading') || t('parts'))}</h2>${work.parts.map(part => partMarkup(work,part)).join('')}</section><p class="catalog-back"><a href="${catalogHref(work)}">${t('backToWorks')}</a></p>`;
   lazyVideos(); requestAnimationFrame(focusHash);
 }
 async function renderUpdates() {
@@ -150,6 +155,6 @@ async function renderCommentary() {
 }
 document.addEventListener('DOMContentLoaded', async () => {
   renderShell(); localizeStatic();
-  try { await Promise.all([renderCatalog(),renderWorkDetail(),renderUpdates(),renderCommentary()]); }
-  catch (error) { console.error(error); document.querySelectorAll('[data-work-list],[data-work-detail],[data-updates],[data-commentary-page]').forEach(element => { if (!element.innerHTML) element.innerHTML = `<p class="empty-state">${state.lang === 'ja' ? 'コンテンツを読み込めませんでした。' : 'Content could not be loaded.'}</p>`; }); }
+  try { await Promise.all([renderCatalog(),renderOriginalOverview(),renderWorkDetail(),renderUpdates(),renderCommentary()]); }
+  catch (error) { console.error(error); document.querySelectorAll('[data-work-list],[data-original-overview],[data-work-detail],[data-updates],[data-commentary-page]').forEach(element => { if (!element.innerHTML) element.innerHTML = `<p class="empty-state">${state.lang === 'ja' ? 'コンテンツを読み込めませんでした。' : 'Content could not be loaded.'}</p>`; }); }
 });
