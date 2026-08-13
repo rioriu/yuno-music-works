@@ -74,10 +74,14 @@ function metadata(work, partLabel = '') {
   return `<div class="work-meta">${Number.isInteger(work.composition_year) ? `<span>${work.composition_year}${state.lang === 'ja' ? '年' : ''}</span>` : ''}${ensemble ? `<span>${esc(ensemble)}</span>` : ''}<span>${esc(label(work,'instrumentation'))}</span>${partLabel ? `<span>${esc(partLabel)}</span>` : ''}<span>${t('duration')} ${duration(work.duration_seconds)}</span></div>`;
 }
 function card(work) {
-  const secondaryTitle = work.type === 'arrangement' ? `<p class="secondary-title">${esc(label(work,'original_title'))}</p>` : '';
-  const origin = work.type === 'arrangement' ? `<p class="arrangement-origin">${t('origin')}: ${esc(label(work,'original_title'))}${credits(work) ? `<br>${credits(work)}` : ''}</p>` : credits(work) ? `<p class="arrangement-origin">${credits(work)}</p>` : '';
+  const title = label(work,'title');
+  const originalTitle = label(work,'original_title');
+  const creditText = credits(work);
+  const sourceText = work.type === 'arrangement' && originalTitle !== title ? `${t('origin')}: ${esc(originalTitle)}` : '';
+  const originParts = work.type === 'arrangement' ? [sourceText, creditText].filter(Boolean) : creditText ? [creditText] : [];
+  const origin = originParts.length ? `<p class="arrangement-origin">${originParts.join('<br>')}</p>` : '';
   const multipart = isMultipart(work), links = multipart ? [`<a class="internal-action" href="${detailHref(work)}">${t('viewWork')}</a>`] : actions(work);
-  return `<article class="work" id="${esc(work.slug)}"><header class="work-heading"><div><h2><a href="${multipart ? detailHref(work) : `#${esc(work.slug)}`}">${esc(label(work,'title'))}</a></h2>${secondaryTitle}</div></header>${origin}${metadata(work, multipart ? label(work,'parts_label') : '')}${multipart ? '' : videoMarkup(work)}${links.length ? `<div class="work-actions">${links.join('')}</div>` : ''}</article>`;
+  return `<article class="work" id="${esc(work.slug)}"><header class="work-heading"><div><h2><a href="${multipart ? detailHref(work) : `#${esc(work.slug)}`}">${esc(title)}</a></h2></div></header>${origin}${metadata(work, multipart ? label(work,'parts_label') : '')}${multipart ? '' : videoMarkup(work)}${links.length ? `<div class="work-actions">${links.join('')}</div>` : ''}</article>`;
 }
 function lazyVideos() {
   const videos = [...document.querySelectorAll('[data-video-src]')], add = element => { if (element.dataset.loaded) return; element.dataset.loaded = 'true'; const iframe = document.createElement('iframe'); iframe.loading = 'lazy'; iframe.title = t('videoTitle'); iframe.allow = 'accelerometer; autoplay; encrypted-media; picture-in-picture'; iframe.referrerPolicy = 'strict-origin-when-cross-origin'; iframe.src = element.dataset.videoSrc; element.replaceChildren(iframe); };
