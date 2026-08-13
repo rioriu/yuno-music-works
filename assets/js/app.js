@@ -20,7 +20,12 @@ const trustedExternalUrl = value => {
 };
 const label = (value, key) => value[`${key}_${state.lang}`] || value[`${key}_ja`] || '';
 const isMultipart = work => Array.isArray(work.parts) && work.parts.length > 0;
-const duration = seconds => `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
+const duration = seconds => {
+  const halfMinutes = Math.round(Number(seconds) / 30);
+  const minutes = Math.floor(halfMinutes / 2);
+  const half = halfMinutes % 2;
+  return state.lang === 'ja' ? `約${minutes}分${half ? '半' : ''}` : `about ${minutes + (half ? 0.5 : 0)} min.`;
+};
 
 function localizeStatic() {
   document.documentElement.lang = state.lang;
@@ -83,6 +88,17 @@ function card(work) {
   const multipart = isMultipart(work), links = multipart ? [`<a class="internal-action" href="${detailHref(work)}">${t('viewWork')}</a>`] : actions(work);
   return `<article class="work" id="${esc(work.slug)}"><header class="work-heading"><div><h2><a href="${multipart ? detailHref(work) : `#${esc(work.slug)}`}">${esc(title)}</a></h2></div></header>${origin}${metadata(work, multipart ? label(work,'parts_label') : '')}${multipart ? '' : videoMarkup(work)}${links.length ? `<div class="work-actions">${links.join('')}</div>` : ''}</article>`;
 }
+function originalTable(items) {
+  const groups = new Map();
+  items.forEach(work => { const year = Number.isInteger(work.composition_year) ? work.composition_year : null; groups.set(year,[...(groups.get(year) || []),work]); });
+  const years = [...groups.keys()].sort((a,b) => a === null ? 1 : b === null ? -1 : b - a);
+  return years.map(year => {
+    const id = year === null ? 'year-unknown' : `year-${year}`, heading = year === null ? (state.lang === 'ja' ? '作曲年不明' : 'Year unknown') : `${year}${state.lang === 'ja' ? '年' : ''}`;
+    const rows = groups.get(year).sort((a,b) => label(a,'title').localeCompare(label(b,'title'),state.lang)).map(work => `<tr><th scope="row"><a href="${detailHref(work)}">${esc(label(work,'title'))}</a></th><td>${esc(label(work,'instrumentation'))}</td></tr>`).join('');
+    const columns = state.lang === 'ja' ? ['作品名','編成'] : ['Title','Instrumentation'];
+    return `<section class="year-group" aria-labelledby="${id}"><h2 id="${id}">${heading}</h2><div class="year-table-wrap" tabindex="0"><table class="work-index"><thead><tr><th scope="col">${columns[0]}</th><th scope="col">${columns[1]}</th></tr></thead><tbody>${rows}</tbody></table></div></section>`;
+  }).join('');
+}
 function lazyVideos() {
   const videos = [...document.querySelectorAll('[data-video-src]')], add = element => { if (element.dataset.loaded) return; element.dataset.loaded = 'true'; const iframe = document.createElement('iframe'); iframe.loading = 'lazy'; iframe.title = t('videoTitle'); iframe.allow = 'accelerometer; autoplay; encrypted-media; picture-in-picture'; iframe.referrerPolicy = 'strict-origin-when-cross-origin'; iframe.src = element.dataset.videoSrc; element.replaceChildren(iframe); };
   if (!('IntersectionObserver' in window)) { videos.forEach(add); return; }
@@ -97,14 +113,14 @@ async function renderCatalog() {
   const works = await getJson('works.json'), index = buildWorkIndex(works), all = works.filter(work => work.published && work.type === document.body.dataset.catalog);
   const category = document.querySelector('[name=category]'), ensemble = document.querySelector('[name=ensemble]'), sort = document.querySelector('[name=sort]'), params = new URLSearchParams(location.search);
   if (category && params.has('category')) category.value = params.get('category'); if (ensemble && params.has('ensemble')) ensemble.value = params.get('ensemble');
-  if (document.body.dataset.catalog === 'original' && location.hash) { let slug; try { slug = decodeURIComponent(location.hash.slice(1)); } catch {} const hit = index.bySlug.get(slug); if (hit?.parent?.published) { location.replace(detailHref(hit.parent, hit.work.slug)); return; } }
+  if (document.body.dataset.catalog === 'original' && location.hash) { let slug; try { slug = decodeURIComponent(location.hash.slice(1)); } catch {} const hit = index.bySlug.get(slug); if (hit?.parent?.published && hit.parent.type === 'original') { location.replace(detailHref(hit.parent, hit.work.slug)); return; } if (hit && !hit.parent && hit.work.published && hit.work.type === 'original') { location.replace(detailHref(hit.work)); return; } }
   const render = () => {
     const items = all.filter(work => (!category || !category.value || work.category === category.value) && (!ensemble || !ensemble.value || work.ensemble === ensemble.value));
-    items.sort((a,b) => { if (sort?.value === 'title') return label(a,'title').localeCompare(label(b,'title'),state.lang); if (!a.published_date && !b.published_date) return 0; if (!a.published_date) return 1; if (!b.published_date) return -1; return sort?.value === 'oldest' ? a.published_date.localeCompare(b.published_date) : b.published_date.localeCompare(a.published_date); });
-    output.innerHTML = items.length ? items.map(card).join('') : `<p class="empty-state">${t('noWorks')}</p>`;
+    if (document.body.dataset.catalog === 'original') output.innerHTML = items.length ? originalTable(items) : `<p class="empty-state">${t('noWorks')}</p>`;
+    else { items.sort((a,b) => { if (sort?.value === 'title') return label(a,'title').localeCompare(label(b,'title'),state.lang); if (!a.published_date && !b.published_date) return 0; if (!a.published_date) return 1; if (!b.published_date) return -1; return sort?.value === 'oldest' ? a.published_date.localeCompare(b.published_date) : b.published_date.localeCompare(a.published_date); }); output.innerHTML = items.length ? items.map(card).join('') : `<p class="empty-state">${t('noWorks')}</p>`; }
     const summary = document.querySelector('[data-filter-summary]'); if (summary) summary.textContent = ensemble?.value && ENSEMBLES[ensemble.value] ? ENSEMBLES[ensemble.value][state.lang] : t('all');
     if (document.body.dataset.catalog === 'original') { const next = new URL(location.href); if (ensemble?.value) next.searchParams.set('ensemble',ensemble.value); else next.searchParams.delete('ensemble'); history.replaceState(null,'',next); }
-    lazyVideos(); requestAnimationFrame(focusHash);
+    if (document.body.dataset.catalog !== 'original') lazyVideos(); requestAnimationFrame(focusHash);
   };
   [category,ensemble,sort].filter(Boolean).forEach(control => control.addEventListener('change',render)); window.addEventListener('hashchange',focusHash); render();
 }
@@ -115,9 +131,10 @@ function partMarkup(parent, part) {
 async function renderWorkDetail() {
   const output = document.querySelector('[data-work-detail]'); if (!output) return;
   const works = await getJson('works.json'), index = buildWorkIndex(works), id = new URLSearchParams(location.search).get('work'), hit = index.byId.get(id);
-  if (!hit || hit.parent || !hit.work.published || !isMultipart(hit.work)) { output.innerHTML = `<p class="empty-state">${t('notFound')}</p><p><a href="${rootLink('originals/list/')}">${t('backToWorks')}</a></p>`; return; }
+  if (!hit || hit.parent || !hit.work.published || hit.work.type !== 'original') { output.innerHTML = `<p class="empty-state">${t('notFound')}</p><p><a href="${rootLink('originals/list/')}">${t('backToWorks')}</a></p>`; return; }
   const work = hit.work; document.title = `${label(work,'title')} — YUNO`;
-  output.innerHTML = `<header class="page-heading"><div class="eyebrow">Original Works</div><h1>${esc(label(work,'title'))}</h1>${credits(work) ? `<p>${credits(work)}</p>` : ''}${metadata(work,label(work,'parts_label'))}</header><section class="parts" aria-labelledby="parts-heading"><h2 id="parts-heading">${esc(label(work,'parts_heading') || t('parts'))}</h2>${work.parts.map(part => partMarkup(work,part)).join('')}</section><p class="catalog-back"><a href="${catalogHref(work)}">${t('backToWorks')}</a></p>`;
+  const links = actions(work), content = isMultipart(work) ? `<section class="parts" aria-labelledby="parts-heading"><h2 id="parts-heading">${esc(label(work,'parts_heading') || t('parts'))}</h2>${work.parts.map(part => partMarkup(work,part)).join('')}</section>` : `<section class="work-detail-content">${videoMarkup(work)}${links.length ? `<div class="work-actions">${links.join('')}</div>` : ''}</section>`;
+  output.innerHTML = `<header class="page-heading"><div class="eyebrow">Original Works</div><h1>${esc(label(work,'title'))}</h1>${credits(work) ? `<p>${credits(work)}</p>` : ''}${metadata(work,isMultipart(work) ? label(work,'parts_label') : '')}</header>${content}<p class="catalog-back"><a href="${catalogHref(work)}">${t('backToWorks')}</a></p>`;
   lazyVideos(); requestAnimationFrame(focusHash);
 }
 async function renderUpdates() {
