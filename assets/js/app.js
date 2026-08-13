@@ -11,7 +11,7 @@ const ENSEMBLES = {piano:{ja:'ピアノ',en:'Piano'},solo:{ja:'独奏',en:'Solo'
 const t = key => C[state.lang][key] || key;
 const rootLink = path => new URL(path, ROOT).href;
 const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
-const TRUSTED_EXTERNAL_ORIGINS = new Set(['https://www.youtube.com','https://www.nicovideo.jp','https://store.piascore.com','https://www.mymusic5.com']);
+const TRUSTED_EXTERNAL_ORIGINS = new Set(['https://www.youtube.com','https://www.nicovideo.jp','https://soundcloud.com','https://www.soundcloud.com','https://store.piascore.com','https://www.mymusic5.com']);
 const trustedExternalUrl = value => {
   try {
     const url = new URL(value);
@@ -51,6 +51,10 @@ function videoMarkup(work) {
   const video = work.video || {}; let src = null;
   if (video.youtube) src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(video.youtube)}?rel=0`;
   else if (video.niconico) src = `https://embed.nicovideo.jp/watch/${encodeURIComponent(video.niconico)}`;
+  else if (video.soundcloud) {
+    const track = trustedExternalUrl(video.soundcloud);
+    if (track) src = `https://w.soundcloud.com/player/?visual=true&url=${encodeURIComponent(track)}&show_artwork=true`;
+  }
   const fallback = trustedExternalUrl(video.fallback_url);
   if (!src) return `<p class="no-video">${t('noVideo')}${fallback ? ` <a target="_blank" rel="noopener" href="${esc(fallback)}">${t('fallbackVideo')}</a>` : ''}</p>`;
   return `<div class="video-wrap" data-video-src="${esc(src)}"><p class="video-pending">${t('loadingVideo')}</p><noscript>${fallback ? `<a target="_blank" rel="noopener" href="${esc(fallback)}">${t('fallbackVideo')}</a>` : ''}</noscript></div>`;
@@ -76,7 +80,7 @@ function card(work) {
   return `<article class="work" id="${esc(work.slug)}"><header class="work-heading"><div><h2><a href="${multipart ? detailHref(work) : `#${esc(work.slug)}`}">${esc(label(work,'title'))}</a></h2>${secondaryTitle}</div></header>${origin}${metadata(work, multipart ? label(work,'parts_label') : '')}${multipart ? '' : videoMarkup(work)}${links.length ? `<div class="work-actions">${links.join('')}</div>` : ''}</article>`;
 }
 function lazyVideos() {
-  const videos = [...document.querySelectorAll('[data-video-src]')], add = element => { if (element.dataset.loaded) return; element.dataset.loaded = 'true'; const iframe = document.createElement('iframe'); iframe.loading = 'lazy'; iframe.title = t('videoTitle'); iframe.allow = 'accelerometer; encrypted-media; picture-in-picture'; iframe.referrerPolicy = 'strict-origin-when-cross-origin'; iframe.src = element.dataset.videoSrc; element.replaceChildren(iframe); };
+  const videos = [...document.querySelectorAll('[data-video-src]')], add = element => { if (element.dataset.loaded) return; element.dataset.loaded = 'true'; const iframe = document.createElement('iframe'); iframe.loading = 'lazy'; iframe.title = t('videoTitle'); iframe.allow = 'accelerometer; autoplay; encrypted-media; picture-in-picture'; iframe.referrerPolicy = 'strict-origin-when-cross-origin'; iframe.src = element.dataset.videoSrc; element.replaceChildren(iframe); };
   if (!('IntersectionObserver' in window)) { videos.forEach(add); return; }
   const observer = new IntersectionObserver(entries => entries.forEach(entry => { if (entry.isIntersecting) { add(entry.target); observer.unobserve(entry.target); } }), {rootMargin:'250px 0px'}); videos.forEach(element => observer.observe(element));
 }

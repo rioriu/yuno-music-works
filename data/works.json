@@ -2624,6 +2624,71 @@
     "sample": false
   },
   {
+    "id": "ranos-no-tsuioku",
+    "slug": "ranos-no-tsuioku",
+    "type": "original",
+    "title_ja": "ラノスの追憶",
+    "title_en": "Memories of Lanos",
+    "category": "pops",
+    "composition_year": 2024,
+    "published_date": "2025-11-21",
+    "ensemble": "pops",
+    "instrumentation_ja": "VoiSona SELENA、IA（歌唱）",
+    "instrumentation_en": "VoiSona SELENA and IA voices",
+    "instruments": [
+      "voice"
+    ],
+    "duration_seconds": 248,
+    "video": {
+      "youtube": null,
+      "niconico": "so45525362",
+      "fallback_url": "https://www.nicovideo.jp/watch/so45525362"
+    },
+    "other_videos": [],
+    "scores": [],
+    "commentary": null,
+    "tags": [
+      "VoiSona",
+      "vocal",
+      "pops"
+    ],
+    "featured": false,
+    "published": true,
+    "sample": false
+  },
+  {
+    "id": "four-movements-of-sentiments",
+    "slug": "four-movements-of-sentiments",
+    "type": "original",
+    "title_ja": "情感四章―吹奏楽のための",
+    "title_en": "Four Movements of Sentiments for Wind Orchestra",
+    "category": "classical",
+    "composition_year": 2013,
+    "published_date": "2013-08-04",
+    "ensemble": "wind",
+    "instrumentation_ja": "吹奏楽",
+    "instrumentation_en": "Wind ensemble",
+    "instruments": [
+      "wind-ensemble"
+    ],
+    "duration_seconds": 659,
+    "video": {
+      "youtube": null,
+      "niconico": null,
+      "soundcloud": "https://soundcloud.com/y-uno/four-movements-of-sentiments",
+      "fallback_url": "https://soundcloud.com/y-uno/four-movements-of-sentiments"
+    },
+    "other_videos": [],
+    "scores": [],
+    "commentary": null,
+    "tags": [
+      "wind-ensemble"
+    ],
+    "featured": false,
+    "published": true,
+    "sample": false
+  },
+  {
     "id": "youtube-uzgormifs-ca",
     "slug": "kids-return-piano-four-hands",
     "type": "arrangement",
