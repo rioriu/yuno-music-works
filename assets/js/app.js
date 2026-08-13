@@ -11,6 +11,13 @@ const ENSEMBLES = {piano:{ja:'ピアノ',en:'Piano'},solo:{ja:'独奏',en:'Solo'
 const t = key => C[state.lang][key] || key;
 const rootLink = path => new URL(path, ROOT).href;
 const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+const TRUSTED_EXTERNAL_ORIGINS = new Set(['https://www.youtube.com','https://www.nicovideo.jp','https://store.piascore.com','https://www.mymusic5.com']);
+const trustedExternalUrl = value => {
+  try {
+    const url = new URL(value);
+    return url.protocol === 'https:' && TRUSTED_EXTERNAL_ORIGINS.has(url.origin) ? url.href : null;
+  } catch { return null; }
+};
 const label = (value, key) => value[`${key}_${state.lang}`] || value[`${key}_ja`] || '';
 const isMultipart = work => Array.isArray(work.parts) && work.parts.length > 0;
 const duration = seconds => `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
@@ -39,16 +46,21 @@ function buildWorkIndex(works) {
 }
 function detailHref(parent, hash = '') { return `${rootLink(`originals/work/?work=${encodeURIComponent(parent.id)}`)}${hash ? `#${encodeURIComponent(hash)}` : ''}`; }
 function catalogHref(work) { return rootLink(`originals/list/?ensemble=${encodeURIComponent(work.ensemble)}`); }
-function commentaryHref(work) { return rootLink(`${work.commentary}/?work=${encodeURIComponent(work.id)}`); }
+function commentaryHref(work) { return rootLink(`${String(work.commentary).replace(/^\/+|\/+$/g,'')}/?work=${encodeURIComponent(work.id)}`); }
 function videoMarkup(work) {
   const video = work.video || {}; let src = null;
   if (video.youtube) src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(video.youtube)}?rel=0`;
   else if (video.niconico) src = `https://embed.nicovideo.jp/watch/${encodeURIComponent(video.niconico)}`;
-  if (!src) return `<p class="no-video">${t('noVideo')}${video.fallback_url ? ` <a target="_blank" rel="noopener" href="${esc(video.fallback_url)}">${t('fallbackVideo')}</a>` : ''}</p>`;
-  return `<div class="video-wrap" data-video-src="${esc(src)}"><p class="video-pending">${t('loadingVideo')}</p><noscript>${video.fallback_url ? `<a target="_blank" rel="noopener" href="${esc(video.fallback_url)}">${t('fallbackVideo')}</a>` : ''}</noscript></div>`;
+  const fallback = trustedExternalUrl(video.fallback_url);
+  if (!src) return `<p class="no-video">${t('noVideo')}${fallback ? ` <a target="_blank" rel="noopener" href="${esc(fallback)}">${t('fallbackVideo')}</a>` : ''}</p>`;
+  return `<div class="video-wrap" data-video-src="${esc(src)}"><p class="video-pending">${t('loadingVideo')}</p><noscript>${fallback ? `<a target="_blank" rel="noopener" href="${esc(fallback)}">${t('fallbackVideo')}</a>` : ''}</noscript></div>`;
 }
 function actions(work) {
-  return [...(work.other_videos || []).map(item => `<a target="_blank" rel="noopener" href="${esc(item.url)}">${esc(label(item,'label'))}</a>`),...(work.scores || []).map(item => `<a target="_blank" rel="noopener" href="${esc(item.url)}">${esc(label(item,'label'))}</a>`),...(work.commentary ? [`<a href="${commentaryHref(work)}">${t('commentary')}</a>`] : [])];
+  const externalLink = item => {
+    const url = trustedExternalUrl(item.url);
+    return url ? `<a target="_blank" rel="noopener" href="${esc(url)}">${esc(label(item,'label'))}</a>` : '';
+  };
+  return [...(work.other_videos || []).map(externalLink),...(work.scores || []).map(externalLink),...(work.commentary ? [`<a href="${commentaryHref(work)}">${t('commentary')}</a>`] : [])].filter(Boolean);
 }
 function credits(work) {
   return [['artist_name','artist'],['composer_name','composer'],['lyricist_name','lyricist']].filter(([field]) => work[field]).map(([field,key]) => `${t(key)}: ${esc(work[field])}`).join(' · ');
@@ -108,8 +120,8 @@ async function renderCommentary() {
   const output = document.querySelector('[data-commentary-page]'); if (!output) return;
   const works = await getJson('works.json'), hit = buildWorkIndex(works).byId.get(new URLSearchParams(location.search).get('work'));
   if (!hit || !hit.work.commentary) { output.innerHTML = `<p class="empty-state">${t('commentaryMissing')}</p><p><a href="${rootLink('originals/list/')}">${t('backToWorks')}</a></p>`; return; }
-  const work = hit.work, back = hit.parent ? detailHref(hit.parent,work.slug) : catalogHref(work), paragraphs = (work[`commentary_${state.lang}`] || work.commentary_ja).split(/\n\n+/).map(text => `<p>${esc(text)}</p>`).join('');
-  document.title = `${label(work,'title')} — YUNO`; output.innerHTML = `<div class="eyebrow">Commentary</div><h1>${esc(label(work,'title'))}</h1><p class="commentary-lead">${esc(label(hit.parent || work,'instrumentation'))}</p><div class="commentary-body">${paragraphs}</div><div class="commentary-links"><a target="_blank" rel="noopener" href="${esc(work.commentary_source)}">${t('sourceDescription')}</a><a href="${back}">${t('backToWorks')}</a></div>`;
+  const work = hit.work, back = hit.parent ? detailHref(hit.parent,work.slug) : catalogHref(work), paragraphs = (work[`commentary_${state.lang}`] || work.commentary_ja).split(/\n\n+/).map(text => `<p>${esc(text)}</p>`).join(''), source = trustedExternalUrl(work.commentary_source);
+  document.title = `${label(work,'title')} — YUNO`; output.innerHTML = `<div class="eyebrow">Commentary</div><h1>${esc(label(work,'title'))}</h1><p class="commentary-lead">${esc(label(hit.parent || work,'instrumentation'))}</p><div class="commentary-body">${paragraphs}</div><div class="commentary-links">${source ? `<a target="_blank" rel="noopener" href="${esc(source)}">${t('sourceDescription')}</a>` : ''}<a href="${back}">${t('backToWorks')}</a></div>`;
 }
 document.addEventListener('DOMContentLoaded', async () => {
   renderShell(); localizeStatic();

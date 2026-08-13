@@ -1675,8 +1675,8 @@
     "other_videos": [],
     "scores": [],
     "commentary": "commentary",
-    "commentary_ja": "フルート、オーボエ、マリンバによる三重奏。メトリック・モジュレーションを主要な作曲上のテーマとし、2024年7月から2025年9月にかけて作曲された。",
-    "commentary_en": "A trio for flute, oboe, and marimba whose central compositional subject is metric modulation. It was written between July 2024 and September 2025.",
+    "commentary_ja": "フルート、オーボエ、マリンバによる三重奏。メトリック・モジュレーションを主要な作曲上のテーマとし、2024年7月から2025年9月にかけて作曲された。\n\nタイトルはFlute,Oboe,Marimbaのアナグラムになっている。ランダムな文字列を大量に生成し、その中から、英語、フランス語、イタリア語として解釈できるものがあるかを生成AIで探索し、タイトルとした。",
+    "commentary_en": "A trio for flute, oboe, and marimba whose central compositional subject is metric modulation. It was written between July 2024 and September 2025.\n\nThe title is an anagram of Flute, Oboe, Marimba. Large numbers of random strings were generated, and generative AI was used to search among them for candidates that could be interpreted as English, French, or Italian; one of those became the title.",
     "commentary_source": "https://www.youtube.com/watch?v=tCadJnjd-3c",
     "tags": [
       "flute",
@@ -2410,6 +2410,352 @@
         "url": "https://store.piascore.com/scores/413208"
       }
     ],
+    "commentary": null,
+    "tags": [
+      "piano",
+      "arrangement"
+    ],
+    "featured": false,
+    "published": true,
+    "sample": false
+  },
+  {
+    "id": "nagori-no-niwa",
+    "slug": "nagori-no-niwa",
+    "type": "original",
+    "title_ja": "名残の庭",
+    "title_en": "Garden of Lingering",
+    "category": "pops",
+    "composition_year": null,
+    "published_date": "2019-09-19",
+    "ensemble": "pops",
+    "instrumentation_ja": "CeVIO さとうささら（歌唱）",
+    "instrumentation_en": "CeVIO Sato Sasara voice",
+    "instruments": [
+      "voice"
+    ],
+    "duration_seconds": 313,
+    "video": {
+      "youtube": "or29Z7RL48g",
+      "niconico": null,
+      "fallback_url": "https://www.youtube.com/watch?v=or29Z7RL48g"
+    },
+    "other_videos": [],
+    "lyricist_name": "雪凪様",
+    "scores": [],
+    "commentary": null,
+    "tags": [
+      "CeVIO",
+      "vocal",
+      "pops"
+    ],
+    "featured": false,
+    "published": true,
+    "sample": false
+  },
+  {
+    "id": "andante",
+    "slug": "andante",
+    "type": "original",
+    "title_ja": "andante",
+    "title_en": "Andante",
+    "category": "pops",
+    "composition_year": null,
+    "published_date": "2019-12-14",
+    "ensemble": "pops",
+    "instrumentation_ja": "CeVIO さとうささら（歌唱）",
+    "instrumentation_en": "CeVIO Sato Sasara voice",
+    "instruments": [
+      "voice"
+    ],
+    "duration_seconds": 320,
+    "video": {
+      "youtube": "l51NQa9Z09w",
+      "niconico": null,
+      "fallback_url": "https://www.youtube.com/watch?v=l51NQa9Z09w"
+    },
+    "other_videos": [],
+    "composer_name": "torekuru様",
+    "lyricist_name": "ふたみん様",
+    "scores": [],
+    "commentary": null,
+    "tags": [
+      "CeVIO",
+      "vocal",
+      "pops"
+    ],
+    "featured": false,
+    "published": true,
+    "sample": false
+  },
+  {
+    "id": "animato",
+    "slug": "animato",
+    "type": "original",
+    "title_ja": "animato",
+    "title_en": "Animato",
+    "category": "pops",
+    "composition_year": null,
+    "published_date": "2020-12-14",
+    "ensemble": "pops",
+    "instrumentation_ja": "CeVIO さとうささら（歌唱）",
+    "instrumentation_en": "CeVIO Sato Sasara voice",
+    "instruments": [
+      "voice"
+    ],
+    "duration_seconds": 267,
+    "video": {
+      "youtube": "gDnf32iESJQ",
+      "niconico": null,
+      "fallback_url": "https://www.youtube.com/watch?v=gDnf32iESJQ"
+    },
+    "other_videos": [],
+    "composer_name": "torekuru様",
+    "lyricist_name": "ふたみん様",
+    "scores": [],
+    "commentary": null,
+    "tags": [
+      "CeVIO",
+      "vocal",
+      "pops"
+    ],
+    "featured": false,
+    "published": true,
+    "sample": false
+  },
+  {
+    "id": "hoshimigusa",
+    "slug": "hoshimigusa",
+    "type": "original",
+    "title_ja": "ホシミグサ",
+    "title_en": "Hoshimigusa",
+    "category": "pops",
+    "composition_year": null,
+    "published_date": "2021-09-11",
+    "ensemble": "pops",
+    "instrumentation_ja": "ボーカル",
+    "instrumentation_en": "Vocal",
+    "instruments": [
+      "voice"
+    ],
+    "duration_seconds": 238,
+    "video": {
+      "youtube": "l-KX_EQq7EA",
+      "niconico": null,
+      "fallback_url": "https://www.youtube.com/watch?v=l-KX_EQq7EA"
+    },
+    "other_videos": [],
+    "lyricist_name": "ふたみん様",
+    "scores": [],
+    "commentary": null,
+    "tags": [
+      "vocal",
+      "pops"
+    ],
+    "featured": false,
+    "published": true,
+    "sample": false
+  },
+  {
+    "id": "wonder-sheep-wander-in-the-sea",
+    "slug": "wonder-sheep-wander-in-the-sea",
+    "type": "original",
+    "title_ja": "ワンダーシープ・ワンダリンザシー",
+    "title_en": "Wonder Sheep, Wandering in the Sea",
+    "category": "pops",
+    "composition_year": null,
+    "published_date": "2022-12-24",
+    "ensemble": "pops",
+    "instrumentation_ja": "CeVIO IA English、ONE（歌唱）",
+    "instrumentation_en": "CeVIO IA English and ONE voices",
+    "instruments": [
+      "voice"
+    ],
+    "duration_seconds": 288,
+    "video": {
+      "youtube": "jaJQM4BqlAY",
+      "niconico": null,
+      "fallback_url": "https://www.youtube.com/watch?v=jaJQM4BqlAY"
+    },
+    "other_videos": [],
+    "lyricist_name": "ふたみん様",
+    "scores": [],
+    "commentary": null,
+    "tags": [
+      "CeVIO",
+      "vocal",
+      "pops"
+    ],
+    "featured": false,
+    "published": true,
+    "sample": false
+  },
+  {
+    "id": "sonata-string-quartet",
+    "slug": "sonata-string-quartet",
+    "type": "original",
+    "title_ja": "弦楽四重奏のためのソナタ",
+    "title_en": "Sonata for String Quartet",
+    "category": "classical",
+    "composition_year": null,
+    "published_date": "2016-09-22",
+    "ensemble": "strings",
+    "instrumentation_ja": "弦楽四重奏",
+    "instrumentation_en": "String quartet",
+    "instruments": [
+      "violin",
+      "viola",
+      "cello"
+    ],
+    "duration_seconds": 856,
+    "video": {
+      "youtube": null,
+      "niconico": "sm29695420",
+      "fallback_url": "https://www.nicovideo.jp/watch/sm29695420"
+    },
+    "other_videos": [],
+    "scores": [],
+    "commentary": null,
+    "tags": [
+      "strings"
+    ],
+    "featured": false,
+    "published": true,
+    "sample": false
+  },
+  {
+    "id": "youtube-uzgormifs-ca",
+    "slug": "kids-return-piano-four-hands",
+    "type": "arrangement",
+    "title_ja": "Kids Return（ピアノ連弾）",
+    "title_en": "Kids Return",
+    "original_title_ja": "Kids Return",
+    "original_title_en": "Kids Return",
+    "artist_name": "久石 譲",
+    "composer_name": "久石 譲",
+    "category": "classical",
+    "composition_year": null,
+    "published_date": "2026-07-31",
+    "ensemble": "duo",
+    "instrumentation_ja": "ピアノ連弾",
+    "instrumentation_en": "Piano four hands",
+    "instruments": [
+      "piano"
+    ],
+    "duration_seconds": 253,
+    "video": {
+      "youtube": "UZGOrmIfsCA",
+      "niconico": null,
+      "fallback_url": "https://www.youtube.com/watch?v=UZGOrmIfsCA"
+    },
+    "other_videos": [],
+    "scores": [],
+    "commentary": null,
+    "tags": [
+      "piano",
+      "arrangement"
+    ],
+    "featured": false,
+    "published": true,
+    "sample": false
+  },
+  {
+    "id": "youtube-jdwvt0ciiso",
+    "slug": "furin-kazan-opening-string-quartet",
+    "type": "arrangement",
+    "title_ja": "風林火山 オープニングテーマ（弦楽四重奏）",
+    "title_en": "Furin Kazan Opening Theme",
+    "original_title_ja": "風林火山 オープニングテーマ",
+    "original_title_en": "Furin Kazan Opening Theme",
+    "category": "classical",
+    "composition_year": null,
+    "published_date": "2020-01-08",
+    "ensemble": "ensemble",
+    "instrumentation_ja": "弦楽四重奏",
+    "instrumentation_en": "String quartet",
+    "instruments": [
+      "violin",
+      "viola",
+      "cello"
+    ],
+    "duration_seconds": 170,
+    "video": {
+      "youtube": "jDWvT0cIiso",
+      "niconico": null,
+      "fallback_url": "https://www.youtube.com/watch?v=jDWvT0cIiso"
+    },
+    "other_videos": [],
+    "scores": [],
+    "commentary": null,
+    "tags": [
+      "strings",
+      "arrangement"
+    ],
+    "featured": false,
+    "published": true,
+    "sample": false
+  },
+  {
+    "id": "youtube-soe7qxwspaq",
+    "slug": "spider-piano-solo",
+    "type": "arrangement",
+    "title_ja": "スパイダー（ピアノソロ）",
+    "title_en": "Spider",
+    "original_title_ja": "スパイダー",
+    "original_title_en": "Spider",
+    "artist_name": "スピッツ",
+    "category": "pops",
+    "composition_year": null,
+    "published_date": "2013-09-26",
+    "ensemble": "solo",
+    "instrumentation_ja": "ピアノソロ",
+    "instrumentation_en": "Piano solo",
+    "instruments": [
+      "piano"
+    ],
+    "duration_seconds": 205,
+    "video": {
+      "youtube": "sOe7QxWSPAQ",
+      "niconico": null,
+      "fallback_url": "https://www.youtube.com/watch?v=sOe7QxWSPAQ"
+    },
+    "other_videos": [],
+    "scores": [],
+    "commentary": null,
+    "tags": [
+      "piano",
+      "arrangement"
+    ],
+    "featured": false,
+    "published": true,
+    "sample": false
+  },
+  {
+    "id": "youtube-jonitoxhj1c",
+    "slug": "sing-piano-solo",
+    "type": "arrangement",
+    "title_ja": "Sing（ピアノソロ）",
+    "title_en": "Sing",
+    "original_title_ja": "Sing",
+    "original_title_en": "Sing",
+    "artist_name": "Goose house",
+    "category": "pops",
+    "composition_year": null,
+    "published_date": "2017-12-23",
+    "ensemble": "solo",
+    "instrumentation_ja": "ピアノソロ",
+    "instrumentation_en": "Piano solo",
+    "instruments": [
+      "piano"
+    ],
+    "duration_seconds": 272,
+    "video": {
+      "youtube": "jONITOxhJ1c",
+      "niconico": null,
+      "fallback_url": "https://www.youtube.com/watch?v=jONITOxhJ1c"
+    },
+    "other_videos": [],
+    "scores": [],
     "commentary": null,
     "tags": [
       "piano",
