@@ -132,7 +132,7 @@ async function renderOriginalOverview() {
 }
 function partMarkup(parent, part) {
   const links = actions(part);
-  return `<article class="work work-part" id="${esc(part.slug)}"><header class="work-heading"><h3>${esc(label(part,'title'))}</h3></header><div class="work-meta"><span>${t('duration')} ${duration(part.duration_seconds)}</span>${part.published_date ? `<span>${esc(part.published_date)}</span>` : ''}</div>${videoMarkup(part)}${links.length ? `<div class="work-actions">${links.join('')}</div>` : ''}</article>`;
+  return `<article class="work work-part" id="${esc(part.slug)}"><header class="work-heading"><h3>${esc(label(part,'title'))}</h3></header><div class="work-meta"><span>${t('duration')} ${duration(part.duration_seconds)}</span></div>${videoMarkup(part)}${links.length ? `<div class="work-actions">${links.join('')}</div>` : ''}</article>`;
 }
 async function renderWorkDetail() {
   const output = document.querySelector('[data-work-detail]'); if (!output) return;
