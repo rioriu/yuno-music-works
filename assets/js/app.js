@@ -76,8 +76,7 @@ function credits(work) {
   return [['artist_name','artist'],['composer_name','composer'],['lyricist_name','lyricist']].filter(([field]) => work[field]).map(([field,key]) => `${t(key)}: ${esc(work[field])}`).join(' · ');
 }
 function metadata(work, partLabel = '') {
-  const ensemble = ENSEMBLES[work.ensemble]?.[state.lang];
-  return `<div class="work-meta">${Number.isInteger(work.composition_year) ? `<span>${work.composition_year}${state.lang === 'ja' ? '年' : ''}</span>` : ''}${ensemble ? `<span>${esc(ensemble)}</span>` : ''}<span>${esc(label(work,'instrumentation'))}</span>${partLabel ? `<span>${esc(partLabel)}</span>` : ''}<span>${t('duration')} ${duration(work.duration_seconds)}</span></div>`;
+  return `<div class="work-meta">${Number.isInteger(work.composition_year) ? `<span>${work.composition_year}${state.lang === 'ja' ? '年' : ''}</span>` : ''}<span>${esc(instrumentationShort(work))}</span>${partLabel ? `<span>${esc(partLabel)}</span>` : ''}<span class="work-duration">${t('duration')} ${duration(work.duration_seconds)}</span></div>`;
 }
 function card(work) {
   const title = label(work,'title');
@@ -91,7 +90,7 @@ function card(work) {
 }
 function instrumentationShort(work) {
   const japanese = work.instrumentation_ja || '';
-  if (/^CeVIO\b/i.test(japanese) || /^CeVIO\b/i.test(work.instrumentation_en || '')) return 'ボーカル';
+  if (/^(?:CeVIO|VoiSona)\b/i.test(japanese) || /^(?:CeVIO|VoiSona)\b/i.test(work.instrumentation_en || '')) return 'ボーカル';
   if (new Set(['打楽器六重奏','吹奏楽','混声合唱','室内オーケストラ','弦楽四重奏','ボーカル']).has(japanese)) return japanese;
   let value = japanese || work.instrumentation_en || label(work,'instrumentation');
   value = value
@@ -159,7 +158,7 @@ async function renderOriginalOverview() {
 }
 function partMarkup(parent, part) {
   const links = actions(part);
-  return `<article class="work work-part" id="${esc(part.slug)}"><header class="work-heading"><h3>${esc(label(part,'title'))}</h3></header><div class="work-meta"><span>${t('duration')} ${duration(part.duration_seconds)}</span></div>${videoMarkup(part)}${links.length ? `<div class="work-actions">${links.join('')}</div>` : ''}</article>`;
+  return `<article class="work work-part" id="${esc(part.slug)}"><header class="work-heading"><h3>${esc(label(part,'title'))}</h3></header><div class="work-meta"><span class="work-duration">${t('duration')} ${duration(part.duration_seconds)}</span></div>${videoMarkup(part)}${links.length ? `<div class="work-actions">${links.join('')}</div>` : ''}</article>`;
 }
 async function renderWorkDetail() {
   const output = document.querySelector('[data-work-detail]'); if (!output) return;
