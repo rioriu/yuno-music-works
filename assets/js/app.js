@@ -90,35 +90,32 @@ function card(work) {
   return `<article class="work" id="${esc(work.slug)}"><header class="work-heading"><div><h2><a href="${multipart ? detailHref(work) : `#${esc(work.slug)}`}">${esc(title)}</a></h2></div></header>${origin}${metadata(work, multipart ? label(work,'parts_label') : '')}${multipart ? '' : videoMarkup(work)}${links.length ? `<div class="work-actions">${links.join('')}</div>` : ''}</article>`;
 }
 function instrumentationShort(work) {
-  let value = work.instrumentation_en || label(work,'instrumentation');
-  const original = value;
+  const japanese = work.instrumentation_ja || '';
+  if (/^CeVIO\b/i.test(japanese) || /^CeVIO\b/i.test(work.instrumentation_en || '')) return 'ボーカル';
+  if (new Set(['打楽器六重奏','吹奏楽','混声合唱','室内オーケストラ','弦楽四重奏','ボーカル']).has(japanese)) return japanese;
+  let value = japanese || work.instrumentation_en || label(work,'instrumentation');
   value = value
-    .replace(/\bTwo clarinets\b/gi, '2 Cl.')
-    .replace(/\bTwo bassoons\b/gi, '2 Bn.')
-    .replace(/\bTwo marimbas\b/gi, '2 Mar.')
-    .replace(/\bAlto saxophone\b/gi, 'A.Sax.')
-    .replace(/\bVioloncello\b/gi, 'Vc.')
-    .replace(/\bSaxophone\b/gi, 'Sax.')
-    .replace(/\bTrumpet\b/gi, 'Trp.')
-    .replace(/\bTrombone\b/gi, 'Trb.')
-    .replace(/\bTuba\b/gi, 'Tba.')
-    .replace(/\bHorn\b/gi, 'Hn.')
-    .replace(/\bFlute\b/gi, 'Fl.')
-    .replace(/\bOboe\b/gi, 'Ob.')
-    .replace(/\bClarinet\b/gi, 'Cl.')
-    .replace(/\bBassoon\b/gi, 'Bn.')
-    .replace(/\bViolin\b/gi, 'Vn.')
-    .replace(/\bViola\b/gi, 'Va.')
-    .replace(/\bCello\b/gi, 'Vc.')
-    .replace(/\bPiano\b/gi, 'Pf.')
-    .replace(/\bMarimba\b/gi, 'Mar.')
-    .replace(/\bVibraphone\b/gi, 'Vib.')
-    .replace(/\bGlockenspiel\b/gi, 'Glsp.')
-    .replace(/\bXylophone\b/gi, 'Xyl.')
-    .replace(/\bPercussion\b/gi, 'Perc.')
-    .replace(/\bCajón\b/gi, 'Caj.');
-  if (value !== original) value = value.replace(/,\s*|\s+and\s+/gi, ' + ');
-  return value.replace(/\s{2,}/g, ' ').trim();
+    .replace(/アルトサクソフォン/g, 'A.Sax.')
+    .replace(/サクソフォン|サックス/g, 'Sax.')
+    .replace(/トランペット/g, 'Trp.')
+    .replace(/トロンボーン/g, 'Trb.')
+    .replace(/チューバ/g, 'Tba.')
+    .replace(/ホルン/g, 'Hn.')
+    .replace(/フルート/g, 'Fl.')
+    .replace(/オーボエ/g, 'Ob.')
+    .replace(/クラリネット/g, 'Cl.')
+    .replace(/ファゴット/g, 'Bn.')
+    .replace(/ヴァイオリン/g, 'Vn.')
+    .replace(/ヴィオラ|ビオラ/g, 'Va.')
+    .replace(/チェロ/g, 'Vc.')
+    .replace(/ピアノ/g, 'Pf.')
+    .replace(/マリンバ/g, 'Mar.')
+    .replace(/ヴィブラフォン/g, 'Vib.')
+    .replace(/グロッケンシュピール/g, 'Glsp.')
+    .replace(/シロフォン/g, 'Xyl.')
+    .replace(/打楽器/g, 'Perc.')
+    .replace(/カホン/g, 'Caj.');
+  return value.replace(/[＋、]/g, ' + ').replace(/\.(?=[\u3040-\u30ff\u3400-\u9fff\d])/g, '. ').replace(/\s{2,}/g, ' ').trim();
 }
 function originalTable(items) {
   const groups = new Map();
