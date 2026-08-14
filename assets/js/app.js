@@ -89,15 +89,45 @@ function card(work) {
   const multipart = isMultipart(work), links = multipart ? [`<a class="internal-action" href="${detailHref(work)}">${t('viewWork')}</a>`] : actions(work);
   return `<article class="work" id="${esc(work.slug)}"><header class="work-heading"><div><h2><a href="${multipart ? detailHref(work) : `#${esc(work.slug)}`}">${esc(title)}</a></h2></div></header>${origin}${metadata(work, multipart ? label(work,'parts_label') : '')}${multipart ? '' : videoMarkup(work)}${links.length ? `<div class="work-actions">${links.join('')}</div>` : ''}</article>`;
 }
+function instrumentationShort(work) {
+  let value = work.instrumentation_en || label(work,'instrumentation');
+  const original = value;
+  value = value
+    .replace(/\bTwo clarinets\b/gi, '2 Cl.')
+    .replace(/\bTwo bassoons\b/gi, '2 Bn.')
+    .replace(/\bTwo marimbas\b/gi, '2 Mar.')
+    .replace(/\bAlto saxophone\b/gi, 'A.Sax.')
+    .replace(/\bVioloncello\b/gi, 'Vc.')
+    .replace(/\bSaxophone\b/gi, 'Sax.')
+    .replace(/\bTrumpet\b/gi, 'Trp.')
+    .replace(/\bTrombone\b/gi, 'Trb.')
+    .replace(/\bTuba\b/gi, 'Tba.')
+    .replace(/\bHorn\b/gi, 'Hn.')
+    .replace(/\bFlute\b/gi, 'Fl.')
+    .replace(/\bOboe\b/gi, 'Ob.')
+    .replace(/\bClarinet\b/gi, 'Cl.')
+    .replace(/\bBassoon\b/gi, 'Bn.')
+    .replace(/\bViolin\b/gi, 'Vn.')
+    .replace(/\bViola\b/gi, 'Va.')
+    .replace(/\bCello\b/gi, 'Vc.')
+    .replace(/\bPiano\b/gi, 'Pf.')
+    .replace(/\bMarimba\b/gi, 'Mar.')
+    .replace(/\bVibraphone\b/gi, 'Vib.')
+    .replace(/\bGlockenspiel\b/gi, 'Glsp.')
+    .replace(/\bXylophone\b/gi, 'Xyl.')
+    .replace(/\bPercussion\b/gi, 'Perc.')
+    .replace(/\bCajón\b/gi, 'Caj.');
+  if (value !== original) value = value.replace(/,\s*|\s+and\s+/gi, ' + ');
+  return value.replace(/\s{2,}/g, ' ').trim();
+}
 function originalTable(items) {
   const groups = new Map();
   items.forEach(work => { const year = Number.isInteger(work.composition_year) ? work.composition_year : null; groups.set(year,[...(groups.get(year) || []),work]); });
   const years = [...groups.keys()].sort((a,b) => a === null ? 1 : b === null ? -1 : b - a);
   return years.map(year => {
     const id = year === null ? 'year-unknown' : `year-${year}`, heading = year === null ? (state.lang === 'ja' ? '作曲年不明' : 'Year unknown') : `${year}${state.lang === 'ja' ? '年' : ''}`;
-    const rows = groups.get(year).sort((a,b) => label(a,'title').localeCompare(label(b,'title'),state.lang)).map(work => `<tr><th scope="row"><a href="${catalogWorkHref(work)}">${esc(label(work,'title'))}</a></th><td>${esc(label(work,'instrumentation'))}</td></tr>`).join('');
-    const columns = state.lang === 'ja' ? ['作品名','編成'] : ['Title','Instrumentation'];
-    return `<section class="year-group" aria-labelledby="${id}"><h2 id="${id}">${heading}</h2><div class="year-table-wrap" tabindex="0"><table class="work-index"><thead><tr><th scope="col">${columns[0]}</th><th scope="col">${columns[1]}</th></tr></thead><tbody>${rows}</tbody></table></div></section>`;
+    const rows = groups.get(year).sort((a,b) => label(a,'title').localeCompare(label(b,'title'),state.lang)).map(work => `<tr><th scope="row"><a href="${catalogWorkHref(work)}">${esc(label(work,'title'))}</a></th><td>${esc(instrumentationShort(work))}</td></tr>`).join('');
+    return `<section class="year-group" aria-labelledby="${id}"><h2 id="${id}">${heading}</h2><div class="year-table-wrap" tabindex="0"><table class="work-index"><tbody>${rows}</tbody></table></div></section>`;
   }).join('');
 }
 function lazyVideos() {
