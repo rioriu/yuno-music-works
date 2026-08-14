@@ -123,7 +123,7 @@ function originalTable(items) {
   const years = [...groups.keys()].sort((a,b) => a === null ? 1 : b === null ? -1 : b - a);
   return years.map(year => {
     const id = year === null ? 'year-unknown' : `year-${year}`, heading = year === null ? (state.lang === 'ja' ? '作曲年不明' : 'Year unknown') : `${year}${state.lang === 'ja' ? '年' : ''}`;
-    const rows = groups.get(year).sort((a,b) => label(a,'title').localeCompare(label(b,'title'),state.lang)).map(work => `<tr><th scope="row"><a href="${catalogWorkHref(work)}">${esc(label(work,'title'))}</a></th><td>${esc(instrumentationShort(work))}</td></tr>`).join('');
+    const rows = groups.get(year).sort((a,b) => label(a,'title').localeCompare(label(b,'title'),state.lang)).map(work => { const href = isMultipart(work) ? detailHref(work) : catalogWorkHref(work); return `<tr><th scope="row"><a href="${href}">${esc(label(work,'title'))}</a></th><td>${esc(instrumentationShort(work))}</td></tr>`; }).join('');
     return `<section class="year-group" aria-labelledby="${id}"><h2 id="${id}">${heading}</h2><div class="year-table-wrap" tabindex="0"><table class="work-index"><tbody>${rows}</tbody></table></div></section>`;
   }).join('');
 }
