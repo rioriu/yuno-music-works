@@ -90,9 +90,11 @@ function card(work) {
 }
 function instrumentationShort(work) {
   const japanese = work.instrumentation_ja || '';
-  if (/^(?:CeVIO|VoiSona)\b/i.test(japanese) || /^(?:CeVIO|VoiSona)\b/i.test(work.instrumentation_en || '')) return 'ボーカル';
+  const english = work.instrumentation_en || '';
+  if (/^(?:CeVIO|VoiSona)\b/i.test(japanese) || /^(?:CeVIO|VoiSona)\b/i.test(english)) return state.lang === 'ja' ? 'ボーカル' : 'Vocal';
+  if (state.lang === 'en') return english || japanese;
   if (new Set(['打楽器六重奏','吹奏楽','混声合唱','室内オーケストラ','弦楽四重奏','ボーカル']).has(japanese)) return japanese;
-  let value = japanese || work.instrumentation_en || label(work,'instrumentation');
+  let value = japanese || english;
   value = value
     .replace(/アルトサクソフォン/g, 'A.Sax.')
     .replace(/サクソフォン|サックス/g, 'Sax.')

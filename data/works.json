@@ -179,7 +179,7 @@
     "title_ja": "ピアノ・ソナタ第2番",
     "title_en": "Piano Sonata No. 2",
     "category": "classical",
-    "composition_year": null,
+    "composition_year": 2018,
     "published_date": "2018-03-15",
     "ensemble": "piano",
     "instrumentation_ja": "ピアノ独奏",
@@ -195,7 +195,10 @@
     },
     "other_videos": [],
     "scores": [],
-    "commentary": null,
+    "commentary": "commentary",
+    "commentary_ja": "2012年～2018年にかけて作曲",
+    "commentary_en": "A work composed between 2012 and 2018.",
+    "commentary_source": "https://www.nicovideo.jp/watch/sm32890543",
     "tags": [
       "piano"
     ],
