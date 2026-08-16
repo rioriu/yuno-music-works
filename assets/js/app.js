@@ -93,6 +93,8 @@ function instrumentationShort(work) {
   const english = work.instrumentation_en || '';
   if (/^(?:CeVIO|VoiSona)\b/i.test(japanese) || /^(?:CeVIO|VoiSona)\b/i.test(english)) return state.lang === 'ja' ? 'ボーカル' : 'Vocal';
   if (state.lang === 'en') return english || japanese;
+  const japaneseOverrides = {'右手のためのピアノ独奏':'右手ピアノ独奏','ピアノ独奏':'ピアノ独奏','トロンボーン四重奏':'トロンボーン四重奏','ヴァイオリン二重奏':'ヴァイオリン二重奏','ホルン独奏':'ホルン独奏','シロフォン独奏':'シロフォン独奏'};
+  if (japaneseOverrides[japanese]) return japaneseOverrides[japanese];
   if (new Set(['打楽器六重奏','吹奏楽','混声合唱','室内オーケストラ','弦楽四重奏','ボーカル']).has(japanese)) return japanese;
   let value = japanese || english;
   value = value
@@ -179,7 +181,7 @@ async function renderCommentary() {
   const works = await getJson('works.json'), hit = buildWorkIndex(works).byId.get(new URLSearchParams(location.search).get('work'));
   if (!hit || !hit.work.commentary) { output.innerHTML = `<p class="empty-state">${t('commentaryMissing')}</p><p><a href="${rootLink('originals/list/')}">${t('backToWorks')}</a></p>`; return; }
   const work = hit.work, back = hit.parent ? detailHref(hit.parent,work.slug) : catalogHref(work), paragraphs = (work[`commentary_${state.lang}`] || work.commentary_ja).split(/\n\n+/).map(text => `<p>${esc(text)}</p>`).join(''), source = trustedExternalUrl(work.commentary_source);
-  document.title = `${label(work,'title')} — YUNO`; output.innerHTML = `<div class="eyebrow">Commentary</div><h1>${esc(label(work,'title'))}</h1><p class="commentary-lead">${esc(label(hit.parent || work,'instrumentation'))}</p><div class="commentary-body">${paragraphs}</div><div class="commentary-links">${source ? `<a target="_blank" rel="noopener" href="${esc(source)}">${t('sourceDescription')}</a>` : ''}<a href="${back}">${t('backToWorks')}</a></div>`;
+  document.title = `${label(work,'title')} — YUNO`; output.innerHTML = `<div class="eyebrow">Commentary</div><h1>${esc(label(work,'title'))}</h1><p class="commentary-lead">${esc(instrumentationShort(hit.parent || work))}</p><div class="commentary-body">${paragraphs}</div><div class="commentary-links">${source ? `<a target="_blank" rel="noopener" href="${esc(source)}">${t('sourceDescription')}</a>` : ''}<a href="${back}">${t('backToWorks')}</a></div>`;
 }
 document.addEventListener('DOMContentLoaded', async () => {
   renderShell(); localizeStatic();
