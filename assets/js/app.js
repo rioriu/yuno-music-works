@@ -4,8 +4,8 @@ const DATA = new URL('data/', ROOT);
 const state = {lang: localStorage.getItem('yuno-language') === 'en' ? 'en' : 'ja'};
 
 const C = {
-  ja: {home:'ホーム',originals:'オリジナル作品',arrangements:'編曲作品',profile:'プロフィール',contact:'お問い合わせ',updates:'更新情報',menu:'メニュー',skip:'本文へ移動',language:'言語',year:'年',duration:'演奏時間',origin:'原曲',artist:'アーティスト',composer:'作曲',lyricist:'作詞',commentary:'作品解説',footer:'© YUNO / MUSIC & WORKS',noWorks:'条件に合う作品はありません。',noVideo:'動画は準備中です。',fallbackVideo:'動画を開く',loadingVideo:'動画を読み込んでいます…',videoTitle:'動画プレーヤー',backToWorks:'作品一覧へ戻る',commentaryMissing:'作品解説が見つかりませんでした。',notFound:'この作品は見つかりませんでした。',parts:'曲目',viewWork:'作品を見る',all:'すべて',publishedNewest:'公開日：新しい順',publishedOldest:'公開日：古い順',results:'件',works:'作品',published:'公開日',browseCreators:'アーティスト・作曲家から探す',showing:'表示中',sourceGenre:'原曲ジャンル',filmTv:'映画・ドラマ音楽',pianoSolo:'ピアノソロ',pianoFourHands:'ピアノ連弾',chamberEnsemble:'室内楽',openWork:'作品を開く',closeWork:'作品を閉じる'},
-  en: {home:'Home',originals:'Original Works',arrangements:'Arrangements',profile:'Profile',contact:'Contact',updates:'Updates',menu:'Menu',skip:'Skip to content',language:'Language',year:'Year',duration:'Duration',origin:'Original',artist:'Artist',composer:'Composer',lyricist:'Lyricist',commentary:'Commentary',footer:'© YUNO / MUSIC & WORKS',noWorks:'No works match these filters.',noVideo:'Video is being prepared.',fallbackVideo:'Open video',loadingVideo:'Loading video…',videoTitle:'Video player',backToWorks:'Back to works',commentaryMissing:'Commentary could not be found.',notFound:'This work could not be found.',parts:'Parts',viewWork:'View work',all:'All',publishedNewest:'Published date: newest first',publishedOldest:'Published date: oldest first',results:'',works:'works',published:'Published',browseCreators:'Browse by artist/composer',showing:'Showing',sourceGenre:'Source genre',filmTv:'Film & TV Music',pianoSolo:'Piano Solo',pianoFourHands:'Piano Four Hands',chamberEnsemble:'Chamber Ensemble',openWork:'Open work',closeWork:'Close work'},
+  ja: {home:'ホーム',originals:'オリジナル作品',arrangements:'編曲作品',profile:'プロフィール',contact:'お問い合わせ',updates:'更新情報',menu:'メニュー',skip:'本文へ移動',language:'言語',year:'年',duration:'演奏時間',origin:'原曲',artist:'アーティスト',composer:'作曲',lyricist:'作詞',commentary:'作品解説',footer:'© YUNO / MUSIC & WORKS',noWorks:'条件に合う作品はありません。',noVideo:'動画は準備中です。',fallbackVideo:'動画を開く',loadingVideo:'動画を読み込んでいます…',videoTitle:'動画プレーヤー',backToWorks:'作品一覧へ戻る',commentaryMissing:'作品解説が見つかりませんでした。',notFound:'この作品は見つかりませんでした。',parts:'曲目',viewWork:'作品を見る',all:'すべて',publishedNewest:'公開日：新しい順',publishedOldest:'公開日：古い順',results:'件',works:'作品',published:'公開日',browseCreators:'アーティスト・作曲家から探す',showing:'表示中',sourceGenre:'原曲ジャンル',filmTv:'映画・ドラマ音楽',pianoSolo:'ピアノソロ',pianoFourHands:'ピアノ連弾',chamberEnsemble:'室内楽',other:'その他',allArrangements:'すべての編曲作品',viewArrangement:'動画・関連リンクを開く',closeArrangement:'閉じる'},
+  en: {home:'Home',originals:'Original Works',arrangements:'Arrangements',profile:'Profile',contact:'Contact',updates:'Updates',menu:'Menu',skip:'Skip to content',language:'Language',year:'Year',duration:'Duration',origin:'Original',artist:'Artist',composer:'Composer',lyricist:'Lyricist',commentary:'Commentary',footer:'© YUNO / MUSIC & WORKS',noWorks:'No works match these filters.',noVideo:'Video is being prepared.',fallbackVideo:'Open video',loadingVideo:'Loading video…',videoTitle:'Video player',backToWorks:'Back to works',commentaryMissing:'Commentary could not be found.',notFound:'This work could not be found.',parts:'Parts',viewWork:'View work',all:'All',publishedNewest:'Published date: newest first',publishedOldest:'Published date: oldest first',results:'',works:'works',published:'Published',browseCreators:'Browse by artist/composer',showing:'Showing',sourceGenre:'Source genre',filmTv:'Film & TV Music',pianoSolo:'Piano Solo',pianoFourHands:'Piano Four Hands',chamberEnsemble:'Chamber Ensemble',other:'Other',allArrangements:'All arrangements',viewArrangement:'Open video and links',closeArrangement:'Close'},
 };
 const PAGE_META = {
   home: {ja:{title:'YUNO / MUSIC & WORKS',description:'YUNOのオリジナル作品と編曲作品を、演奏動画や楽譜へのリンクとともに紹介します。'},en:{title:'YUNO / MUSIC & WORKS',description:'Explore YUNO’s original works and arrangements with performance videos and score links.'}},
@@ -148,7 +148,7 @@ function instrumentationShort(work) {
   const japanese = work.instrumentation_ja || '', english = work.instrumentation_en || '';
   if (/^(?:CeVIO|VoiSona)\b/i.test(japanese) || /^(?:CeVIO|VoiSona)\b/i.test(english)) return state.lang === 'ja' ? 'ボーカル' : 'Vocal';
   if (state.lang === 'en') return english || japanese;
-  const japaneseOverrides = {'右手のためのピアノ独奏':'右手ピアノ独奏','ピアノ独奏':'ピアノ独奏','トロンボーン四重奏':'トロンボーン四重奏','ヴァイオリン二重奏':'ヴァイオリン二重奏','ホルン独奏':'ホルン独奏','シロフォン独奏':'シロフォン独奏'};
+  const japaneseOverrides = {'右手のためのピアノ独奏':'右手ピアノ独奏','ピアノ独奏':'ピアノ独奏','ピアノソロ':'ピアノソロ','ピアノ連弾':'ピアノ連弾','チェロ五重奏':'チェロ五重奏','サックス四重奏':'サックス四重奏','トロンボーン四重奏':'トロンボーン四重奏','ヴァイオリン二重奏':'ヴァイオリン二重奏','ホルン独奏':'ホルン独奏','シロフォン独奏':'シロフォン独奏'};
   if (japaneseOverrides[japanese]) return japaneseOverrides[japanese];
   if (new Set(['打楽器六重奏','吹奏楽','混声合唱','室内オーケストラ','弦楽四重奏','ボーカル']).has(japanese)) return japanese;
   let value = japanese || english;
@@ -212,18 +212,45 @@ function arrangementCreatorCounts(works) {
   const counts = new Map(); works.forEach(work => { const creator = arrangementCreator(work); if (creator) counts.set(creator,(counts.get(creator) || 0) + 1); });
   return [...counts.entries()].sort(([a,countA],[b,countB]) => countB - countA || a.localeCompare(b,state.lang === 'ja' ? 'ja-JP' : 'en',{sensitivity:'base'}));
 }
-function renderCreatorButtons(works, selected) {
-  const mount = document.querySelector('[data-arrangement-creators]'); if (!mount) return;
-  const creators = arrangementCreatorCounts(works), allCount = works.length;
-  mount.innerHTML = [`<button class="creator-button" type="button" data-creator="" aria-pressed="${selected === ''}"><span>${t('all')}</span><span class="creator-count">${allCount}</span></button>`,...creators.map(([creator,count]) => `<button class="creator-button" type="button" data-creator="${esc(creator)}" aria-pressed="${creator === selected}"><span>${esc(creator)}</span><span class="creator-count">${count}</span></button>`)].join('');
+const ARRANGEMENT_FEATURED_CREATORS = ['キリンジ','久石 譲'];
+function arrangementBrowseHref(key, value) {
+  const params = new URLSearchParams(); params.set(key,value);
+  return `${rootLink('arrangements/')}?${params}`;
 }
-function arrangementDate(work) {
-  if (!work.published_date) return '';
-  return new Intl.DateTimeFormat(state.lang === 'ja' ? 'ja-JP' : 'en-GB',{year:'numeric',month:'short',day:'numeric',timeZone:'UTC'}).format(new Date(`${work.published_date}T00:00:00Z`));
+function arrangementBrowseLink(text, count, key, value) {
+  return `<a class="arrangement-discovery-link" href="${esc(arrangementBrowseHref(key,value))}"><span>${esc(text)}</span><strong>${count}</strong><span class="arrangement-discovery-arrow" aria-hidden="true">→</span></a>`;
+}
+function renderArrangementDiscovery(works) {
+  const creatorMount = document.querySelector('[data-arrangement-creator-links]'), genreMount = document.querySelector('[data-arrangement-genre-links]'), ensembleMount = document.querySelector('[data-arrangement-ensemble-links]'), allMount = document.querySelector('[data-arrangement-all-link]');
+  const creatorCount = creator => works.filter(work => arrangementCreator(work) === creator).length;
+  const creatorLinks = [
+    ['キリンジ',creatorCount('キリンジ'),'キリンジ'],
+    [state.lang === 'ja' ? '久石 譲' : 'Joe Hisaishi',creatorCount('久石 譲'),'久石 譲'],
+    [t('other'),works.filter(work => !ARRANGEMENT_FEATURED_CREATORS.includes(arrangementCreator(work))).length,'other'],
+  ];
+  if (creatorMount) creatorMount.innerHTML = creatorLinks.map(([text,count,value]) => arrangementBrowseLink(text,count,'creator',value)).join('');
+  if (genreMount) genreMount.innerHTML = [
+    arrangementBrowseLink(state.lang === 'ja' ? 'ポップス' : 'POPS',works.filter(work => work.category === 'pops').length,'genre','pops'),
+    arrangementBrowseLink(t('filmTv'),works.filter(work => work.category === 'screen').length,'genre','screen'),
+  ].join('');
+  if (ensembleMount) ensembleMount.innerHTML = [
+    arrangementBrowseLink(t('pianoSolo'),works.filter(work => work.ensemble === 'solo').length,'ensemble','solo'),
+    arrangementBrowseLink(t('pianoFourHands'),works.filter(work => work.ensemble === 'duo').length,'ensemble','duo'),
+    arrangementBrowseLink(t('chamberEnsemble'),works.filter(work => work.ensemble === 'ensemble').length,'ensemble','ensemble'),
+  ].join('');
+  if (allMount) allMount.innerHTML = `<a href="${esc(arrangementBrowseHref('view','all'))}">${t('allArrangements')} <span aria-hidden="true">→</span></a>`;
+}
+function arrangementSelectionLabel(creator, genre, ensemble) {
+  const labels = [];
+  if (creator) labels.push(creator === 'other' ? t('other') : creator === '久石 譲' && state.lang === 'en' ? 'Joe Hisaishi' : creator);
+  if (genre) labels.push(genre === 'pops' ? (state.lang === 'ja' ? 'ポップス' : 'POPS') : t('filmTv'));
+  if (ensemble) labels.push({solo:t('pianoSolo'),duo:t('pianoFourHands'),ensemble:t('chamberEnsemble')}[ensemble]);
+  if (!labels.length) return t('allArrangements');
+  return state.lang === 'ja' ? `${labels.join('・')}の編曲作品` : `${labels.join(' / ')} arrangements`;
 }
 function arrangementRow(work) {
   const slug = esc(work.slug), panel = `arrangement-panel-${slug}`;
-  return `<article class="arrangement-row" id="${slug}" data-arrangement-row data-slug="${slug}"><div class="arrangement-row-heading"><button class="arrangement-toggle" type="button" data-arrangement-toggle data-slug="${slug}" aria-expanded="false" aria-controls="${panel}"><span class="arrangement-title">${esc(label(work,'title'))}</span><span class="arrangement-toggle-label">${t('openWork')}</span></button></div><p class="arrangement-credit">${arrangementCredits(work)}</p><div class="work-meta arrangement-meta"><span>${esc(instrumentationShort(work))}</span><span>${t('published')} ${esc(arrangementDate(work))}</span></div><div class="arrangement-panel" id="${panel}" data-arrangement-panel hidden></div></article>`;
+  return `<article class="arrangement-row" id="${slug}" data-arrangement-row data-slug="${slug}"><button class="arrangement-toggle" type="button" data-arrangement-toggle data-slug="${slug}" aria-expanded="false" aria-controls="${panel}"><span class="arrangement-toggle-main"><span class="arrangement-title">${esc(label(work,'title'))}</span><span class="arrangement-credit">${arrangementCredits(work)}</span><span class="work-meta arrangement-meta"><span>${esc(instrumentationShort(work))}</span></span></span><span class="arrangement-toggle-action"><span class="arrangement-toggle-label">${t('viewArrangement')}</span><span class="arrangement-toggle-icon" aria-hidden="true">＋</span></span></button><div class="arrangement-panel" id="${panel}" data-arrangement-panel hidden></div></article>`;
 }
 function arrangementExpandedMarkup(work) {
   const links = actions(work);
@@ -234,45 +261,51 @@ function clearLocationHash() {
   const next = new URL(location.href); next.hash = ''; history.replaceState(null,'',next);
 }
 async function renderArrangementCatalog(works) {
-  const output = document.querySelector('[data-work-list]'), creatorMount = document.querySelector('[data-arrangement-creators]'); if (!output) return;
-  const all = works.filter(work => work.published && work.type === 'arrangement'), genre = document.querySelector('[name=genre]'), ensemble = document.querySelector('[name=ensemble]'), sort = document.querySelector('[name=sort]');
+  const output = document.querySelector('[data-work-list]'); if (!output) return;
+  const discovery = document.querySelector('[data-arrangement-discovery]'), results = document.querySelector('[data-arrangement-results]'), all = works.filter(work => work.published && work.type === 'arrangement');
+  renderArrangementDiscovery(all);
   const params = new URLSearchParams(location.search), creatorValues = new Set(arrangementCreatorCounts(all).map(([creator]) => creator));
-  let selectedCreator = params.get('creator') || '', selectedGenre = params.get('genre') || '', selectedEnsemble = params.get('ensemble') || '', selectedSort = params.get('sort') || 'newest';
+  creatorValues.add('other');
+  let selectedCreator = params.get('creator') || '', selectedGenre = params.get('genre') || '', selectedEnsemble = params.get('ensemble') || '', selectedSort = params.get('sort') || 'newest', showAll = params.get('view') === 'all';
   if (!creatorValues.has(selectedCreator)) selectedCreator = '';
   if (!ARRANGEMENT_GENRES.includes(selectedGenre)) selectedGenre = '';
   if (!ARRANGEMENT_ENSEMBLES.includes(selectedEnsemble)) selectedEnsemble = '';
   if (!ARRANGEMENT_SORTS.includes(selectedSort)) selectedSort = 'newest';
-  const normalize = () => { const next = new URLSearchParams(location.search); next.delete('category'); selectedCreator ? next.set('creator',selectedCreator) : next.delete('creator'); selectedGenre ? next.set('genre',selectedGenre) : next.delete('genre'); selectedEnsemble ? next.set('ensemble',selectedEnsemble) : next.delete('ensemble'); selectedSort !== 'newest' ? next.set('sort',selectedSort) : next.delete('sort'); replaceUrl(next); };
+  if (params.has('view') && !showAll) params.delete('view');
+  const hashSlug = readHash(), hashWork = all.find(work => work.slug === hashSlug);
+  if (hashSlug && !hashWork) clearLocationHash();
+  const showResults = showAll || Boolean(selectedCreator || selectedGenre || selectedEnsemble || selectedSort !== 'newest' || hashWork);
+  if (selectedCreator || selectedGenre || selectedEnsemble) showAll = false;
+  const normalize = () => { const next = new URLSearchParams(location.search); next.delete('category'); selectedCreator ? next.set('creator',selectedCreator) : next.delete('creator'); selectedGenre ? next.set('genre',selectedGenre) : next.delete('genre'); selectedEnsemble ? next.set('ensemble',selectedEnsemble) : next.delete('ensemble'); selectedSort !== 'newest' ? next.set('sort',selectedSort) : next.delete('sort'); showAll ? next.set('view','all') : next.delete('view'); replaceUrl(next); };
   normalize();
-  if (genre) genre.value = selectedGenre; if (ensemble) ensemble.value = selectedEnsemble; if (sort) sort.value = selectedSort;
+  if (discovery) discovery.hidden = showResults;
+  if (results) results.hidden = !showResults;
+  if (!showResults) { output.replaceChildren(); return; }
   let expandedSlug = null;
-  const closeExpanded = (clearHash = false) => { output.querySelectorAll('[data-arrangement-panel]').forEach(panel => { panel.replaceChildren(); panel.hidden = true; }); output.querySelectorAll('[data-arrangement-toggle]').forEach(button => { button.setAttribute('aria-expanded','false'); const label = button.querySelector('.arrangement-toggle-label'); if (label) label.textContent = t('openWork'); }); expandedSlug = null; if (clearHash) clearLocationHash(); };
+  const closeExpanded = (clearHash = false) => { output.querySelectorAll('[data-arrangement-panel]').forEach(panel => { panel.replaceChildren(); panel.hidden = true; }); output.querySelectorAll('[data-arrangement-toggle]').forEach(button => { button.setAttribute('aria-expanded','false'); const label = button.querySelector('.arrangement-toggle-label'), icon = button.querySelector('.arrangement-toggle-icon'); if (label) label.textContent = t('viewArrangement'); if (icon) icon.textContent = '＋'; }); expandedSlug = null; if (clearHash) clearLocationHash(); };
   const openExpanded = (slug, updateHash = true) => {
     const row = document.getElementById(slug), work = all.find(item => item.slug === slug);
     if (!row?.matches('[data-arrangement-row]')) return false;
     if (!row || !work) return false;
     if (expandedSlug && expandedSlug !== slug) closeExpanded(false);
     const button = row.querySelector('[data-arrangement-toggle]'), panel = row.querySelector('[data-arrangement-panel]');
-    button.setAttribute('aria-expanded','true'); const buttonLabel = button.querySelector('.arrangement-toggle-label'); if (buttonLabel) buttonLabel.textContent = t('closeWork'); panel.hidden = false; panel.innerHTML = arrangementExpandedMarkup(work); const video = panel.querySelector('[data-video-src]'); if (video) mountVideo(video); expandedSlug = slug;
+    button.setAttribute('aria-expanded','true'); const buttonLabel = button.querySelector('.arrangement-toggle-label'), icon = button.querySelector('.arrangement-toggle-icon'); if (buttonLabel) buttonLabel.textContent = t('closeArrangement'); if (icon) icon.textContent = '−'; panel.hidden = false; panel.innerHTML = arrangementExpandedMarkup(work); const video = panel.querySelector('[data-video-src]'); if (video) mountVideo(video); expandedSlug = slug;
     if (updateHash && readHash() !== slug) { const next = new URL(location.href); next.hash = slug; history.replaceState(null,'',next); }
     return true;
   };
   const handleHash = () => { const slug = readHash(); if (!slug) { if (expandedSlug) closeExpanded(false); return; } if (!openExpanded(slug,false)) { if (expandedSlug) closeExpanded(false); clearLocationHash(); } };
   const render = () => {
     const priorSlug = expandedSlug || readHash();
-    selectedGenre = genre?.value || ''; selectedEnsemble = ensemble?.value || ''; selectedSort = sort?.value || 'newest'; normalize();
-    const items = all.filter(work => (!selectedCreator || arrangementCreator(work) === selectedCreator) && (!selectedGenre || work.category === selectedGenre) && (!selectedEnsemble || work.ensemble === selectedEnsemble));
+    const items = all.filter(work => (!selectedCreator || (selectedCreator === 'other' ? !ARRANGEMENT_FEATURED_CREATORS.includes(arrangementCreator(work)) : arrangementCreator(work) === selectedCreator)) && (!selectedGenre || work.category === selectedGenre) && (!selectedEnsemble || work.ensemble === selectedEnsemble));
     items.sort((a,b) => { if (selectedSort === 'title') return label(a,'title').localeCompare(label(b,'title'),state.lang); return selectedSort === 'oldest' ? a.published_date.localeCompare(b.published_date) : b.published_date.localeCompare(a.published_date); });
-    renderCreatorButtons(all,selectedCreator);
     output.innerHTML = items.length ? items.map(arrangementRow).join('') : `<p class="empty-state">${t('noWorks')}</p>`;
-    const count = document.querySelector('[data-arrangement-count]'), status = document.querySelector('[data-arrangement-status]');
+    const count = document.querySelector('[data-arrangement-count]'), status = document.querySelector('[data-arrangement-status]'), title = document.querySelector('[data-arrangement-results-title]');
+    if (title) title.textContent = arrangementSelectionLabel(selectedCreator,selectedGenre,selectedEnsemble);
     if (count) count.textContent = originalCountText(items.length);
     if (status) status.textContent = state.lang === 'ja' ? `${items.length}件の編曲作品を表示` : `${t('showing')} ${items.length} arrangement${items.length === 1 ? '' : 's'}`;
     output.querySelectorAll('[data-arrangement-toggle]').forEach(button => button.addEventListener('click', () => { const slug = button.dataset.slug; if (expandedSlug === slug) closeExpanded(true); else openExpanded(slug,true); }));
-    creatorMount?.querySelectorAll('[data-creator]').forEach(button => button.addEventListener('click', () => { selectedCreator = button.dataset.creator || ''; render(); }));
     if (priorSlug && items.some(item => item.slug === priorSlug)) openExpanded(priorSlug,false); else if (priorSlug) { closeExpanded(true); }
   };
-  [genre,ensemble,sort].filter(Boolean).forEach(control => control.addEventListener('change',render));
   window.addEventListener('hashchange',handleHash);
   render();
 }
