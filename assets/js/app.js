@@ -166,8 +166,8 @@ async function renderWorkDetail() {
   const output = document.querySelector('[data-work-detail]'); if (!output) return;
   const works = await getJson('works.json'), index = buildWorkIndex(works), id = new URLSearchParams(location.search).get('work'), hit = index.byId.get(id);
   if (!hit || hit.parent || !hit.work.published || !isMultipart(hit.work)) { output.innerHTML = `<p class="empty-state">${t('notFound')}</p><p><a href="${rootLink('originals/list/')}">${t('backToWorks')}</a></p>`; return; }
-  const work = hit.work; document.title = `${label(work,'title')} — YUNO`;
-  output.innerHTML = `<header class="page-heading"><div class="eyebrow">Original Works</div><h1>${esc(label(work,'title'))}</h1>${credits(work) ? `<p>${credits(work)}</p>` : ''}${metadata(work,label(work,'parts_label'))}</header><section class="parts" aria-labelledby="parts-heading"><h2 id="parts-heading">${esc(label(work,'parts_heading') || t('parts'))}</h2>${work.parts.map(part => partMarkup(work,part)).join('')}</section><p class="catalog-back"><a href="${catalogHref(work)}">${t('backToWorks')}</a></p>`;
+  const work = hit.work, compositionPeriod = label(work,'composition_period'); document.title = `${label(work,'title')} — YUNO`;
+  output.innerHTML = `<header class="page-heading"><div class="eyebrow">Original Works</div><h1>${esc(label(work,'title'))}</h1>${credits(work) ? `<p>${credits(work)}</p>` : ''}${metadata(work,label(work,'parts_label'))}${compositionPeriod ? `<p>${esc(compositionPeriod)}</p>` : ''}</header><section class="parts">${work.parts.map(part => partMarkup(work,part)).join('')}</section><p class="catalog-back"><a href="${catalogHref(work)}">${t('backToWorks')}</a></p>`;
   lazyVideos(); requestAnimationFrame(focusHash);
 }
 async function renderUpdates() {

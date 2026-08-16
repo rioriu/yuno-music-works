@@ -195,10 +195,9 @@
     },
     "other_videos": [],
     "scores": [],
-    "commentary": "commentary",
-    "commentary_ja": "2012年～2018年にかけて作曲",
-    "commentary_en": "A work composed between 2012 and 2018.",
-    "commentary_source": "https://www.nicovideo.jp/watch/sm32890543",
+    "commentary": null,
+    "composition_period_ja": "2012年～2018年にかけて作曲",
+    "composition_period_en": "Composed between 2012 and 2018.",
     "tags": [
       "piano"
     ],
