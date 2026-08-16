@@ -4,8 +4,8 @@ const DATA = new URL('data/', ROOT);
 const state = {lang: localStorage.getItem('yuno-language') === 'en' ? 'en' : 'ja'};
 
 const C = {
-  ja: {home:'ホーム',originals:'オリジナル作品',arrangements:'編曲作品',profile:'プロフィール',contact:'お問い合わせ',updates:'更新情報',menu:'メニュー',skip:'本文へ移動',language:'言語',year:'年',duration:'演奏時間',origin:'原曲',artist:'アーティスト',composer:'作曲',lyricist:'作詞',commentary:'作品解説',footer:'© YUNO / MUSIC & WORKS',noWorks:'条件に合う作品はありません。',noVideo:'動画は準備中です。',fallbackVideo:'動画を開く',loadingVideo:'動画を読み込んでいます…',videoTitle:'動画プレーヤー',sourceDescription:'YouTube概要欄を見る',backToWorks:'作品一覧へ戻る',commentaryMissing:'作品解説が見つかりませんでした。',notFound:'この作品は見つかりませんでした。',parts:'曲目',viewWork:'作品を見る',all:'すべて'},
-  en: {home:'Home',originals:'Original Works',arrangements:'Arrangements',profile:'Profile',contact:'Contact',updates:'Updates',menu:'Menu',skip:'Skip to content',language:'Language',year:'Year',duration:'Duration',origin:'Original',artist:'Artist',composer:'Composer',lyricist:'Lyricist',commentary:'Commentary',footer:'© YUNO / MUSIC & WORKS',noWorks:'No works match these filters.',noVideo:'Video is being prepared.',fallbackVideo:'Open video',loadingVideo:'Loading video…',videoTitle:'Video player',sourceDescription:'View the YouTube description',backToWorks:'Back to works',commentaryMissing:'Commentary could not be found.',notFound:'This work could not be found.',parts:'Parts',viewWork:'View work',all:'All'},
+  ja: {home:'ホーム',originals:'オリジナル作品',arrangements:'編曲作品',profile:'プロフィール',contact:'お問い合わせ',updates:'更新情報',menu:'メニュー',skip:'本文へ移動',language:'言語',year:'年',duration:'演奏時間',origin:'原曲',artist:'アーティスト',composer:'作曲',lyricist:'作詞',commentary:'作品解説',footer:'© YUNO / MUSIC & WORKS',noWorks:'条件に合う作品はありません。',noVideo:'動画は準備中です。',fallbackVideo:'動画を開く',loadingVideo:'動画を読み込んでいます…',videoTitle:'動画プレーヤー',backToWorks:'作品一覧へ戻る',commentaryMissing:'作品解説が見つかりませんでした。',notFound:'この作品は見つかりませんでした。',parts:'曲目',viewWork:'作品を見る',all:'すべて'},
+  en: {home:'Home',originals:'Original Works',arrangements:'Arrangements',profile:'Profile',contact:'Contact',updates:'Updates',menu:'Menu',skip:'Skip to content',language:'Language',year:'Year',duration:'Duration',origin:'Original',artist:'Artist',composer:'Composer',lyricist:'Lyricist',commentary:'Commentary',footer:'© YUNO / MUSIC & WORKS',noWorks:'No works match these filters.',noVideo:'Video is being prepared.',fallbackVideo:'Open video',loadingVideo:'Loading video…',videoTitle:'Video player',backToWorks:'Back to works',commentaryMissing:'Commentary could not be found.',notFound:'This work could not be found.',parts:'Parts',viewWork:'View work',all:'All'},
 };
 const ENSEMBLES = {piano:{ja:'ピアノ',en:'Piano'},solo:{ja:'独奏',en:'Solo'},'solo-piano':{ja:'独奏＋ピアノ',en:'Solo & Piano'},strings:{ja:'弦楽アンサンブル',en:'String Ensemble'},woodwinds:{ja:'木管アンサンブル',en:'Woodwind Ensemble'},brass:{ja:'金管アンサンブル',en:'Brass Ensemble'},percussion:{ja:'打楽器アンサンブル',en:'Percussion Ensemble'},mixed:{ja:'混成アンサンブル',en:'Mixed Ensemble'},orchestra:{ja:'オーケストラ',en:'Orchestra'},wind:{ja:'吹奏楽',en:'Wind Ensemble'},'art-song':{ja:'歌曲',en:'Art Song'},pops:{ja:'POPS',en:'POPS'},choral:{ja:'合唱',en:'Choral Works'}};
 const t = key => C[state.lang][key] || key;
@@ -26,6 +26,8 @@ const duration = seconds => {
   const half = halfMinutes % 2;
   return state.lang === 'ja' ? `約${minutes}分${half ? '半' : ''}` : `about ${minutes + (half ? 0.5 : 0)} min.`;
 };
+const hidesDuration = work => work?.type === 'arrangement' || (work?.type === 'original' && work?.ensemble === 'pops');
+const durationMarkup = (work, parent = work) => hidesDuration(work) || hidesDuration(parent) ? '' : `<p class="work-duration">${t('duration')} ${duration(work.duration_seconds)}</p>`;
 
 function localizeStatic() {
   document.documentElement.lang = state.lang;
@@ -76,17 +78,14 @@ function credits(work) {
   return [['artist_name','artist'],['composer_name','composer'],['lyricist_name','lyricist']].filter(([field]) => work[field]).map(([field,key]) => `${t(key)}: ${esc(work[field])}`).join(' · ');
 }
 function metadata(work, partLabel = '') {
-  return `<div class="work-meta">${Number.isInteger(work.composition_year) ? `<span>${work.composition_year}${state.lang === 'ja' ? '年' : ''}</span>` : ''}<span>${esc(instrumentationShort(work))}</span>${partLabel ? `<span>${esc(partLabel)}</span>` : ''}<span class="work-duration">${t('duration')} ${duration(work.duration_seconds)}</span></div>`;
+  return `<div class="work-meta">${Number.isInteger(work.composition_year) ? `<span>${work.composition_year}${state.lang === 'ja' ? '年' : ''}</span>` : ''}<span>${esc(instrumentationShort(work))}</span>${partLabel ? `<span>${esc(partLabel)}</span>` : ''}</div>`;
 }
 function card(work) {
   const title = label(work,'title');
-  const originalTitle = label(work,'original_title');
   const creditText = credits(work);
-  const sourceText = work.type === 'arrangement' && originalTitle !== title ? `${t('origin')}: ${esc(originalTitle)}` : '';
-  const originParts = work.type === 'arrangement' ? [sourceText, creditText].filter(Boolean) : creditText ? [creditText] : [];
-  const origin = originParts.length ? `<p class="arrangement-origin">${originParts.join('<br>')}</p>` : '';
+  const origin = creditText ? `<p class="arrangement-origin">${creditText}</p>` : '';
   const multipart = isMultipart(work), links = multipart ? [`<a class="internal-action" href="${detailHref(work)}">${t('viewWork')}</a>`] : actions(work);
-  return `<article class="work" id="${esc(work.slug)}"><header class="work-heading"><div><h2><a href="${multipart ? detailHref(work) : `#${esc(work.slug)}`}">${esc(title)}</a></h2></div></header>${origin}${metadata(work, multipart ? label(work,'parts_label') : '')}${multipart ? '' : videoMarkup(work)}${links.length ? `<div class="work-actions">${links.join('')}</div>` : ''}</article>`;
+  return `<article class="work" id="${esc(work.slug)}"><header class="work-heading"><div><h2><a href="${multipart ? detailHref(work) : `#${esc(work.slug)}`}">${esc(title)}</a></h2></div></header>${origin}${metadata(work, multipart ? label(work,'parts_label') : '')}${multipart ? '' : videoMarkup(work)}${multipart ? '' : durationMarkup(work)}${links.length ? `<div class="work-actions">${links.join('')}</div>` : ''}</article>`;
 }
 function instrumentationShort(work) {
   const japanese = work.instrumentation_ja || '';
@@ -162,7 +161,7 @@ async function renderOriginalOverview() {
 }
 function partMarkup(parent, part) {
   const links = actions(part);
-  return `<article class="work work-part" id="${esc(part.slug)}"><header class="work-heading"><h3>${esc(label(part,'title'))}</h3></header><div class="work-meta"><span class="work-duration">${t('duration')} ${duration(part.duration_seconds)}</span></div>${videoMarkup(part)}${links.length ? `<div class="work-actions">${links.join('')}</div>` : ''}</article>`;
+  return `<article class="work work-part" id="${esc(part.slug)}"><header class="work-heading"><h3>${esc(label(part,'title'))}</h3></header>${videoMarkup(part)}${durationMarkup(part,parent)}${links.length ? `<div class="work-actions">${links.join('')}</div>` : ''}</article>`;
 }
 async function renderWorkDetail() {
   const output = document.querySelector('[data-work-detail]'); if (!output) return;
@@ -180,8 +179,8 @@ async function renderCommentary() {
   const output = document.querySelector('[data-commentary-page]'); if (!output) return;
   const works = await getJson('works.json'), hit = buildWorkIndex(works).byId.get(new URLSearchParams(location.search).get('work'));
   if (!hit || !hit.work.commentary) { output.innerHTML = `<p class="empty-state">${t('commentaryMissing')}</p><p><a href="${rootLink('originals/list/')}">${t('backToWorks')}</a></p>`; return; }
-  const work = hit.work, back = hit.parent ? detailHref(hit.parent,work.slug) : catalogHref(work), paragraphs = (work[`commentary_${state.lang}`] || work.commentary_ja).split(/\n\n+/).map(text => `<p>${esc(text)}</p>`).join(''), source = trustedExternalUrl(work.commentary_source);
-  document.title = `${label(work,'title')} — YUNO`; output.innerHTML = `<div class="eyebrow">Commentary</div><h1>${esc(label(work,'title'))}</h1><p class="commentary-lead">${esc(instrumentationShort(hit.parent || work))}</p><div class="commentary-body">${paragraphs}</div><div class="commentary-links">${source ? `<a target="_blank" rel="noopener" href="${esc(source)}">${t('sourceDescription')}</a>` : ''}<a href="${back}">${t('backToWorks')}</a></div>`;
+  const work = hit.work, back = hit.parent ? detailHref(hit.parent,work.slug) : catalogHref(work), paragraphs = (work[`commentary_${state.lang}`] || work.commentary_ja).split(/\n\n+/).map(text => `<p>${esc(text)}</p>`).join('');
+  document.title = `${label(work,'title')} — YUNO`; output.innerHTML = `<div class="eyebrow">${t('commentary')}</div><h1>${esc(label(work,'title'))}</h1><p class="commentary-lead">${esc(instrumentationShort(hit.parent || work))}</p><div class="commentary-body">${paragraphs}</div><div class="commentary-links"><a href="${back}">${t('backToWorks')}</a></div>`;
 }
 document.addEventListener('DOMContentLoaded', async () => {
   renderShell(); localizeStatic();
