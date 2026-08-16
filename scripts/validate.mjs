@@ -1,19 +1,177 @@
-import {readFile,readdir,stat} from 'node:fs/promises';import {existsSync,statSync} from 'node:fs';import path from 'node:path';import {fileURLToPath} from 'node:url';import {createHash} from 'node:crypto';
-const originalIndexSource=await readFile(new URL('../originals/index.html',import.meta.url),'utf8'),originalListSource=await readFile(new URL('../originals/list/index.html',import.meta.url),'utf8'),originalAppSource=await readFile(new URL('../assets/js/app.js',import.meta.url),'utf8'),originalBehaviorChecks=['renderOriginalOverview','data-original-overview','originalTable','work-index','year-unknown','catalogWorkHref(work)','isMultipart(work) ? detailHref(work) : catalogWorkHref(work)','encodeURIComponent(work.slug)','hit?.parent?.published && hit.parent.type === \'original\'','items.map(card)','lazyVideos(); requestAnimationFrame(focusHash)','!isMultipart(hit.work)','instrumentationShort(work)','${esc(instrumentationShort(work))}','instrumentationShort(hit.parent || work)'],originalTableSource=originalAppSource.slice(originalAppSource.indexOf('function originalTable'),originalAppSource.indexOf('function lazyVideos'));if(!originalIndexSource.includes('data-original-overview')||originalIndexSource.indexOf('data-original-overview')>originalIndexSource.indexOf('ensemble-section')||!originalIndexSource.includes('data-en="Original Works"')||!originalIndexSource.includes('data-en="Explore by instrumentation"')||!originalListSource.includes('name="sort"')||originalBehaviorChecks.some(check=>!originalAppSource.includes(check))||originalTableSource.includes('<thead>')||originalTableSource.includes('duration(')||originalAppSource.includes('work-detail-content')){console.error('Validation failed: original overview/catalogue/detail source checks');process.exit(1)}
-const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),errors=[];const fail=x=>errors.push(x);const json=async n=>{try{return JSON.parse(await readFile(path.join(root,n),'utf8'))}catch(e){fail(`${n}: invalid JSON (${e.message})`);return[]}};
-async function htmlFiles(dir=root){const entries=await readdir(dir,{withFileTypes:true});return (await Promise.all(entries.filter(e=>!['.git','node_modules'].includes(e.name)).map(e=>e.isDirectory()?htmlFiles(path.join(dir,e.name)):e.name.endsWith('.html')?[path.join(dir,e.name)]:[]))).flat()}
-const statSyncSafe=x=>{try{return statSync(x)}catch{return null}},localTarget=(file,url)=>{const resolved=path.resolve(path.dirname(file),url);return existsSync(resolved)&&statSyncSafe(resolved)?.isDirectory()?path.join(resolved,'index.html'):resolved};
-const works=await json('data/works.json'),updates=await json('data/updates.json'),fields=['id','slug','type','title_ja','title_en','category','composition_year','published_date','ensemble','instrumentation_ja','instrumentation_en','instruments','duration_seconds','video','other_videos','scores','commentary','tags','featured','published'];
-const validateJapanese=(value,dataPath='works')=>{if(Array.isArray(value)){value.forEach((item,index)=>validateJapanese(item,`${dataPath}[${index}]`));return}if(!value||typeof value!=='object')return;for(const [key,item]of Object.entries(value)){const nextPath=`${dataPath}.${key}`;if(key.endsWith('_ja')&&typeof item==='string'&&(item.includes('?')||item.includes('\uFFFD')))fail(`${nextPath}: corrupted Japanese text`);validateJapanese(item,nextPath)}};validateJapanese(works);
-if(!Array.isArray(works)||!works.length)fail('data/works.json: expected a non-empty array');if(!works.some(w=>w.type==='original')||!works.some(w=>w.type==='arrangement'))fail('works: requires original and arrangement');if(works.some(w=>w.sample===true||JSON.stringify(w).includes('example.com')))fail('works: sample/example content is forbidden');const ids=new Set(),slugs=new Set();let commentaryCount=0;const originalEnsembles=['piano','solo','solo-piano','strings','woodwinds','brass','percussion','mixed','orchestra','wind','art-song','choral','pops'];
-for(const [i,w]of works.entries()){for(const f of fields)if(!(f in w))fail(`works[${i}]: missing ${f}`);if(ids.has(w.id))fail(`works[${i}]: duplicate id`);ids.add(w.id);if(w.published){if(typeof w.slug!=='string'||!/^[A-Za-z0-9][A-Za-z0-9_-]*$/.test(w.slug))fail(`works[${i}]: published slug must be a non-empty URL-fragment-safe slug`);else if(slugs.has(w.slug))fail(`works[${i}]: duplicate published slug`);else slugs.add(w.slug)}if(!['original','arrangement'].includes(w.type))fail(`works[${i}]: invalid type`);if(w.type==='original'&&!originalEnsembles.includes(w.ensemble))fail(`works[${i}]: invalid original ensemble`);if(w.composition_year!==null&&(!Number.isInteger(w.composition_year)||w.composition_year<0))fail(`works[${i}]: invalid composition_year`);if(w.published_date!==null&&(!/^\d{4}-\d{2}-\d{2}$/.test(w.published_date)||Number.isNaN(Date.parse(`${w.published_date}T00:00:00Z`))))fail(`works[${i}]: invalid published_date`);if(w.type==='arrangement'&&w.published&&w.published_date===null)fail(`works[${i}]: published arrangement requires published_date`);if(!Number.isInteger(w.duration_seconds)||w.duration_seconds<0)fail(`works[${i}]: invalid duration_seconds`);if(!Array.isArray(w.instruments)||!Array.isArray(w.scores)||!Array.isArray(w.other_videos)||!Array.isArray(w.tags))fail(`works[${i}]: expected arrays`);if(w.video.youtube&&!/^[\w-]{11}$/.test(w.video.youtube))fail(`works[${i}]: invalid YouTube ID`);if(w.video.niconico&&!/^(sm|so)\d+$/.test(w.video.niconico))fail(`works[${i}]: invalid Niconico ID`);if(w.video.soundcloud&&!/^https:\/\/(?:www\.)?soundcloud\.com\/[^?#\s]+$/.test(w.video.soundcloud))fail(`works[${i}]: invalid SoundCloud URL`);if(w.type==='arrangement')for(const f of ['original_title_ja','original_title_en'])if(!w[f])fail(`works[${i}]: arrangement missing ${f}`);for(const x of [...w.scores,...w.other_videos])if(!x.url||!/^https?:\/\//.test(x.url))fail(`works[${i}]: external link must be http(s)`);if(w.commentary){commentaryCount++;if(!w.commentary_ja||!w.commentary_en||!w.commentary_source)fail(`works[${i}]: commentary text and source required`);if(!existsSync(path.join(root,w.commentary,'index.html')))fail(`works[${i}]: commentary route missing`)}}
-const partFields=['id','slug','title_ja','title_en','composition_year','published_date','duration_seconds','video','other_videos','scores','commentary'],nestedIds=new Set(works.map(w=>w.id)),nestedSlugs=new Set(works.filter(w=>w.published).map(w=>w.slug));let partCount=0;for(const [i,w]of works.entries()){if(!('parts'in w))continue;if(!Array.isArray(w.parts)||!w.parts.length){fail(`works[${i}]: parts must be a non-empty array`);continue}if(w.type!=='original')fail(`works[${i}]: multipart parent must be original`);for(const f of ['parts_label_ja','parts_label_en','parts_heading_ja','parts_heading_en'])if(!w[f])fail(`works[${i}]: missing ${f}`);let total=0,newest=null;for(const [j,p]of w.parts.entries()){partCount++;for(const f of partFields)if(!(f in p))fail(`works[${i}].parts[${j}]: missing ${f}`);if(nestedIds.has(p.id))fail(`works[${i}].parts[${j}]: duplicate id`);nestedIds.add(p.id);if(typeof p.slug!=='string'||!/^[A-Za-z0-9][A-Za-z0-9_-]*$/.test(p.slug)||nestedSlugs.has(p.slug))fail(`works[${i}].parts[${j}]: invalid or duplicate slug`);nestedSlugs.add(p.slug);if(p.composition_year!==null&&(!Number.isInteger(p.composition_year)||p.composition_year<0))fail(`works[${i}].parts[${j}]: invalid composition_year`);if(p.published_date!==null&&(!/^\d{4}-\d{2}-\d{2}$/.test(p.published_date)||Number.isNaN(Date.parse(`${p.published_date}T00:00:00Z`))))fail(`works[${i}].parts[${j}]: invalid published_date`);if(!Number.isInteger(p.duration_seconds)||p.duration_seconds<0)fail(`works[${i}].parts[${j}]: invalid duration_seconds`);if(!Array.isArray(p.scores)||!Array.isArray(p.other_videos))fail(`works[${i}].parts[${j}]: expected arrays`);if(p.video.youtube&&!/^[\w-]{11}$/.test(p.video.youtube))fail(`works[${i}].parts[${j}]: invalid YouTube ID`);if(p.video.niconico&&!/^(sm|so)\d+$/.test(p.video.niconico))fail(`works[${i}].parts[${j}]: invalid Niconico ID`);for(const x of [...p.scores,...p.other_videos])if(!x.url||!/^https?:\/\//.test(x.url))fail(`works[${i}].parts[${j}]: external link must be http(s)`);if(p.commentary){commentaryCount++;if(!p.commentary_ja||!p.commentary_en||!p.commentary_source)fail(`works[${i}].parts[${j}]: commentary text and source required`);if(!existsSync(path.join(root,p.commentary,'index.html')))fail(`works[${i}].parts[${j}]: commentary route missing`)}total+=p.duration_seconds;if(p.published_date&&(!newest||p.published_date>newest))newest=p.published_date}if(w.duration_seconds!==total)fail(`works[${i}]: parent duration must equal parts`);if(w.published_date!==newest)fail(`works[${i}]: parent published_date must equal newest part`) }
-for(const [i,w]of works.entries())if(w.type==='arrangement'&&w.published&&(typeof w.composer_name!=='string'||!w.composer_name.trim()))fail(`works[${i}]: published arrangement requires composer_name`);
-for(const ensemble of originalEnsembles)if(!works.some(w=>w.type==='original'&&w.ensemble===ensemble))fail(`works: no original work for ${ensemble}`);
-if(!Array.isArray(updates)||!updates.length)fail('data/updates.json: expected non-empty array');for(const [i,u]of updates.entries()){if(!/^\d{4}-\d{2}-\d{2}$/.test(u.date)||!u.text_ja||!u.text_en)fail(`updates[${i}]: ISO date and bilingual text required`);if(u.link&&!existsSync(path.join(root,u.link,'index.html')))fail(`updates[${i}]: missing linked route ${u.link}`)}
-const arrangementAppSource=await readFile(path.join(root,'assets/js/app.js'),'utf8'),arrangementCardSource=arrangementAppSource.slice(arrangementAppSource.indexOf('function card'),arrangementAppSource.indexOf('function instrumentationShort'));
-if(arrangementCardSource.includes('original_title')||arrangementCardSource.includes("t('origin')"))fail('app.js: arrangement cards must not render source/original-title labels');
-if(!arrangementAppSource.includes("const durationMarkup = (work, parent = work) => hidesDuration(work) || hidesDuration(parent) ? ''"))fail('app.js: durationMarkup must hide arrangement durations and POPS-original durations');
-const routes=['index.html','404.html','originals/index.html','originals/list/index.html','originals/work/index.html','commentary/index.html','arrangements/index.html','profile/index.html','contact/index.html','updates/index.html'];for(const r of routes)if(!existsSync(path.join(root,r)))fail(`missing route ${r}`);const pages=await htmlFiles(),publicPlaceholderPatterns=['example.com','example','sample','demo','placeholder','prepublication','replace before publishing','サンプル','デモ','例示','プレースホルダー','公開前','公開準備中','要差し替え'];let links=0;for(const page of pages){const source=await readFile(page,'utf8'),relative=path.relative(root,page),notFound=relative==='404.html';for(const pattern of publicPlaceholderPatterns)if(source.toLocaleLowerCase().includes(pattern.toLocaleLowerCase()))fail(`${relative}: public placeholder content matches "${pattern}"`);if(!notFound&&(!source.includes('data-site-header')||!source.includes('data-site-footer')))fail(`${relative}: missing shared shell mount`);if(!notFound&&/\b(?:href|src)=["']\/(?!\/)/.test(source))fail(`${relative}: root-absolute local URL`);for(const ref of [...source.matchAll(/\b(?:href|src)=["']([^"'#?]+)["']/g)].map(m=>m[1])){if(notFound||/^(https?:|mailto:|data:)/.test(ref))continue;links++;if(!existsSync(localTarget(page,ref)))fail(`${relative}: missing local target ${ref}`)}}
-const home=await readFile(path.join(root,'index.html'),'utf8');if(/<iframe\b|data-video-src/.test(home))fail('home must not contain video embed');const notFound=await readFile(path.join(root,'404.html'),'utf8');for(const f of ["location.pathname.split('/').filter(Boolean)[0]","/\\.github\\.io$/i.test(location.hostname)","? `/${firstSegment}/` : '/'"])if(!notFound.includes(f))fail(`404.html: missing ${f}`);const model404Base=href=>{const u=new URL(href),firstSegment=u.pathname.split('/').filter(Boolean)[0];return/\.github\.io$/i.test(u.hostname)&&firstSegment&&firstSegment!=='404.html'?`/${firstSegment}/`:'/'};if(new URL(model404Base('https://example.github.io/repo/missing/deep/'),'https://example.github.io/repo/missing/deep/').href!=='https://example.github.io/repo/')fail('404 GitHub model');if(new URL(model404Base('http://127.0.0.1:4173/missing/deep/'),'http://127.0.0.1:4173/missing/deep/').href!=='http://127.0.0.1:4173/')fail('404 local model');
-const detail=await readFile(path.join(root,'originals/work/index.html'),'utf8');if(!detail.includes('data-work-detail'))fail('originals/work/index.html: missing detail mount');const app=await readFile(path.join(root,'assets/js/app.js'),'utf8');try{new Function(app)}catch(error){fail(`assets/js/app.js: invalid JavaScript syntax (${error.message})`)}for(const f of ['buildWorkIndex','renderWorkDetail','IntersectionObserver','youtube-nocookie.com/embed','else if (video.niconico)','w.soundcloud.com/player/','iframe.loading','data-work-detail','window.matchMedia(\'(max-width: 760px)\')','navEl.toggleAttribute(\'hidden\', mobile && !open)','mobileNav.addEventListener(\'change\', () => setNav(false))'])if(!app.includes(f))fail(`app.js: missing ${f}`);const securityCsp="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-src https://www.youtube-nocookie.com https://embed.nicovideo.jp https://w.soundcloud.com; form-action https://formspree.io; base-uri 'self'; object-src 'none'",securityCsp404="default-src 'self'; script-src 'self' 'sha256-lcAM9mpY7dCnpi9UZ2XPnVWFabZeZ7fCWaLna8XOuoY='; style-src 'self' 'sha256-WEgh/1LeHk6RuhyrbXjs13j9FrZFoATLZ6f0KC3y/CA='; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-src https://www.youtube-nocookie.com https://embed.nicovideo.jp https://w.soundcloud.com; form-action https://formspree.io; base-uri 'self'; object-src 'none'",allowedOrigins=new Set(['https://www.youtube.com','https://www.nicovideo.jp','https://soundcloud.com','https://www.soundcloud.com','https://store.piascore.com','https://www.mymusic5.com']),validExternal=(value)=>{try{const url=new URL(value);return url.protocol==='https:'&&allowedOrigins.has(url.origin)}catch{return false}},validRoute=value=>typeof value==='string'&&/^(?:[A-Za-z0-9_-]+\/)*[A-Za-z0-9_-]*\/?$/.test(value)&&!value.includes('..');for(const page of pages){const pageSource=await readFile(page,'utf8'),relative=path.relative(root,page);if(!pageSource.includes(`http-equiv="Content-Security-Policy" content="${relative==='404.html'?securityCsp404:securityCsp}"`))fail(`${relative}: missing or weakened CSP`);if(!pageSource.includes('name="referrer" content="strict-origin-when-cross-origin"'))fail(`${relative}: missing referrer policy`);if(relative!=='404.html'&&/<(?:script|style)\b(?![^>]*\bsrc=)/i.test(pageSource))fail(`${relative}: inline script or style is forbidden`);for(const tag of pageSource.match(/<[^>]*\btarget=["']_blank["'][^>]*>/gi)||[])if(!/\brel=["'][^"']*\bnoopener\b/i.test(tag))fail(`${relative}: target=_blank link lacks rel=noopener`)}const inlineHash=value=>createHash('sha256').update(value,'utf8').digest('base64'),inline404=[...notFound.matchAll(/<(style|script)>([\s\S]*?)<\/\1>/gi)];if(inline404.length!==2)fail('404.html: expected one inline style and one inline script');for(const [,kind,content] of inline404)if(!securityCsp404.includes(`'sha256-${inlineHash(content)}'`))fail(`404.html: CSP ${kind} hash does not match inline content`);for(const [i,work] of works.entries()){for(const [j,item] of [...work.scores,...work.other_videos].entries())if(!validExternal(item.url))fail(`works[${i}]: external link ${j} must use an approved HTTPS origin`);for(const [j,item] of (work.parts||[]).entries())for(const link of [...item.scores,...item.other_videos])if(!validExternal(link.url))fail(`works[${i}].parts[${j}]: external link must use an approved HTTPS origin`);for(const item of [work,...(work.parts||[])]){if(item.video?.fallback_url&&!validExternal(item.video.fallback_url))fail(`works[${i}]: fallback video URL must use an approved HTTPS origin`);if(item.commentary_source&&!validExternal(item.commentary_source))fail(`works[${i}]: commentary source must use an approved HTTPS origin`);if(item.commentary&&!validRoute(item.commentary))fail(`works[${i}]: commentary route must stay within the site`)}}for(const [i,update] of updates.entries())if(update.link&&!validRoute(update.link))fail(`updates[${i}]: link must stay within the site`);const contact=await readFile(path.join(root,'contact/index.html'),'utf8');if(!contact.includes('action="https://formspree.io/f/meajewlw"'))fail('contact: unexpected form endpoint');if(!app.includes('TRUSTED_EXTERNAL_ORIGINS')||!app.includes('trustedExternalUrl'))fail('app.js: missing runtime external URL guard');if(errors.length){console.error('Validation failed:');errors.forEach(e=>console.error('- '+e));process.exit(1)}console.log(`Validated ${pages.length} pages, ${works.length} top-level works, ${updates.length} updates, ${commentaryCount} commentary references, and ${links} internal links.`);
+import {createHash} from 'node:crypto';
+import {existsSync,statSync} from 'node:fs';
+import {readFile,readdir} from 'node:fs/promises';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const errors = [];
+const fail = message => errors.push(message);
+const read = file => readFile(path.join(root,file),'utf8');
+const json = async file => { try { return JSON.parse(await read(file)); } catch (error) { fail(`${file}: invalid JSON (${error.message})`); return []; } };
+const existsFile = file => existsSync(file) && statSync(file).isFile();
+const localTarget = (file, url) => {
+  const clean = url.split(/[?#]/,1)[0];
+  const resolved = path.resolve(path.dirname(file),clean);
+  if (existsSync(resolved) && statSync(resolved).isDirectory()) return path.join(resolved,'index.html');
+  return resolved;
+};
+async function htmlFiles(dir = root) {
+  const entries = await readdir(dir,{withFileTypes:true});
+  return (await Promise.all(entries.filter(entry => !['.git','node_modules'].includes(entry.name)).map(entry => entry.isDirectory() ? htmlFiles(path.join(dir,entry.name)) : entry.name.endsWith('.html') ? [path.join(dir,entry.name)] : []))).flat();
+}
+const pages = await htmlFiles();
+const works = await json('data/works.json');
+const updates = await json('data/updates.json');
+const appSource = await read('assets/js/app.js');
+const originalSource = await read('originals/index.html');
+const arrangementSource = await read('arrangements/index.html');
+const originalListSource = await read('originals/list/index.html');
+const originalDetailSource = await read('originals/work/index.html');
+const favicon = await read('favicon.svg');
+
+const originalEnsembles = ['piano','solo','solo-piano','strings','woodwinds','brass','percussion','mixed','orchestra','wind','art-song','choral','pops'];
+const arrangementGenres = new Set(['pops','screen']);
+const arrangementEnsembles = new Set(['solo','duo','ensemble']);
+const topFields = ['id','slug','type','title_ja','title_en','category','composition_year','published_date','ensemble','instrumentation_ja','instrumentation_en','instruments','duration_seconds','video','other_videos','scores','commentary','tags','featured','published'];
+const ids = new Set(), slugs = new Set();
+let commentaryCount = 0;
+const validateJapanese = (value, location = 'works') => {
+  if (Array.isArray(value)) { value.forEach((item,index) => validateJapanese(item,`${location}[${index}]`)); return; }
+  if (!value || typeof value !== 'object') return;
+  for (const [key,item] of Object.entries(value)) {
+    const next = `${location}.${key}`;
+    if (key.endsWith('_ja') && typeof item === 'string') {
+      if (item.includes('?') || item.includes('\uFFFD')) fail(`${next}: corrupted Japanese text`);
+      if (item.includes('(') || item.includes(')')) fail(`${next}: ASCII parentheses are forbidden in Japanese content`);
+    }
+    validateJapanese(item,next);
+  }
+};
+validateJapanese(works);
+if (!Array.isArray(works) || !works.length) fail('works: expected a non-empty array');
+if (works.length !== 69) fail(`works: expected 69 top-level works, got ${works.length}`);
+if (works.some(work => work.sample === true || JSON.stringify(work).includes('example.com'))) fail('works: sample/example content is forbidden');
+const validDate = value => value === null || (/^\d{4}-\d{2}-\d{2}$/.test(value) && !Number.isNaN(Date.parse(`${value}T00:00:00Z`)));
+const validSlug = value => typeof value === 'string' && /^[A-Za-z0-9][A-Za-z0-9_-]*$/.test(value);
+const validVideo = video => video && (!video.youtube || /^[\w-]{11}$/.test(video.youtube)) && (!video.niconico || /^(sm|so)\d+$/.test(video.niconico)) && (!video.soundcloud || /^https:\/\/(?:www\.)?soundcloud\.com\/[^?#\s]+$/.test(video.soundcloud));
+for (const [index,work] of works.entries()) {
+  for (const field of topFields) if (!(field in work)) fail(`works[${index}]: missing ${field}`);
+  if (ids.has(work.id)) fail(`works[${index}]: duplicate id`); ids.add(work.id);
+  if (work.published) { if (!validSlug(work.slug)) fail(`works[${index}]: invalid published slug`); else if (slugs.has(work.slug)) fail(`works[${index}]: duplicate published slug`); else slugs.add(work.slug); }
+  if (!['original','arrangement'].includes(work.type)) fail(`works[${index}]: invalid type`);
+  if (work.type === 'original' && !originalEnsembles.includes(work.ensemble)) fail(`works[${index}]: invalid original ensemble`);
+  if (work.type === 'arrangement') {
+    if (!arrangementGenres.has(work.category)) fail(`works[${index}]: arrangement category must be pops|screen`);
+    if (work.published && (typeof work.composer_name !== 'string' || !work.composer_name.trim())) fail(`works[${index}]: published arrangement requires composer_name`);
+    if (work.artist_name?.includes('\u3000') || work.composer_name?.includes('\u3000')) fail(`works[${index}]: artist/composer contains U+3000`);
+    if (work.title_ja !== work.original_title_ja || work.title_en !== work.original_title_en) fail(`works[${index}]: arrangement title must match original title`);
+    if ((work.category === 'screen') && work.instrumentation_ja?.includes('ピアノソロ')) fail(`works[${index}]: screen arrangement cannot use ピアノソロ`);
+  }
+  if (work.type === 'original' && work.category === 'classical' && work.instrumentation_ja?.includes('ピアノソロ')) fail(`works[${index}]: classical original cannot use ピアノソロ`);
+  if (work.type === 'arrangement' && work.category === 'pops' && work.instrumentation_ja?.includes('ピアノ独奏')) fail(`works[${index}]: POPS arrangement cannot use ピアノ独奏`);
+  if (work.composition_year !== null && (!Number.isInteger(work.composition_year) || work.composition_year < 0)) fail(`works[${index}]: invalid composition_year`);
+  if (!validDate(work.published_date)) fail(`works[${index}]: invalid published_date`);
+  if (work.composition_year !== null && work.published_date && work.composition_year > Number(work.published_date.slice(0,4))) fail(`works[${index}]: composition_year is later than publication year`);
+  if (!Number.isInteger(work.duration_seconds) || work.duration_seconds < 0) fail(`works[${index}]: invalid duration_seconds`);
+  if (!Array.isArray(work.instruments) || !Array.isArray(work.scores) || !Array.isArray(work.other_videos) || !Array.isArray(work.tags)) fail(`works[${index}]: expected arrays`);
+  if (!validVideo(work.video)) fail(`works[${index}]: invalid video`);
+  if (work.type === 'arrangement') for (const field of ['original_title_ja','original_title_en']) if (!work[field]) fail(`works[${index}]: arrangement missing ${field}`);
+  for (const item of [...work.scores,...work.other_videos]) if (!item.url || !/^https?:\/\//.test(item.url)) fail(`works[${index}]: external link must be http(s)`);
+  for (const field of ['lyricist_name']) if (work[field] && !work[field].endsWith('様')) fail(`works[${index}]: ${field} must end in 様`);
+  if (work.commentary) { commentaryCount++; if (!work.commentary_ja || !work.commentary_en || !work.commentary_source) fail(`works[${index}]: commentary text and source required`); if (!existsFile(path.join(root,work.commentary,'index.html'))) fail(`works[${index}]: commentary route missing`); }
+  if (Array.isArray(work.parts)) {
+    if (work.type !== 'original' || !work.parts.length) fail(`works[${index}]: multipart parts are invalid`);
+    let durationTotal = 0, newest = null;
+    for (const [partIndex,part] of work.parts.entries()) {
+      for (const field of ['id','slug','title_ja','title_en','composition_year','published_date','duration_seconds','video','other_videos','scores','commentary']) if (!(field in part)) fail(`works[${index}].parts[${partIndex}]: missing ${field}`);
+      if (ids.has(part.id)) fail(`works[${index}].parts[${partIndex}]: duplicate id`); ids.add(part.id);
+      if (!validSlug(part.slug) || slugs.has(part.slug)) fail(`works[${index}].parts[${partIndex}]: invalid or duplicate slug`); slugs.add(part.slug);
+      if (!validDate(part.published_date)) fail(`works[${index}].parts[${partIndex}]: invalid published_date`);
+      if (part.composition_year !== null && (!Number.isInteger(part.composition_year) || part.composition_year < 0)) fail(`works[${index}].parts[${partIndex}]: invalid composition_year`);
+      if (part.composition_year !== null && part.published_date && part.composition_year > Number(part.published_date.slice(0,4))) fail(`works[${index}].parts[${partIndex}]: composition_year is later than publication year`);
+      if (!Number.isInteger(part.duration_seconds) || part.duration_seconds < 0) fail(`works[${index}].parts[${partIndex}]: invalid duration_seconds`);
+      if (!Array.isArray(part.scores) || !Array.isArray(part.other_videos) || !validVideo(part.video)) fail(`works[${index}].parts[${partIndex}]: invalid arrays or video`);
+      for (const item of [...part.scores,...part.other_videos]) if (!item.url || !/^https?:\/\//.test(item.url)) fail(`works[${index}].parts[${partIndex}]: external link must be http(s)`);
+      if (part.commentary) { commentaryCount++; if (!part.commentary_ja || !part.commentary_en || !part.commentary_source) fail(`works[${index}].parts[${partIndex}]: commentary text and source required`); if (!existsFile(path.join(root,part.commentary,'index.html'))) fail(`works[${index}].parts[${partIndex}]: commentary route missing`); }
+      durationTotal += part.duration_seconds; if (part.published_date && (!newest || part.published_date > newest)) newest = part.published_date;
+    }
+    if (work.duration_seconds !== durationTotal) fail(`works[${index}]: parent duration must equal parts`);
+    if (work.published_date !== newest) fail(`works[${index}]: parent published_date must equal newest part`);
+  }
+}
+for (const ensemble of originalEnsembles) if (!works.some(work => work.type === 'original' && work.ensemble === ensemble)) fail(`works: no original work for ${ensemble}`);
+const publishedOriginals = works.filter(work => work.type === 'original' && work.published), publishedArrangements = works.filter(work => work.type === 'arrangement' && work.published);
+if (publishedOriginals.length !== 51) fail(`works: expected 51 published originals, got ${publishedOriginals.length}`);
+if (publishedArrangements.length !== 18) fail(`works: expected 18 published arrangements, got ${publishedArrangements.length}`);
+if (publishedArrangements.filter(work => work.category === 'pops').length !== 15 || publishedArrangements.filter(work => work.category === 'screen').length !== 3) fail('works: arrangement category counts must be pops=15 and screen=3');
+if (publishedArrangements.filter(work => work.artist_name === 'キリンジ').length !== 10) fail('works: Kirinji creator count mismatch');
+if (publishedArrangements.some(work => work.lyricist_name && !work.lyricist_name.endsWith('様'))) fail('works: lyricist honorific missing');
+if (works.find(work => work.id === 'evarlasting-nightmare')?.title_ja !== 'Everlasting Nightmare') fail('works: Everlasting Nightmare correction missing');
+if (works.find(work => work.id === 'sonata-string-quartet')?.composition_year !== 2016) fail('works: sonata composition year correction missing');
+if (!Array.isArray(updates) || updates.length !== 1) fail(`data/updates.json: expected one update`);
+for (const [index,update] of updates.entries()) { if (!/^\d{4}-\d{2}-\d{2}$/.test(update.date) || !update.text_ja || !update.text_en) fail(`updates[${index}]: ISO date and bilingual text required`); if (update.link && !existsFile(path.join(root,update.link,'index.html'))) fail(`updates[${index}]: missing linked route ${update.link}`); }
+
+const securityCsp = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-src https://www.youtube-nocookie.com https://embed.nicovideo.jp https://w.soundcloud.com; form-action https://formspree.io; base-uri 'self'; object-src 'none'";
+const securityCsp404 = "default-src 'self'; script-src 'self' 'sha256-FZle6OXos+3f3ug6BjmOoAoRSxzst3tGXeOgv541flg='; style-src 'self' 'sha256-WEgh/1LeHk6RuhyrbXjs13j9FrZFoATLZ6f0KC3y/CA='; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-src https://www.youtube-nocookie.com https://embed.nicovideo.jp https://w.soundcloud.com; form-action https://formspree.io; base-uri 'self'; object-src 'none'";
+const allowedOrigins = new Set(['https://www.youtube.com','https://www.nicovideo.jp','https://soundcloud.com','https://www.soundcloud.com','https://store.piascore.com','https://www.mymusic5.com']);
+const validExternal = value => { try { const url = new URL(value); return url.protocol === 'https:' && allowedOrigins.has(url.origin); } catch { return false; } };
+const validRoute = value => typeof value === 'string' && /^(?:[A-Za-z0-9_-]+\/)*[A-Za-z0-9_-]*\/?$/.test(value) && !value.includes('..');
+const routeSet = new Set(['index.html','404.html','originals/index.html','originals/list/index.html','originals/work/index.html','arrangements/index.html','commentary/index.html','profile/index.html','contact/index.html','updates/index.html']);
+for (const route of routeSet) if (!existsFile(path.join(root,route))) fail(`missing route ${route}`);
+let internalLinks = 0;
+for (const page of pages) {
+  const source = await readFile(page,'utf8'), relative = path.relative(root,page).replaceAll('\\','/'), notFound = relative === '404.html';
+  if (!notFound) {
+    if (!source.includes('data-site-header') || !source.includes('data-site-footer')) fail(`${relative}: missing shared shell mount`);
+    if (!source.match(/<meta\s+name="description"\s+content="[^"]+"/i)) fail(`${relative}: missing fallback meta description`);
+    if (!source.includes('data-page-meta=')) fail(`${relative}: missing stable page metadata key`);
+    if (!source.match(/<link\s+rel="icon"\s+type="image\/svg\+xml"\s+href="[^"]*favicon\.svg"/i)) fail(`${relative}: missing relative favicon link`);
+  }
+  if (!notFound && /\b(?:href|src)=["']\/(?!\/)/.test(source)) fail(`${relative}: root-absolute local URL`);
+  for (const pattern of ['example.com','sample','demo','placeholder','prepublication','replace before publishing','サンプル','デモ','例示','プレースホルダー','公開前','公開準備中','要差し替え']) if (source.toLocaleLowerCase().includes(pattern.toLocaleLowerCase())) fail(`${relative}: public placeholder content matches "${pattern}"`);
+  for (const ref of [...source.matchAll(/\b(?:href|src)=["']([^"'#?]+)["']/g)].map(match => match[1])) {
+    if (notFound || /^(https?:|mailto:|data:)/.test(ref)) continue;
+    internalLinks++;
+    if (!existsSync(localTarget(page,ref))) fail(`${relative}: missing local target ${ref}`);
+  }
+  if (!source.includes(`http-equiv="Content-Security-Policy" content="${notFound ? securityCsp404 : securityCsp}"`)) fail(`${relative}: missing or weakened CSP`);
+  if (!source.includes('name="referrer" content="strict-origin-when-cross-origin"')) fail(`${relative}: missing referrer policy`);
+  if (!notFound && /<(?:script|style)\b(?![^>]*\bsrc=)/i.test(source)) fail(`${relative}: inline script or style is forbidden`);
+  for (const tag of source.match(/<[^>]*\btarget=["']_blank["'][^>]*>/gi) || []) if (!/\brel=["'][^"']*\bnoopener\b/i.test(tag)) fail(`${relative}: target=_blank link lacks rel=noopener`);
+}
+const notFound = await read('404.html');
+for (const required of ["location.pathname.split('/').filter(Boolean)[0]","/\\.github\\.io$/i.test(location.hostname)","? `/${firstSegment}/` : '/'"]) if (!notFound.includes(required)) fail(`404.html: missing ${required}`);
+if (!notFound.includes('document.querySelector(\'link[rel="icon"]\')') || !notFound.includes('favicon.href = `${siteBase}favicon.svg`')) fail('404.html: favicon must follow the deployment-aware site base');
+if (!notFound.includes('<link rel="icon" type="image/svg+xml" href="data:,">') || /<link\s+rel="icon"[^>]+href="(?:\.\.?\/)?favicon\.svg"/i.test(notFound)) fail('404.html: favicon initial href must not fetch a relative path');
+const hash = value => createHash('sha256').update(value,'utf8').digest('base64');
+const inline404 = [...notFound.matchAll(/<(style|script)>([\s\S]*?)<\/\1>/gi)];
+if (inline404.length !== 2) fail('404.html: expected one inline style and one inline script');
+for (const [,kind,content] of inline404) if (!securityCsp404.includes(`'sha256-${hash(content)}'`)) fail(`404.html: CSP ${kind} hash does not match inline content`);
+if (!favicon.includes('viewBox="0 0 64 64"') || !favicon.includes('#f7f5ef') || !favicon.includes('#0c5f63') || !favicon.includes('rx=')) fail('favicon.svg: missing required 64px cream/teal rounded-square mark');
+if (/<(?:script|style|iframe|img)[^>]+src=["']https?:/i.test(favicon)) fail('favicon.svg: external dependency is forbidden');
+
+try { new Function(appSource); } catch (error) { fail(`assets/js/app.js: invalid JavaScript syntax (${error.message})`); }
+for (const required of ['const PAGE_META','data-original-overview','function originalTable','<thead>','<caption class="visually-hidden">','data-original-status','data-arrangement-creators','[name=genre]','data-creator','aria-pressed','data-arrangement-panel','aria-controls','history.replaceState','hashchange','iframe.allowFullscreen = true','fullscreen','data-video-title','trustedExternalUrl','IntersectionObserver','const ORIGINAL_SORTS','function normalizeOriginalListUrl']) if (!appSource.includes(required)) fail(`app.js: missing ${required}`);
+if (/<section class="original-overview"[^>]*aria-live=/i.test(originalSource)) fail('originals/index.html: aria-live must not be on the overview mount');
+if (/<div class="year-table-wrap"[^>]*tabindex=/i.test(appSource)) fail('app.js: year table wrapper must not have unconditional tabindex');
+if (!arrangementSource.includes('name="genre"') || arrangementSource.includes('name="category"') || arrangementSource.includes('value="classical"')) fail('arrangements/index.html: genre filter/category enum is stale');
+if (!arrangementSource.includes('data-arrangement-creators') || !arrangementSource.includes('Browse by artist/composer')) fail('arrangements/index.html: creator browser mount missing');
+if (!originalListSource.includes('Published date: newest first') || !originalListSource.includes('Published date: oldest first')) fail('originals/list/index.html: published sort labels missing');
+const originalCatalogLogic = appSource.slice(appSource.indexOf('async function renderCatalog'),appSource.indexOf('function partMarkup'));
+for (const required of ['let selectedEnsemble','selectedSort = params.get','if (!ORIGINAL_ENSEMBLES.includes(selectedEnsemble))','if (!ORIGINAL_SORTS.includes(selectedSort))','normalizeOriginalListUrl(selectedEnsemble,selectedSort)','selectedEnsemble = ensemble?.value ||','selectedSort = sort?.value ||']) if (!originalCatalogLogic.includes(required)) fail(`app.js: original list URL state logic missing ${required}`);
+if (!originalDetailSource.includes('data-work-detail')) fail('originals/work/index.html: missing detail mount');
+for (const [index,work] of works.entries()) {
+  for (const item of [...work.scores,...work.other_videos]) if (!validExternal(item.url)) fail(`works[${index}]: external link must use an approved HTTPS origin`);
+  for (const [partIndex,part] of (work.parts || []).entries()) for (const item of [...part.scores,...part.other_videos]) if (!validExternal(item.url)) fail(`works[${index}].parts[${partIndex}]: external link must use an approved HTTPS origin`);
+  for (const item of [work,...(work.parts || [])]) {
+    if (item.video?.fallback_url && !validExternal(item.video.fallback_url)) fail(`works[${index}]: fallback video URL must use an approved HTTPS origin`);
+    if (item.commentary_source && !validExternal(item.commentary_source)) fail(`works[${index}]: commentary source must use an approved HTTPS origin`);
+    if (item.commentary && !validRoute(item.commentary)) fail(`works[${index}]: commentary route must stay within the site`);
+  }
+}
+for (const update of updates) if (update.link && !validRoute(update.link)) fail('updates: link must stay within the site');
+const contact = await read('contact/index.html');
+if (!contact.includes('action="https://formspree.io/f/meajewlw"')) fail('contact: unexpected form endpoint');
+if (errors.length) { console.error('Validation failed:'); errors.forEach(error => console.error(`- ${error}`)); process.exit(1); }
+console.log(`Validated ${pages.length} pages, ${works.length} top-level works, ${updates.length} update, ${commentaryCount} commentary references, and ${internalLinks} internal links.`);
