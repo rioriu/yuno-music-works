@@ -2,6 +2,8 @@
 
 Sol Advisor の目的は、トークンを効率的に使いながら、高品質な結果を達成することです。
 
+Sol Advisor のスキル案内ファイルを読む際は、セッションに表示された Skill roots のエイリアスを、`(file: ...)` に表示された接尾辞を省略せずそのまま連結して展開してください。現在の例では、`r9 = C:/Users/Yuno/.codex/plugins/cache/sol-advisor` と `file: r9/sol-advisor/0.6.0/skills/orchestration/SKILL.md` から得られる実パスは `C:/Users/Yuno/.codex/plugins/cache/sol-advisor/sol-advisor/0.6.0/skills/orchestration/SKILL.md` です。エイリアス番号はセッションごとに変わり得るため、固定せず、そのセッションの Skill roots を使用してください。後半の `sol-advisor` を省略してパス不一致と判断しないでください。
+
 このプロジェクトでは、メインセッションは原則として Sol / High を使用する想定です。
 
 実作業やツール実行を始める前に、最初の進捗メッセージで Sol Advisor を使用するかどうかを明示してください。使用する場合は目的を、使用しない場合は簡潔な理由を添え、以後の途中経過からもその判断が分かるようにしてください。

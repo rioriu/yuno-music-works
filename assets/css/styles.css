@@ -58,6 +58,9 @@ select{max-width:100%;background:var(--bg);border:1px solid var(--text);border-r
 .secondary-title{color:var(--muted);font-size:.93rem;margin:0}
 .work-meta{display:flex;flex-wrap:wrap;gap:.5rem;color:var(--muted);font-size:.82rem;margin:1rem 0}
 .work-meta span{display:inline-flex;align-items:center;min-height:1.9rem;padding:.2rem .65rem;border:1px solid var(--rule);border-radius:999px;background:#f0f2ef;line-height:1.35}
+.work-meta .work-meta-ensemble{min-height:2rem;padding:.22rem .78rem;border-color:var(--accent);background:#e3eeea;color:var(--accent);font-size:.88rem;font-weight:700;letter-spacing:.015em;box-shadow:inset 0 0 0 1px rgba(12,95,99,.12)}
+.work-recognitions{display:grid;gap:.35rem;margin:.75rem 0 0;padding-left:.75rem;border-left:3px solid #9b7629;font-size:.82rem}
+.work-recognition{display:block;color:#765817;font-weight:700;letter-spacing:.015em;line-height:1.55}
 .work-duration{color:var(--muted);font-size:.82rem;margin:.55rem 0 0}
 .arrangement-origin{font-size:.92rem;color:var(--muted);margin:.8rem 0}
 .work-actions{display:flex;gap:.65rem;flex-wrap:wrap;margin-top:1.15rem;font-size:.88rem}
@@ -132,6 +135,12 @@ select{max-width:100%;background:var(--bg);border:1px solid var(--text);border-r
 .arrangement-toggle[aria-expanded=true] .arrangement-toggle-icon{background:var(--accent);color:var(--bg)}
 .arrangement-panel{padding:0 1.2rem 1.2rem}
 .arrangement-video{max-width:640px}
+.original-parts-summary{max-width:44rem;border-top:1px solid var(--rule);padding-top:1rem}
+.original-parts-summary h3{font:1.25rem/1.25 var(--serif);margin:0 0 .65rem}
+.original-parts-summary ol{list-style:none;margin:0;padding:0;border-bottom:1px solid var(--rule)}
+.original-parts-summary li{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:baseline;gap:1rem;padding:.65rem 0;border-top:1px solid var(--rule)}
+.original-parts-summary li:first-child{border-top:0}
+.original-parts-summary li span{color:var(--muted);font-size:.82rem;white-space:nowrap}
 .catalog-heading{margin-bottom:2rem}
 .catalog-heading .eyebrow span{font-size:inherit}
 .year-group{margin-top:2.25rem}

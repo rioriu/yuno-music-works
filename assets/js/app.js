@@ -4,22 +4,44 @@ const DATA = new URL('data/', ROOT);
 const state = {lang: localStorage.getItem('yuno-language') === 'en' ? 'en' : 'ja'};
 
 const C = {
-  ja: {home:'ホーム',originals:'オリジナル作品',arrangements:'編曲作品',profile:'プロフィール',contact:'お問い合わせ',updates:'更新情報',menu:'メニュー',skip:'本文へ移動',language:'言語',year:'年',duration:'演奏時間',origin:'原曲',artist:'アーティスト',composer:'作曲',lyricist:'作詞',commentary:'作品解説',footer:'© YUNO / MUSIC & WORKS',noWorks:'条件に合う作品はありません。',noVideo:'動画は準備中です。',fallbackVideo:'動画を開く',loadingVideo:'動画を読み込んでいます…',videoTitle:'動画プレーヤー',backToWorks:'作品一覧へ戻る',commentaryMissing:'作品解説が見つかりませんでした。',notFound:'この作品は見つかりませんでした。',parts:'曲目',viewWork:'作品を見る',all:'すべて',publishedNewest:'公開日：新しい順',publishedOldest:'公開日：古い順',results:'件',works:'作品',published:'公開日',browseCreators:'アーティスト・作曲家から探す',showing:'表示中',sourceGenre:'原曲ジャンル',filmTv:'映画・ドラマ音楽',pianoSolo:'ピアノソロ',pianoFourHands:'ピアノ連弾',chamberEnsemble:'室内楽',other:'その他',allArrangements:'すべての編曲作品',viewArrangement:'動画・関連リンクを開く',closeArrangement:'閉じる'},
-  en: {home:'Home',originals:'Original Works',arrangements:'Arrangements',profile:'Profile',contact:'Contact',updates:'Updates',menu:'Menu',skip:'Skip to content',language:'Language',year:'Year',duration:'Duration',origin:'Original',artist:'Artist',composer:'Composer',lyricist:'Lyricist',commentary:'Commentary',footer:'© YUNO / MUSIC & WORKS',noWorks:'No works match these filters.',noVideo:'Video is being prepared.',fallbackVideo:'Open video',loadingVideo:'Loading video…',videoTitle:'Video player',backToWorks:'Back to works',commentaryMissing:'Commentary could not be found.',notFound:'This work could not be found.',parts:'Parts',viewWork:'View work',all:'All',publishedNewest:'Published date: newest first',publishedOldest:'Published date: oldest first',results:'',works:'works',published:'Published',browseCreators:'Browse by artist/composer',showing:'Showing',sourceGenre:'Source genre',filmTv:'Film & TV Music',pianoSolo:'Piano Solo',pianoFourHands:'Piano Four Hands',chamberEnsemble:'Chamber Ensemble',other:'Other',allArrangements:'All arrangements',viewArrangement:'Open video and links',closeArrangement:'Close'},
+  ja: {home:'ホーム',originals:'オリジナル作品',arrangements:'編曲作品',profile:'プロフィール',contact:'お問い合わせ',updates:'更新情報',menu:'メニュー',skip:'本文へ移動',language:'言語',year:'年',duration:'演奏時間',origin:'原曲',artist:'アーティスト',composer:'作曲',lyricist:'作詞',commentary:'作品解説',footer:'© YUNO / MUSIC & WORKS',noWorks:'条件に合う作品はありません。',noVideo:'動画はありません。',fallbackVideo:'動画を開く',loadingVideo:'動画を読み込んでいます…',videoTitle:'動画プレーヤー',backToWorks:'作品一覧へ戻る',commentaryMissing:'作品解説が見つかりませんでした。',notFound:'この作品は見つかりませんでした。',parts:'曲目',viewWork:'作品を見る',all:'すべて',publishedNewest:'公開日：新しい順',publishedOldest:'公開日：古い順',results:'件',works:'作品',published:'公開日',browseCreators:'アーティスト・作曲家から探す',showing:'表示中',sourceGenre:'原曲ジャンル',filmTv:'映画・ドラマ音楽',pianoSolo:'ピアノソロ',pianoFourHands:'ピアノ連弾',chamberEnsemble:'室内楽',other:'その他',allArrangements:'すべての編曲作品',viewArrangement:'動画・関連リンクを開く',closeArrangement:'閉じる',allOriginals:'すべてのオリジナル作品',viewOriginal:'動画・作品情報を開く',closeOriginal:'閉じる',recognitions:'受賞・入選歴'},
+  en: {home:'Home',originals:'Original Works',arrangements:'Arrangements',profile:'Profile',contact:'Contact',updates:'Updates',menu:'Menu',skip:'Skip to content',language:'Language',year:'Year',duration:'Duration',origin:'Original',artist:'Artist',composer:'Composer',lyricist:'Lyricist',commentary:'Commentary',footer:'© YUNO / MUSIC & WORKS',noWorks:'No works match these filters.',noVideo:'No video is available.',fallbackVideo:'Open video',loadingVideo:'Loading video…',videoTitle:'Video player',backToWorks:'Back to works',commentaryMissing:'Commentary could not be found.',notFound:'This work could not be found.',parts:'Parts',viewWork:'View work',all:'All',publishedNewest:'Published date: newest first',publishedOldest:'Published date: oldest first',results:'',works:'works',published:'Published',browseCreators:'Browse by artist/composer',showing:'Showing',sourceGenre:'Source genre',filmTv:'Film & TV Music',pianoSolo:'Piano Solo',pianoFourHands:'Piano Four Hands',chamberEnsemble:'Chamber Ensemble',other:'Other',allArrangements:'All arrangements',viewArrangement:'Open video and links',closeArrangement:'Close',allOriginals:'All original works',viewOriginal:'Open video and work information',closeOriginal:'Close',recognitions:'Awards and selections'},
 };
 const PAGE_META = {
   home: {ja:{title:'YUNO / MUSIC & WORKS',description:'YUNOのオリジナル作品と編曲作品を、演奏動画や楽譜へのリンクとともに紹介します。'},en:{title:'YUNO / MUSIC & WORKS',description:'Explore YUNO’s original works and arrangements with performance videos and score links.'}},
-  originals: {ja:{title:'オリジナル作品 — YUNO',description:'YUNOのオリジナル作品を編成から探せる目次です。'},en:{title:'Original Works — YUNO',description:'Browse YUNO’s original works by instrumentation.'}},
+  originals: {ja:{title:'オリジナル作品 — YUNO',description:'YUNOのオリジナル作品を、編成・ジャンル、曲の長さ、楽器から探せます。'},en:{title:'Original Works — YUNO',description:'Browse YUNO’s original works by ensemble or genre, duration, and instrument.'}},
   'original-list': {ja:{title:'オリジナル作品一覧 — YUNO',description:'YUNOのオリジナル作品一覧。編成で絞り込めます。'},en:{title:'Original Works — YUNO',description:'Browse and filter YUNO’s original works by instrumentation.'}},
   'original-detail': {ja:{title:'オリジナル作品 — YUNO',description:'YUNOのオリジナル作品の詳細と各楽章・曲目。'},en:{title:'Original Work — YUNO',description:'Details and parts for a YUNO original work.'}},
   arrangements: {ja:{title:'編曲作品 — YUNO',description:'YUNOによる編曲作品を、アーティスト・作曲家、原曲ジャンル、編成から探せます。'},en:{title:'Arrangements — YUNO',description:'Browse YUNO arrangements by artist or composer, source genre, and ensemble.'}},
   commentary: {ja:{title:'作品解説 — YUNO',description:'YUNOの作品解説。'},en:{title:'Commentary — YUNO',description:'Commentary on a YUNO work.'}},
-  profile: {ja:{title:'プロフィール — 宇野 芳宣 / YUNO',description:'作曲・編曲を行うYUNO（宇野 芳宣）のプロフィール、受賞歴、主な作品を紹介します。'},en:{title:'Profile — Yoshinobu Uno / YUNO',description:'Profile, awards, and selected works by composer and arranger YUNO (Yoshinobu Uno).'}},
+  profile: {ja:{title:'プロフィール — 宇野 芳宣 / YUNO',description:'作曲・編曲を行うYUNO（宇野 芳宣）のプロフィールと受賞歴を紹介します。'},en:{title:'Profile — Yoshinobu Uno / YUNO',description:'Profile and awards of composer and arranger YUNO (Yoshinobu Uno).'}},
   contact: {ja:{title:'お問い合わせ — YUNO',description:'YUNOへのお問い合わせフォームと公式公開チャンネルの案内です。'},en:{title:'Contact — YUNO',description:'Contact YUNO through the inquiry form or official public channels.'}},
   updates: {ja:{title:'更新情報 — YUNO',description:'YUNO / MUSIC & WORKSの作品公開情報とサイト更新履歴です。'},en:{title:'Updates — YUNO',description:'Publications and site updates for YUNO / MUSIC & WORKS.'}},
 };
 const ENSEMBLES = {piano:{ja:'ピアノ',en:'Piano'},solo:{ja:'独奏',en:'Solo'},'solo-piano':{ja:'独奏＋ピアノ',en:'Solo & Piano'},strings:{ja:'弦楽アンサンブル',en:'String Ensemble'},woodwinds:{ja:'木管アンサンブル',en:'Woodwind Ensemble'},brass:{ja:'金管アンサンブル',en:'Brass Ensemble'},percussion:{ja:'打楽器アンサンブル',en:'Percussion Ensemble'},mixed:{ja:'混成アンサンブル',en:'Mixed Ensemble'},orchestra:{ja:'オーケストラ',en:'Orchestra'},wind:{ja:'吹奏楽',en:'Wind Ensemble'},'art-song':{ja:'歌曲',en:'Art Song'},pops:{ja:'POPS',en:'POPS'},choral:{ja:'合唱',en:'Choral Works'}};
 const ORIGINAL_ENSEMBLES = Object.keys(ENSEMBLES);
+const ORIGINAL_GROUPS = {
+  solo:{ja:'ソロ（ピアノを含む）',en:'Solo (including piano)',ensembles:['piano','solo']},
+  'solo-piano':{ja:'独奏＋ピアノ',en:'Solo & Piano',ensembles:['solo-piano']},
+  chamber:{ja:'室内楽・アンサンブル',en:'Chamber Music & Ensembles',ensembles:['strings','woodwinds','brass','percussion','mixed']},
+  large:{ja:'吹奏楽・オーケストラ',en:'Wind Ensemble & Orchestra',ensembles:['wind','orchestra']},
+  vocal:{ja:'声楽・合唱',en:'Vocal & Choral',ensembles:['art-song','choral']},
+  pops:{ja:'POPS',en:'POPS',category:'pops'},
+};
+const ORIGINAL_DURATIONS = {
+  'under-3':{ja:'3分未満',en:'Under 3 minutes',min:0,max:180},
+  '3-5':{ja:'3〜5分',en:'3–5 minutes',min:180,max:300},
+  '5-10':{ja:'5〜10分',en:'5–10 minutes',min:300,max:600},
+  '10-plus':{ja:'10分以上',en:'10 minutes or longer',min:600,max:Infinity},
+};
+const ORIGINAL_INSTRUMENTS = {
+  piano:{ja:'ピアノ',en:'Piano',instruments:['piano']},
+  woodwinds:{ja:'木管楽器',en:'Woodwind Instruments',instruments:['flute','oboe','clarinet','bassoon','saxophone','alto-saxophone']},
+  brass:{ja:'金管楽器',en:'Brass Instruments',instruments:['horn','trumpet','trombone','tuba']},
+  strings:{ja:'弦楽器',en:'String Instruments',instruments:['violin','viola','cello']},
+  percussion:{ja:'打楽器',en:'Percussion Instruments',instruments:['marimba','vibraphone','xylophone','glockenspiel','percussion','cajon']},
+  voice:{ja:'声・合唱',en:'Voice & Choir',instruments:['voice','choir']},
+};
 const ARRANGEMENT_GENRES = ['pops','screen'];
 const ARRANGEMENT_ENSEMBLES = ['solo','duo','ensemble'];
 const ARRANGEMENT_SORTS = ['newest','oldest','title'];
@@ -79,8 +101,12 @@ function buildWorkIndex(works) {
   return {byId,bySlug};
 }
 function detailHref(parent, hash = '') { return `${rootLink(`originals/work/?work=${encodeURIComponent(parent.id)}`)}${hash ? `#${encodeURIComponent(hash)}` : ''}`; }
-function catalogHref(work) { return rootLink(`originals/list/?ensemble=${encodeURIComponent(work.ensemble)}`); }
-function catalogWorkHref(work) { return `${catalogHref(work)}#${encodeURIComponent(work.slug)}`; }
+function originalGroupFromEnsemble(ensemble) {
+  if (ensemble === 'pops') return 'pops';
+  return Object.entries(ORIGINAL_GROUPS).find(([,group]) => group.ensembles?.includes(ensemble))?.[0] || '';
+}
+function originalGroupValue(work) { return work.category === 'pops' ? 'pops' : originalGroupFromEnsemble(work.ensemble); }
+function catalogHref(work) { return rootLink(`originals/?group=${encodeURIComponent(originalGroupValue(work))}`); }
 function commentaryHref(work) { return rootLink(`${String(work.commentary).replace(/^\/+|\/+$/g,'')}/?work=${encodeURIComponent(work.id)}`); }
 
 function videoSource(work) {
@@ -137,16 +163,32 @@ function arrangementCredits(work) {
   if (work.lyricist_name) parts.push(`${t('lyricist')}: ${esc(work.lyricist_name)}`);
   return parts.join(' · ');
 }
+function recognitionMarkup(work) {
+  if (!Array.isArray(work.recognitions) || !work.recognitions.length) return '';
+  const separator = state.lang === 'ja' ? '　' : ' — ';
+  const items = work.recognitions.map(item => `<span class="work-recognition">${esc(label(item,'competition'))}${separator}${esc(label(item,'result'))}</span>`).join('');
+  return `<span class="work-recognitions" aria-label="${esc(t('recognitions'))}">${items}</span>`;
+}
 function metadata(work, partLabel = '') {
-  return `<div class="work-meta">${Number.isInteger(work.composition_year) ? `<span>${work.composition_year}${state.lang === 'ja' ? '年' : ''}</span>` : ''}<span>${esc(instrumentationShort(work))}</span>${partLabel ? `<span>${esc(partLabel)}</span>` : ''}</div>`;
+  return `<div class="work-meta"><span class="work-meta-ensemble">${esc(instrumentationShort(work))}</span>${Number.isInteger(work.composition_year) ? `<span>${work.composition_year}${state.lang === 'ja' ? '年' : ''}</span>` : ''}${partLabel ? `<span>${esc(partLabel)}</span>` : ''}</div>`;
 }
 function originalCard(work) {
   const title = label(work,'title'), multipart = isMultipart(work), links = multipart ? [`<a class="internal-action" href="${detailHref(work)}">${t('viewWork')}</a>`] : actions(work);
-  return `<article class="work" id="${esc(work.slug)}"><header class="work-heading"><div><h2><a href="${multipart ? detailHref(work) : `#${esc(work.slug)}`}"${multipart ? '' : ' class="work-anchor"'}>${esc(title)}</a></h2></div></header>${metadata(work, multipart ? label(work,'parts_label') : '')}${multipart ? '' : videoMarkup(work)}${multipart ? '' : durationMarkup(work)}${links.length ? `<div class="work-actions">${links.join('')}</div>` : ''}</article>`;
+  return `<article class="work" id="${esc(work.slug)}"><header class="work-heading"><div><h2><a href="${multipart ? detailHref(work) : `#${esc(work.slug)}`}"${multipart ? '' : ' class="work-anchor"'}>${esc(title)}</a></h2>${recognitionMarkup(work)}</div></header>${metadata(work, multipart ? label(work,'parts_label') : '')}${multipart ? '' : videoMarkup(work)}${multipart ? '' : durationMarkup(work)}${links.length ? `<div class="work-actions">${links.join('')}</div>` : ''}</article>`;
+}
+function singingCharacterShort(work, japanese, english) {
+  if (work.type !== 'original' || work.category !== 'pops' || !work.instruments?.includes('voice')) return '';
+  const value = (state.lang === 'ja' ? japanese : english) || japanese || english;
+  return value
+    .replace(/（歌唱）$/,'')
+    .replace(/\s+voices?$/i,'')
+    .replace(/\bIA English\b/gi,'IA')
+    .trim();
 }
 function instrumentationShort(work) {
   const japanese = work.instrumentation_ja || '', english = work.instrumentation_en || '';
-  if (/^(?:CeVIO|VoiSona)\b/i.test(japanese) || /^(?:CeVIO|VoiSona)\b/i.test(english)) return state.lang === 'ja' ? 'ボーカル' : 'Vocal';
+  const singingCharacters = singingCharacterShort(work,japanese,english);
+  if (singingCharacters) return singingCharacters;
   if (state.lang === 'en') return english || japanese;
   const japaneseOverrides = {'右手のためのピアノ独奏':'右手ピアノ独奏','ピアノ独奏':'ピアノ独奏','ピアノソロ':'ピアノソロ','ピアノ連弾':'ピアノ連弾','チェロ五重奏':'チェロ五重奏','サックス四重奏':'サックス四重奏','トロンボーン四重奏':'トロンボーン四重奏','ヴァイオリン二重奏':'ヴァイオリン二重奏','ホルン独奏':'ホルン独奏','シロフォン独奏':'シロフォン独奏'};
   if (japaneseOverrides[japanese]) return japaneseOverrides[japanese];
@@ -156,17 +198,6 @@ function instrumentationShort(work) {
   return value.replace(/[＋、]/g, ' + ').replace(/\.(?=[\u3040-\u30ff\u3400-\u9fff\d])/g, '. ').replace(/\s{2,}/g, ' ').trim();
 }
 
-function originalTable(items) {
-  const groups = new Map();
-  items.forEach(work => { const year = Number.isInteger(work.composition_year) ? work.composition_year : null; groups.set(year,[...(groups.get(year) || []),work]); });
-  const years = [...groups.keys()].sort((a,b) => a === null ? 1 : b === null ? -1 : b - a);
-  return years.map(year => {
-    const id = year === null ? 'year-unknown' : `year-${year}`;
-    const heading = year === null ? (state.lang === 'ja' ? '作曲年不明' : 'Year unknown') : `${year}${state.lang === 'ja' ? '年' : ''}`;
-    const rows = [...groups.get(year)].sort((a,b) => label(a,'title').localeCompare(label(b,'title'),state.lang)).map(work => { const href = isMultipart(work) ? detailHref(work) : catalogWorkHref(work); return `<tr><th scope="row"><a href="${href}">${esc(label(work,'title'))}</a></th><td>${esc(instrumentationShort(work))}</td></tr>`; }).join('');
-    return `<section class="year-group" aria-labelledby="${id}"><h2 id="${id}">${heading}</h2><div class="year-table-wrap"><table class="work-index"><caption class="visually-hidden">${esc(heading)} — ${t('originals')}</caption><thead><tr><th scope="col">${state.lang === 'ja' ? '作品名' : 'Work title'}</th><th scope="col">${state.lang === 'ja' ? '編成' : 'Instrumentation'}</th></tr></thead><tbody>${rows}</tbody></table></div></section>`;
-  }).join('');
-}
 function readHash() {
   try { return decodeURIComponent(location.hash.slice(1)); } catch { return ''; }
 }
@@ -187,24 +218,150 @@ function normalizeOriginalListUrl(ensemble, sort) {
   replaceUrl(next);
 }
 function originalCountText(count) { return state.lang === 'ja' ? `${count}${t('works')}` : `${count} ${t('works')}`; }
-async function renderOriginalOverview() {
-  const output = document.querySelector('[data-original-overview]'); if (!output) return;
-  const works = await getJson('works.json'), originals = works.filter(work => work.published && work.type === 'original');
-  const select = document.querySelector('[data-original-overview] ~ * [name=ensemble]') || document.querySelector('.original-overview-controls [name=ensemble]');
-  const count = document.querySelector('[data-original-count]'), status = document.querySelector('[data-original-status]'), params = new URLSearchParams(location.search);
-  const selected = params.get('ensemble');
-  if (!ORIGINAL_ENSEMBLES.includes(selected)) { if (selected !== null) { params.delete('ensemble'); replaceUrl(params); } if (select) select.value = ''; }
-  else if (select) select.value = selected;
-  const render = () => {
-    const ensemble = select?.value || '';
-    const items = ensemble ? originals.filter(work => work.ensemble === ensemble) : originals;
-    output.innerHTML = items.length ? originalTable(items) : `<p class="empty-state">${t('noWorks')}</p>`;
-    if (count) count.textContent = originalCountText(items.length);
-    if (status) status.textContent = state.lang === 'ja' ? `${ensemble && ENSEMBLES[ensemble] ? ENSEMBLES[ensemble].ja : t('all')}：${items.length}件` : `${items.length} ${t('works')} — ${ensemble && ENSEMBLES[ensemble] ? ENSEMBLES[ensemble].en : t('all')}`;
-    const next = new URLSearchParams(location.search); if (ensemble) next.set('ensemble',ensemble); else next.delete('ensemble'); replaceUrl(next);
-    requestAnimationFrame(focusHash);
+
+function originalMatchesGroup(work, value) {
+  const group = ORIGINAL_GROUPS[value];
+  if (!group) return false;
+  if (group.category) return work.category === group.category;
+  return group.ensembles.includes(work.ensemble);
+}
+function originalMatchesDuration(work, value) {
+  const range = ORIGINAL_DURATIONS[value];
+  return Boolean(range && work.duration_seconds >= range.min && work.duration_seconds < range.max);
+}
+function originalMatchesInstrument(work, value) {
+  const group = ORIGINAL_INSTRUMENTS[value];
+  if (!group || work.category === 'pops') return false;
+  return work.instruments.some(instrument => group.instruments.includes(instrument));
+}
+function originalBrowseHref(key, value) {
+  const params = new URLSearchParams(); params.set(key,value);
+  return `${rootLink('originals/')}?${params}`;
+}
+function originalBrowseLink(text, count, key, value) {
+  return `<a class="arrangement-discovery-link" href="${esc(originalBrowseHref(key,value))}"><span>${esc(text)}</span><strong>${count}</strong><span class="arrangement-discovery-arrow" aria-hidden="true">→</span></a>`;
+}
+function renderOriginalDiscovery(works) {
+  const groupMount = document.querySelector('[data-original-group-links]'), durationMount = document.querySelector('[data-original-duration-links]'), instrumentMount = document.querySelector('[data-original-instrument-links]'), allMount = document.querySelector('[data-original-all-link]');
+  if (groupMount) groupMount.innerHTML = Object.entries(ORIGINAL_GROUPS).map(([value,group]) => originalBrowseLink(group[state.lang],works.filter(work => originalMatchesGroup(work,value)).length,'group',value)).join('');
+  if (durationMount) durationMount.innerHTML = Object.entries(ORIGINAL_DURATIONS).map(([value,range]) => originalBrowseLink(range[state.lang],works.filter(work => originalMatchesDuration(work,value)).length,'duration',value)).join('');
+  if (instrumentMount) instrumentMount.innerHTML = Object.entries(ORIGINAL_INSTRUMENTS).map(([value,group]) => originalBrowseLink(group[state.lang],works.filter(work => originalMatchesInstrument(work,value)).length,'instrument',value)).join('');
+  if (allMount) allMount.innerHTML = `<a href="${esc(originalBrowseHref('view','all'))}">${t('allOriginals')} <span aria-hidden="true">→</span></a>`;
+}
+function originalSelectionLabel(group, durationValue, instrument) {
+  const labels = [
+    ORIGINAL_GROUPS[group]?.[state.lang],
+    ORIGINAL_DURATIONS[durationValue]?.[state.lang],
+    ORIGINAL_INSTRUMENTS[instrument]?.[state.lang],
+  ].filter(Boolean);
+  if (!labels.length) return t('allOriginals');
+  return state.lang === 'ja' ? `${labels.join('・')}の作品` : `${labels.join(' / ')} works`;
+}
+function originalRow(work) {
+  const slug = esc(work.slug), panel = `original-panel-${slug}`, credit = credits(work);
+  const meta = [
+    Number.isInteger(work.composition_year) ? `${work.composition_year}${state.lang === 'ja' ? '年' : ''}` : '',
+    duration(work.duration_seconds),
+    isMultipart(work) ? label(work,'parts_label') : '',
+  ].filter(Boolean);
+  return `<article class="arrangement-row original-row" id="${slug}" data-original-row data-slug="${slug}"><button class="arrangement-toggle original-toggle" type="button" data-original-toggle data-slug="${slug}" aria-expanded="false" aria-controls="${panel}"><span class="arrangement-toggle-main"><span class="arrangement-title">${esc(label(work,'title'))}</span>${credit ? `<span class="arrangement-credit">${credit}</span>` : ''}${recognitionMarkup(work)}<span class="work-meta arrangement-meta"><span class="work-meta-ensemble">${esc(instrumentationShort(work))}</span>${meta.map(value => `<span>${esc(value)}</span>`).join('')}</span></span><span class="arrangement-toggle-action"><span class="original-toggle-label">${t('viewOriginal')}</span><span class="arrangement-toggle-icon" aria-hidden="true">＋</span></span></button><div class="arrangement-panel original-panel" id="${panel}" data-original-panel hidden></div></article>`;
+}
+function originalExpandedMarkup(work) {
+  if (isMultipart(work)) {
+    const headingId = `${esc(work.slug)}-parts-title`;
+    const parts = work.parts.map(part => `<li><a href="${detailHref(work,part.slug)}">${esc(label(part,'title'))}</a><span>${esc(duration(part.duration_seconds))}</span></li>`).join('');
+    const links = [...actions(work),`<a class="internal-action" href="${detailHref(work)}">${t('viewWork')}</a>`];
+    return `<div class="original-expanded"><section class="original-parts-summary" aria-labelledby="${headingId}"><h3 id="${headingId}">${t('parts')}</h3><ol>${parts}</ol></section><div class="work-actions">${links.join('')}</div></div>`;
+  }
+  const links = actions(work);
+  return `<div class="original-expanded"><div class="arrangement-video">${videoMarkup(work)}</div>${links.length ? `<div class="work-actions">${links.join('')}</div>` : ''}</div>`;
+}
+async function renderOriginalDiscoveryCatalog(works) {
+  const output = document.querySelector('[data-work-list]'); if (!output) return;
+  const discovery = document.querySelector('[data-original-discovery]'), results = document.querySelector('[data-original-results]'), all = works.filter(work => work.published && work.type === 'original');
+  renderOriginalDiscovery(all);
+  const params = new URLSearchParams(location.search), legacyEnsemble = params.get('ensemble');
+  let selectedGroup = params.get('group') || '', selectedDuration = params.get('duration') || '', selectedInstrument = params.get('instrument') || '', showAll = params.get('view') === 'all';
+  if (!selectedGroup && ORIGINAL_ENSEMBLES.includes(legacyEnsemble)) selectedGroup = originalGroupFromEnsemble(legacyEnsemble);
+  if (!ORIGINAL_GROUPS[selectedGroup]) selectedGroup = '';
+  if (!ORIGINAL_DURATIONS[selectedDuration]) selectedDuration = '';
+  if (!ORIGINAL_INSTRUMENTS[selectedInstrument]) selectedInstrument = '';
+  if (params.has('view') && !showAll) params.delete('view');
+  const index = buildWorkIndex(all), hashSlug = readHash(), hashHit = index.bySlug.get(hashSlug);
+  if (hashHit?.parent) { location.replace(detailHref(hashHit.parent,hashHit.work.slug)); return; }
+  const hashWork = hashHit && !hashHit.parent ? hashHit.work : null;
+  if (hashSlug && !hashWork) clearLocationHash();
+  const showResults = showAll || Boolean(selectedGroup || selectedDuration || selectedInstrument || hashWork);
+  if (selectedGroup || selectedDuration || selectedInstrument) showAll = false;
+  const normalize = () => {
+    const next = new URLSearchParams(location.search);
+    next.delete('ensemble'); next.delete('category'); next.delete('sort');
+    selectedGroup ? next.set('group',selectedGroup) : next.delete('group');
+    selectedDuration ? next.set('duration',selectedDuration) : next.delete('duration');
+    selectedInstrument ? next.set('instrument',selectedInstrument) : next.delete('instrument');
+    showAll ? next.set('view','all') : next.delete('view');
+    replaceUrl(next);
   };
-  select?.addEventListener('change',render); window.addEventListener('hashchange',focusHash); render();
+  normalize();
+  if (discovery) discovery.hidden = showResults;
+  if (results) results.hidden = !showResults;
+  if (!showResults) { output.replaceChildren(); return; }
+  let expandedSlug = null;
+  const closeExpanded = (clearHash = false) => {
+    output.querySelectorAll('[data-original-panel]').forEach(panel => { panel.replaceChildren(); panel.hidden = true; });
+    output.querySelectorAll('[data-original-toggle]').forEach(button => {
+      button.setAttribute('aria-expanded','false');
+      const buttonLabel = button.querySelector('.original-toggle-label'), icon = button.querySelector('.arrangement-toggle-icon');
+      if (buttonLabel) buttonLabel.textContent = t('viewOriginal');
+      if (icon) icon.textContent = '＋';
+    });
+    expandedSlug = null;
+    if (clearHash) clearLocationHash();
+  };
+  const openExpanded = (slug, updateHash = true) => {
+    const row = document.getElementById(slug), work = all.find(item => item.slug === slug);
+    if (!row?.matches('[data-original-row]') || !work) return false;
+    if (expandedSlug && expandedSlug !== slug) closeExpanded(false);
+    const button = row.querySelector('[data-original-toggle]'), panel = row.querySelector('[data-original-panel]');
+    button.setAttribute('aria-expanded','true');
+    const buttonLabel = button.querySelector('.original-toggle-label'), icon = button.querySelector('.arrangement-toggle-icon');
+    if (buttonLabel) buttonLabel.textContent = t('closeOriginal');
+    if (icon) icon.textContent = '−';
+    panel.hidden = false;
+    panel.innerHTML = originalExpandedMarkup(work);
+    panel.querySelectorAll('[data-video-src]').forEach(mountVideo);
+    expandedSlug = slug;
+    if (updateHash && readHash() !== slug) { const next = new URL(location.href); next.hash = slug; history.replaceState(null,'',next); }
+    return true;
+  };
+  const handleHash = () => {
+    const slug = readHash();
+    if (!slug) { if (expandedSlug) closeExpanded(false); return; }
+    if (!openExpanded(slug,false)) { if (expandedSlug) closeExpanded(false); clearLocationHash(); }
+  };
+  const render = () => {
+    const priorSlug = expandedSlug || readHash();
+    const items = all.filter(work => (!selectedGroup || originalMatchesGroup(work,selectedGroup)) && (!selectedDuration || originalMatchesDuration(work,selectedDuration)) && (!selectedInstrument || originalMatchesInstrument(work,selectedInstrument)));
+    items.sort((a,b) => {
+      const yearDifference = (Number.isInteger(b.composition_year) ? b.composition_year : -Infinity) - (Number.isInteger(a.composition_year) ? a.composition_year : -Infinity);
+      if (yearDifference) return yearDifference;
+      const dateDifference = (b.published_date || '').localeCompare(a.published_date || '');
+      return dateDifference || label(a,'title').localeCompare(label(b,'title'),state.lang);
+    });
+    output.innerHTML = items.length ? items.map(originalRow).join('') : `<p class="empty-state">${t('noWorks')}</p>`;
+    const count = document.querySelector('[data-original-count]'), status = document.querySelector('[data-original-status]'), title = document.querySelector('[data-original-results-title]');
+    if (title) title.textContent = originalSelectionLabel(selectedGroup,selectedDuration,selectedInstrument);
+    if (count) count.textContent = originalCountText(items.length);
+    if (status) status.textContent = state.lang === 'ja' ? `${items.length}件のオリジナル作品を表示` : `${t('showing')} ${items.length} original work${items.length === 1 ? '' : 's'}`;
+    output.querySelectorAll('[data-original-toggle]').forEach(button => button.addEventListener('click', () => {
+      const slug = button.dataset.slug;
+      if (expandedSlug === slug) closeExpanded(true); else openExpanded(slug,true);
+    }));
+    if (priorSlug && items.some(item => item.slug === priorSlug)) openExpanded(priorSlug,false);
+    else if (priorSlug) closeExpanded(true);
+  };
+  window.addEventListener('hashchange',handleHash);
+  render();
 }
 
 function arrangementCreator(work) { return work.artist_name || work.composer_name || ''; }
@@ -313,6 +470,7 @@ async function renderCatalog() {
   const output = document.querySelector('[data-work-list]'); if (!output) return;
   const works = await getJson('works.json');
   if (document.body.dataset.catalog === 'arrangement') { await renderArrangementCatalog(works); return; }
+  if (document.body.dataset.catalog === 'original-discovery') { await renderOriginalDiscoveryCatalog(works); return; }
   const index = buildWorkIndex(works), all = works.filter(work => work.published && work.type === 'original'), ensemble = document.querySelector('[name=ensemble]'), sort = document.querySelector('[name=sort]'), params = new URLSearchParams(location.search);
   let selectedEnsemble = params.get('ensemble') || '', selectedSort = params.get('sort') || 'newest';
   if (!ORIGINAL_ENSEMBLES.includes(selectedEnsemble)) selectedEnsemble = '';
@@ -340,10 +498,10 @@ function partMarkup(parent, part) {
 async function renderWorkDetail() {
   const output = document.querySelector('[data-work-detail]'); if (!output) return;
   const works = await getJson('works.json'), index = buildWorkIndex(works), id = new URLSearchParams(location.search).get('work'), hit = index.byId.get(id);
-  if (!hit || hit.parent || !hit.work.published || !isMultipart(hit.work)) { output.innerHTML = `<p class="empty-state">${t('notFound')}</p><p><a href="${rootLink('originals/list/')}">${t('backToWorks')}</a></p>`; return; }
+  if (!hit || hit.parent || !hit.work.published || !isMultipart(hit.work)) { output.innerHTML = `<p class="empty-state">${t('notFound')}</p><p><a href="${rootLink('originals/')}">${t('backToWorks')}</a></p>`; return; }
   const work = hit.work, compositionPeriod = label(work,'composition_period');
   document.title = `${label(work,'title')} — YUNO`; setDescription(state.lang === 'ja' ? `${label(work,'title')}の作品詳細。` : `Details for ${label(work,'title')}.`);
-  output.innerHTML = `<header class="page-heading"><div class="eyebrow">${state.lang === 'ja' ? 'オリジナル作品' : 'Original Works'}</div><h1>${esc(label(work,'title'))}</h1>${credits(work) ? `<p>${credits(work)}</p>` : ''}${metadata(work,label(work,'parts_label'))}${compositionPeriod ? `<p>${esc(compositionPeriod)}</p>` : ''}</header><section class="parts">${work.parts.map(part => partMarkup(work,part)).join('')}</section><p class="catalog-back"><a href="${catalogHref(work)}">${t('backToWorks')}</a></p>`;
+  output.innerHTML = `<header class="page-heading"><div class="eyebrow">${state.lang === 'ja' ? 'オリジナル作品' : 'Original Works'}</div><h1>${esc(label(work,'title'))}</h1>${credits(work) ? `<p>${credits(work)}</p>` : ''}${recognitionMarkup(work)}${metadata(work,label(work,'parts_label'))}${compositionPeriod ? `<p>${esc(compositionPeriod)}</p>` : ''}</header><section class="parts">${work.parts.map(part => partMarkup(work,part)).join('')}</section><p class="catalog-back"><a href="${catalogHref(work)}">${t('backToWorks')}</a></p>`;
   lazyVideos(); requestAnimationFrame(focusHash);
 }
 async function renderUpdates() {
@@ -353,12 +511,12 @@ async function renderUpdates() {
 async function renderCommentary() {
   const output = document.querySelector('[data-commentary-page]'); if (!output) return;
   const works = await getJson('works.json'), hit = buildWorkIndex(works).byId.get(new URLSearchParams(location.search).get('work'));
-  if (!hit || !hit.work.commentary) { output.innerHTML = `<p class="empty-state">${t('commentaryMissing')}</p><p><a href="${rootLink('originals/list/')}">${t('backToWorks')}</a></p>`; return; }
+  if (!hit || !hit.work.commentary) { output.innerHTML = `<p class="empty-state">${t('commentaryMissing')}</p><p><a href="${rootLink('originals/')}">${t('backToWorks')}</a></p>`; return; }
   const work = hit.work, back = hit.parent ? detailHref(hit.parent,work.slug) : catalogHref(work), paragraphs = (work[`commentary_${state.lang}`] || work.commentary_ja).split(/\n\n+/).map(text => `<p>${esc(text)}</p>`).join('');
   document.title = `${label(work,'title')} — YUNO`; setDescription(state.lang === 'ja' ? `${label(work,'title')}の作品解説。` : `Commentary for ${label(work,'title')}.`); output.innerHTML = `<div class="eyebrow">${t('commentary')}</div><h1>${esc(label(work,'title'))}</h1><p class="commentary-lead">${esc(instrumentationShort(hit.parent || work))}</p><div class="commentary-body">${paragraphs}</div><div class="commentary-links"><a href="${back}">${t('backToWorks')}</a></div>`;
 }
 document.addEventListener('DOMContentLoaded', async () => {
   renderShell(); localizeStatic(); renderPageMeta();
-  try { await Promise.all([renderCatalog(),renderOriginalOverview(),renderWorkDetail(),renderUpdates(),renderCommentary()]); }
-  catch (error) { console.error(error); document.querySelectorAll('[data-work-list],[data-original-overview],[data-work-detail],[data-updates],[data-commentary-page]').forEach(element => { if (!element.innerHTML) element.innerHTML = `<p class="empty-state">${state.lang === 'ja' ? 'コンテンツを読み込めませんでした。' : 'Content could not be loaded.'}</p>`; }); }
+  try { await Promise.all([renderCatalog(),renderWorkDetail(),renderUpdates(),renderCommentary()]); }
+  catch (error) { console.error(error); document.querySelectorAll('[data-work-list],[data-work-detail],[data-updates],[data-commentary-page]').forEach(element => { if (!element.innerHTML) element.innerHTML = `<p class="empty-state">${state.lang === 'ja' ? 'コンテンツを読み込めませんでした。' : 'Content could not be loaded.'}</p>`; }); }
 });

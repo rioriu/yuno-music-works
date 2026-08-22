@@ -50,7 +50,7 @@ const validateJapanese = (value, location = 'works') => {
 };
 validateJapanese(works);
 if (!Array.isArray(works) || !works.length) fail('works: expected a non-empty array');
-if (works.length !== 69) fail(`works: expected 69 top-level works, got ${works.length}`);
+if (works.length !== 70) fail(`works: expected 70 top-level works, got ${works.length}`);
 if (works.some(work => work.sample === true || JSON.stringify(work).includes('example.com'))) fail('works: sample/example content is forbidden');
 const validDate = value => value === null || (/^\d{4}-\d{2}-\d{2}$/.test(value) && !Number.isNaN(Date.parse(`${value}T00:00:00Z`)));
 const validSlug = value => typeof value === 'string' && /^[A-Za-z0-9][A-Za-z0-9_-]*$/.test(value);
@@ -75,6 +75,10 @@ for (const [index,work] of works.entries()) {
   if (work.composition_year !== null && work.published_date && work.composition_year > Number(work.published_date.slice(0,4))) fail(`works[${index}]: composition_year is later than publication year`);
   if (!Number.isInteger(work.duration_seconds) || work.duration_seconds < 0) fail(`works[${index}]: invalid duration_seconds`);
   if (!Array.isArray(work.instruments) || !Array.isArray(work.scores) || !Array.isArray(work.other_videos) || !Array.isArray(work.tags)) fail(`works[${index}]: expected arrays`);
+  if ('recognitions' in work) {
+    if (!Array.isArray(work.recognitions) || !work.recognitions.length) fail(`works[${index}]: recognitions must be a non-empty array`);
+    else for (const [recognitionIndex,recognition] of work.recognitions.entries()) for (const field of ['competition_ja','competition_en','result_ja','result_en']) if (typeof recognition[field] !== 'string' || !recognition[field].trim()) fail(`works[${index}].recognitions[${recognitionIndex}]: missing ${field}`);
+  }
   if (!validVideo(work.video)) fail(`works[${index}]: invalid video`);
   if (work.type === 'arrangement') for (const field of ['original_title_ja','original_title_en']) if (!work[field]) fail(`works[${index}]: arrangement missing ${field}`);
   for (const item of [...work.scores,...work.other_videos]) if (!item.url || !/^https?:\/\//.test(item.url)) fail(`works[${index}]: external link must be http(s)`);
@@ -102,7 +106,49 @@ for (const [index,work] of works.entries()) {
 }
 for (const ensemble of originalEnsembles) if (!works.some(work => work.type === 'original' && work.ensemble === ensemble)) fail(`works: no original work for ${ensemble}`);
 const publishedOriginals = works.filter(work => work.type === 'original' && work.published), publishedArrangements = works.filter(work => work.type === 'arrangement' && work.published);
-if (publishedOriginals.length !== 51) fail(`works: expected 51 published originals, got ${publishedOriginals.length}`);
+if (publishedOriginals.length !== 52) fail(`works: expected 52 published originals, got ${publishedOriginals.length}`);
+const originalGroupPredicates = {
+  solo:work => ['piano','solo'].includes(work.ensemble),
+  'solo-piano':work => work.ensemble === 'solo-piano',
+  chamber:work => ['strings','woodwinds','brass','percussion','mixed'].includes(work.ensemble),
+  large:work => ['wind','orchestra'].includes(work.ensemble),
+  vocal:work => ['art-song','choral'].includes(work.ensemble),
+  pops:work => work.category === 'pops',
+};
+const expectedOriginalGroupCounts = {solo:6,'solo-piano':5,chamber:14,large:5,vocal:5,pops:17};
+for (const [group,predicate] of Object.entries(originalGroupPredicates)) {
+  const count = publishedOriginals.filter(predicate).length;
+  if (count !== expectedOriginalGroupCounts[group]) fail(`works: original group ${group} count must be ${expectedOriginalGroupCounts[group]}, got ${count}`);
+}
+const publishedPopsOriginals = publishedOriginals.filter(work => work.category === 'pops');
+if (publishedPopsOriginals.some(work => /^(?:ボーカル|Vocal)$/i.test(work.instrumentation_ja) || /^(?:ボーカル|Vocal)$/i.test(work.instrumentation_en))) fail('works: POPS originals require a named singing character');
+if (publishedPopsOriginals.some(work => !/^(?:CeVIO|VoiSona)\s+/.test(work.instrumentation_ja) || !/^(?:CeVIO|VoiSona)\s+/.test(work.instrumentation_en))) fail('works: POPS originals require a singing-software name');
+for (const required of ['function singingCharacterShort',"work.category !== 'pops'",'replace(/\\bIA English\\b/gi']) if (!appSource.includes(required)) fail(`app.js: POPS singing-character display missing ${required}`);
+if (appSource.includes("replace(/^(?:CeVIO|VoiSona)\\s+/i,''")) fail('app.js: POPS display must retain the singing-software name');
+const originalDurationPredicates = {
+  'under-3':work => work.duration_seconds < 180,
+  '3-5':work => work.duration_seconds >= 180 && work.duration_seconds < 300,
+  '5-10':work => work.duration_seconds >= 300 && work.duration_seconds < 600,
+  '10-plus':work => work.duration_seconds >= 600,
+};
+const expectedOriginalDurationCounts = {'under-3':8,'3-5':20,'5-10':14,'10-plus':10};
+for (const [range,predicate] of Object.entries(originalDurationPredicates)) {
+  const count = publishedOriginals.filter(predicate).length;
+  if (count !== expectedOriginalDurationCounts[range]) fail(`works: original duration ${range} count must be ${expectedOriginalDurationCounts[range]}, got ${count}`);
+}
+const originalInstrumentSets = {
+  piano:['piano'],
+  woodwinds:['flute','oboe','clarinet','bassoon','saxophone','alto-saxophone'],
+  brass:['horn','trumpet','trombone','tuba'],
+  strings:['violin','viola','cello'],
+  percussion:['marimba','vibraphone','xylophone','glockenspiel','percussion','cajon'],
+  voice:['voice','choir'],
+};
+const expectedOriginalInstrumentCounts = {piano:15,woodwinds:9,brass:4,strings:6,percussion:7,voice:5};
+for (const [group,instruments] of Object.entries(originalInstrumentSets)) {
+  const count = publishedOriginals.filter(work => work.category !== 'pops' && work.instruments.some(instrument => instruments.includes(instrument))).length;
+  if (count !== expectedOriginalInstrumentCounts[group]) fail(`works: non-POPS original instrument ${group} count must be ${expectedOriginalInstrumentCounts[group]}, got ${count}`);
+}
 if (publishedArrangements.length !== 18) fail(`works: expected 18 published arrangements, got ${publishedArrangements.length}`);
 if (publishedArrangements.filter(work => work.category === 'pops').length !== 15 || publishedArrangements.filter(work => work.category === 'screen').length !== 3) fail('works: arrangement category counts must be pops=15 and screen=3');
 if (publishedArrangements.filter(work => work.artist_name === 'キリンジ').length !== 10) fail('works: Kirinji creator count mismatch');
@@ -156,9 +202,14 @@ if (!favicon.includes('viewBox="0 0 64 64"') || !favicon.includes('#f7f5ef') || 
 if (/<(?:script|style|iframe|img)[^>]+src=["']https?:/i.test(favicon)) fail('favicon.svg: external dependency is forbidden');
 
 try { new Function(appSource); } catch (error) { fail(`assets/js/app.js: invalid JavaScript syntax (${error.message})`); }
-for (const required of ['const PAGE_META','data-original-overview','function originalTable','<thead>','<caption class="visually-hidden">','data-original-status','data-arrangement-creator-links','data-arrangement-genre-links','data-arrangement-ensemble-links','function arrangementBrowseHref','data-arrangement-results','viewArrangement','arrangement-toggle-icon','data-arrangement-panel','aria-controls','history.replaceState','hashchange','iframe.allowFullscreen = true','fullscreen','data-video-title','trustedExternalUrl','IntersectionObserver','const ORIGINAL_SORTS','function normalizeOriginalListUrl']) if (!appSource.includes(required)) fail(`app.js: missing ${required}`);
-if (/<section class="original-overview"[^>]*aria-live=/i.test(originalSource)) fail('originals/index.html: aria-live must not be on the overview mount');
-if (/<div class="year-table-wrap"[^>]*tabindex=/i.test(appSource)) fail('app.js: year table wrapper must not have unconditional tabindex');
+for (const required of ['const PAGE_META','function recognitionMarkup','work-recognitions','data-original-group-links','data-original-duration-links','data-original-instrument-links','function originalBrowseHref','data-original-results','viewOriginal','data-original-toggle','data-original-panel','data-arrangement-creator-links','data-arrangement-genre-links','data-arrangement-ensemble-links','function arrangementBrowseHref','data-arrangement-results','viewArrangement','arrangement-toggle-icon','data-arrangement-panel','aria-controls','history.replaceState','hashchange','iframe.allowFullscreen = true','fullscreen','data-video-title','trustedExternalUrl','IntersectionObserver','const ORIGINAL_SORTS','function normalizeOriginalListUrl']) if (!appSource.includes(required)) fail(`app.js: missing ${required}`);
+if (originalSource.includes('original-overview-controls') || originalSource.includes('ensemble-section') || originalSource.includes('list/?ensemble=')) fail('originals/index.html: old overview controls or ensemble index remain');
+for (const required of ['data-original-discovery','data-original-group-links','data-original-duration-links','data-original-instrument-links','data-original-all-link','data-original-results','Browse by ensemble or genre','Browse by duration','Browse by instrument']) if (!originalSource.includes(required)) fail(`originals/index.html: discovery structure missing ${required}`);
+const originalInstrumentLogic = appSource.slice(appSource.indexOf('function originalMatchesInstrument'),appSource.indexOf('function originalBrowseHref'));
+if (!originalInstrumentLogic.includes("work.category === 'pops'")) fail('app.js: original instrument browsing must exclude POPS works');
+if (!appSource.includes("woodwinds:{ja:'木管楽器'")) fail('app.js: original woodwind label must be 木管楽器');
+const originalRowLogic = appSource.slice(appSource.indexOf('function originalRow'),appSource.indexOf('function originalExpandedMarkup'));
+if (!originalRowLogic.includes('data-original-toggle') || !originalRowLogic.includes('arrangement-toggle-action') || !originalRowLogic.includes('duration(work.duration_seconds)')) fail('app.js: original rows need an obvious expansion control and duration');
 if (arrangementSource.includes('name="genre"') || arrangementSource.includes('arrangement-controls') || arrangementSource.includes('value="classical"')) fail('arrangements/index.html: old inline filter controls remain');
 for (const required of ['data-arrangement-discovery','data-arrangement-creator-links','data-arrangement-genre-links','data-arrangement-ensemble-links','data-arrangement-all-link','data-arrangement-results','Browse by artist/composer','Browse by source genre','Browse by ensemble']) if (!arrangementSource.includes(required)) fail(`arrangements/index.html: discovery structure missing ${required}`);
 const arrangementRowLogic = appSource.slice(appSource.indexOf('function arrangementRow'),appSource.indexOf('function arrangementExpandedMarkup'));

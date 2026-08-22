@@ -5,64 +5,48 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-src https://www.youtube-nocookie.com https://embed.nicovideo.jp https://w.soundcloud.com; form-action https://formspree.io; base-uri 'self'; object-src 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <meta name="description" content="YUNOのオリジナル作品を編成から探せる目次です。">
+  <meta name="description" content="YUNOのオリジナル作品を、編成・ジャンル、曲の長さ、楽器から探せます。">
   <title>オリジナル作品 — YUNO</title>
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <link rel="stylesheet" href="../assets/css/styles.css">
   <script type="module" src="../assets/js/app.js"></script>
 </head>
-<body data-page="originals" data-page-meta="originals">
+<body data-page="originals" data-page-meta="originals" data-catalog="original-discovery">
   <header class="site-header" data-site-header></header>
   <main class="shell" id="main">
     <header class="page-heading">
-      <div class="eyebrow">Original Works</div>
+      <div class="eyebrow" data-ja="ORIGINAL WORKS" data-en="ORIGINAL WORKS">ORIGINAL WORKS</div>
       <h1 data-ja="オリジナル作品" data-en="Original Works">オリジナル作品</h1>
     </header>
-    <form class="controls original-overview-controls" aria-label="Work filters">
-      <label class="control"><span data-ja="編成" data-en="Instrumentation">編成</span><select name="ensemble">
-        <option value="" data-ja="すべて" data-en="All">すべて</option>
-        <option value="piano" data-ja="ピアノ" data-en="Piano">ピアノ</option>
-        <option value="solo" data-ja="独奏" data-en="Solo">独奏</option>
-        <option value="solo-piano" data-ja="独奏＋ピアノ" data-en="Solo &amp; Piano">独奏＋ピアノ</option>
-        <option value="strings" data-ja="弦楽アンサンブル" data-en="String Ensemble">弦楽アンサンブル</option>
-        <option value="woodwinds" data-ja="木管アンサンブル" data-en="Woodwind Ensemble">木管アンサンブル</option>
-        <option value="brass" data-ja="金管アンサンブル" data-en="Brass Ensemble">金管アンサンブル</option>
-        <option value="percussion" data-ja="打楽器アンサンブル" data-en="Percussion Ensemble">打楽器アンサンブル</option>
-        <option value="mixed" data-ja="混成アンサンブル" data-en="Mixed Ensemble">混成アンサンブル</option>
-        <option value="orchestra" data-ja="オーケストラ" data-en="Orchestra">オーケストラ</option>
-        <option value="wind" data-ja="吹奏楽" data-en="Wind Ensemble">吹奏楽</option>
-        <option value="art-song" data-ja="歌曲" data-en="Art Song">歌曲</option>
-        <option value="choral" data-ja="合唱" data-en="Choral Works">合唱</option>
-        <option value="pops" data-ja="POPS" data-en="POPS">POPS</option>
-      </select></label>
-    </form>
-    <p class="results-count" data-original-count></p>
-    <p class="filter-status" data-original-status aria-live="polite"></p>
-    <section class="original-overview" data-original-overview></section>
-    <section class="ensemble-section" aria-labelledby="classical-ensembles">
-      <h2 id="classical-ensembles" data-ja="編成から作品を探す" data-en="Explore by instrumentation">編成から作品を探す</h2>
-      <div class="ensemble-grid">
-        <a class="ensemble-card" href="list/?ensemble=piano"><span class="ensemble-en">Piano</span><strong>ピアノ</strong></a>
-        <a class="ensemble-card" href="list/?ensemble=solo"><span class="ensemble-en">Solo</span><strong>独奏</strong></a>
-        <a class="ensemble-card" href="list/?ensemble=solo-piano"><span class="ensemble-en">Solo &amp; Piano</span><strong>独奏＋ピアノ</strong></a>
-        <a class="ensemble-card" href="list/?ensemble=strings"><span class="ensemble-en">String Ensemble</span><strong>弦楽アンサンブル</strong></a>
-        <a class="ensemble-card" href="list/?ensemble=woodwinds"><span class="ensemble-en">Woodwind Ensemble</span><strong>木管アンサンブル</strong></a>
-        <a class="ensemble-card" href="list/?ensemble=brass"><span class="ensemble-en">Brass Ensemble</span><strong>金管アンサンブル</strong></a>
-        <a class="ensemble-card" href="list/?ensemble=percussion"><span class="ensemble-en">Percussion Ensemble</span><strong>打楽器アンサンブル</strong></a>
-        <a class="ensemble-card" href="list/?ensemble=mixed"><span class="ensemble-en">Mixed Ensemble</span><strong>混成アンサンブル</strong></a>
-        <a class="ensemble-card" href="list/?ensemble=orchestra"><span class="ensemble-en">Orchestra</span><strong>オーケストラ</strong></a>
-        <a class="ensemble-card" href="list/?ensemble=wind"><span class="ensemble-en">Wind Ensemble</span><strong>吹奏楽</strong></a>
-        <a class="ensemble-card" href="list/?ensemble=art-song"><span class="ensemble-en">Art Song</span><strong>歌曲</strong></a>
-        <a class="ensemble-card" href="list/?ensemble=choral"><span class="ensemble-en">Choral Works</span><strong>合唱</strong></a>
-      </div>
+
+    <div class="arrangement-discovery original-discovery" data-original-discovery>
+      <section class="arrangement-discovery-group" aria-labelledby="original-group-browser-title">
+        <h2 id="original-group-browser-title" data-ja="編成・ジャンルから探す" data-en="Browse by ensemble or genre">編成・ジャンルから探す</h2>
+        <div class="arrangement-discovery-links" data-original-group-links></div>
+      </section>
+
+      <section class="arrangement-discovery-group" aria-labelledby="original-duration-browser-title">
+        <h2 id="original-duration-browser-title" data-ja="曲の長さから探す" data-en="Browse by duration">曲の長さから探す</h2>
+        <div class="arrangement-discovery-links" data-original-duration-links></div>
+      </section>
+
+      <section class="arrangement-discovery-group" aria-labelledby="original-instrument-browser-title">
+        <h2 id="original-instrument-browser-title" data-ja="楽器から探す" data-en="Browse by instrument">楽器から探す</h2>
+        <div class="arrangement-discovery-links" data-original-instrument-links></div>
+      </section>
+
+      <p class="arrangement-all-link" data-original-all-link></p>
+    </div>
+
+    <section class="arrangement-results original-results" data-original-results hidden aria-labelledby="original-results-title">
+      <a class="arrangement-back" href="./" data-ja="探し方を選び直す" data-en="Choose another way to browse">探し方を選び直す</a>
+      <header class="arrangement-results-heading">
+        <h2 id="original-results-title" data-original-results-title></h2>
+        <p class="results-count" data-original-count></p>
+        <p class="filter-status visually-hidden" data-original-status aria-live="polite"></p>
+      </header>
+      <div class="work-list arrangement-list original-list" data-work-list></div>
     </section>
-    <section class="ensemble-section ensemble-secondary" aria-labelledby="vocal-ensembles">
-      <h2 id="vocal-ensembles">POPS</h2>
-      <div class="ensemble-grid ensemble-grid-compact">
-        <a class="ensemble-card" href="list/?ensemble=pops"><span class="ensemble-en">POPS</span><strong>POPS</strong></a>
-      </div>
-    </section>
-    <p class="catalog-all-link"><a href="list/" data-ja="すべてのオリジナル作品を見る" data-en="View all original works">すべてのオリジナル作品を見る</a></p>
   </main>
   <footer class="site-footer" data-site-footer></footer>
 </body>

@@ -819,8 +819,8 @@
     "composition_year": 2019,
     "published_date": "2019-03-24",
     "ensemble": "art-song",
-    "instrumentation_ja": "CeVIO さとうささら（歌唱）",
-    "instrumentation_en": "CeVIO Sato Sasara voice",
+    "instrumentation_ja": "独唱+pf.",
+    "instrumentation_en": "Solo voice and piano",
     "instruments": [
       "voice"
     ],
@@ -1010,6 +1010,14 @@
         "url": "https://store.piascore.com/scores/414352"
       }
     ],
+    "recognitions": [
+      {
+        "competition_ja": "第33回TIAA全日本作曲家コンクール ソロ部門",
+        "competition_en": "33rd TIAA All Japan Composers Competition, Solo Division",
+        "result_ja": "審査員賞",
+        "result_en": "Jury Prize"
+      }
+    ],
     "commentary": "commentary",
     "commentary_ja": "第33回TIAA全日本作曲家コンクール審査員賞受賞作品。すべての音が前後いずれかの音と長9度または短9度の関係を持つこと、同時に2音以上を打鍵しないこと、右手だけで演奏できること、という3つの制約のもとに作曲されている。和音はアルペジオ、装飾音、サステインペダルの余韻によってのみ示される。",
     "commentary_en": "A Jury Prize winner at the 33rd TIAA All Japan Composers Competition. The work follows three constraints: every note forms a major or minor ninth with at least one adjacent note; no two notes are struck simultaneously; and the piece is playable by the right hand alone. Harmony is implied only through arpeggios, ornaments, and pedal resonance.",
@@ -1108,8 +1116,8 @@
     "composition_year": 2020,
     "published_date": "2020-02-12",
     "ensemble": "art-song",
-    "instrumentation_ja": "CeVIO さとうささら＋ピアノ",
-    "instrumentation_en": "CeVIO Sato Sasara voice and piano",
+    "instrumentation_ja": "独唱+pf.",
+    "instrumentation_en": "Solo voice and piano",
     "instruments": [
       "voice",
       "piano"
@@ -1122,6 +1130,14 @@
     },
     "other_videos": [],
     "scores": [],
+    "recognitions": [
+      {
+        "competition_ja": "第32回TIAA全日本作曲家コンクール 歌曲・独唱部門",
+        "competition_en": "32nd TIAA All Japan Composers Competition, Song and Solo Vocal Division",
+        "result_ja": "奨励賞",
+        "result_en": "Encouragement Award"
+      }
+    ],
     "commentary": null,
     "tags": [
       "voice",
@@ -1147,7 +1163,7 @@
       "clarinet",
       "bassoon"
     ],
-    "duration_seconds": 675,
+    "duration_seconds": 570,
     "video": {
       "youtube": "Ak1lCGxunyc",
       "niconico": null,
@@ -1388,7 +1404,7 @@
     "id": "dialogue-1",
     "slug": "dialogue-1",
     "type": "original",
-    "title_ja": "「ダイアログ I」ホルン＋トロンボーンのための",
+    "title_ja": "「ダイアログ I」ホルンとトロンボーンのための",
     "title_en": "Dialogue I",
     "category": "classical",
     "composition_year": 2019,
@@ -1540,6 +1556,48 @@
     ]
   },
   {
+    "id": "kaze-wa-kurusa",
+    "slug": "kaze-wa-kurusa",
+    "type": "original",
+    "title_ja": "かぜはくるさ",
+    "title_en": "Kaze wa Kuru sa",
+    "category": "classical",
+    "composition_year": 2023,
+    "published_date": null,
+    "ensemble": "art-song",
+    "instrumentation_ja": "独唱+pf.",
+    "instrumentation_en": "Solo voice and piano",
+    "instruments": [
+      "voice",
+      "piano"
+    ],
+    "duration_seconds": 210,
+    "video": {
+      "youtube": null,
+      "niconico": null,
+      "fallback_url": null
+    },
+    "other_videos": [],
+    "scores": [],
+    "recognitions": [
+      {
+        "competition_ja": "日本歌曲振興波の会 第22回日本歌曲コンクール 作曲部門",
+        "competition_en": "22nd Japanese Art Song Competition, Composition Division",
+        "result_ja": "入選",
+        "result_en": "Selected"
+      }
+    ],
+    "commentary": null,
+    "tags": [
+      "voice",
+      "piano",
+      "art-song"
+    ],
+    "featured": false,
+    "published": true,
+    "sample": false
+  },
+  {
     "id": "shuka-no-uta",
     "slug": "shuka-no-uta",
     "type": "original",
@@ -1564,6 +1622,14 @@
     },
     "other_videos": [],
     "scores": [],
+    "recognitions": [
+      {
+        "competition_ja": "第1回Trio Iris作曲コンペティション",
+        "competition_en": "1st Trio Iris Composition Competition",
+        "result_ja": "第2位",
+        "result_en": "Second Prize"
+      }
+    ],
     "commentary": "commentary",
     "commentary_ja": "「和」と「色彩」をテーマに、和歌に詠まれた色という二つの要素を結び付けた作品。「朱華（はねず）」は黄色がかった淡い赤色で、褪色しやすい染色だったことから『万葉集』では移ろいやすい心に重ねて詠まれた。物憂げで神秘的な前半と、拍節感の強い躍動的な後半の対照によって、心情の変化を描いている。",
     "commentary_en": "Responding to themes of “Japan/harmony” and “color,” the work connects both ideas through a color named in waka poetry. Hanezu is a pale yellowish red whose fugitive dye became associated in the Man’yōshū with a changeable heart. The contrast between a wistful, mysterious opening and a rhythmically vivid second half suggests an emotional change.",
@@ -1712,7 +1778,10 @@
     },
     "other_videos": [],
     "scores": [],
-    "commentary": null,
+    "commentary": "commentary",
+    "commentary_ja": "一聴するとミニマル・ミュージックを思わせる作品。さまざまな積み上げ歌のうち、「The 12 Days of Christmas」と谷川俊太郎の絵本『すいへいせん』から着想を得ている。メトリック・モジュレーションも用い、付点八分音符≒154の拍を聴きながら四分音符＝116で入る箇所など、演奏難度は高い。",
+    "commentary_en": "At first hearing, the piece has a minimalist character. Among the many traditions of cumulative song, it draws inspiration from “The Twelve Days of Christmas” and Shuntaro Tanikawa’s picture book Suiheisen. It also employs metric modulation: in one passage, for example, performers must enter at quarter note = 116 while hearing a dotted-eighth pulse at approximately 154, making the work technically demanding to perform.",
+    "commentary_source": "https://www.youtube.com/watch?v=mAbUbJd_Fmw",
     "tags": [
       "orchestra"
     ],
@@ -2542,8 +2611,8 @@
     "composition_year": 2021,
     "published_date": "2021-09-11",
     "ensemble": "pops",
-    "instrumentation_ja": "ボーカル",
-    "instrumentation_en": "Vocal",
+    "instrumentation_ja": "CeVIO IA English（歌唱）",
+    "instrumentation_en": "CeVIO IA English voice",
     "instruments": [
       "voice"
     ],
@@ -2556,6 +2625,14 @@
     "other_videos": [],
     "lyricist_name": "ふたみん様",
     "scores": [],
+    "recognitions": [
+      {
+        "competition_ja": "第1回伊勢志摩国際大衆音楽作曲コンクール",
+        "competition_en": "1st Ise-Shima International Popular Music Composition Competition",
+        "result_ja": "特別賞",
+        "result_en": "Special Award"
+      }
+    ],
     "commentary": null,
     "tags": [
       "vocal",
@@ -2690,6 +2767,14 @@
     },
     "other_videos": [],
     "scores": [],
+    "recognitions": [
+      {
+        "competition_ja": "大江戸シンフォニックウィンドオーケストラ作品公募2013",
+        "competition_en": "Oedo Symphonic Wind Orchestra Call for Scores 2013",
+        "result_ja": "入選",
+        "result_en": "Selected"
+      }
+    ],
     "commentary": null,
     "tags": [
       "wind-ensemble"
