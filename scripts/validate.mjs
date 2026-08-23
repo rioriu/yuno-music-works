@@ -50,7 +50,7 @@ const validateJapanese = (value, location = 'works') => {
 };
 validateJapanese(works);
 if (!Array.isArray(works) || !works.length) fail('works: expected a non-empty array');
-if (works.length !== 70) fail(`works: expected 70 top-level works, got ${works.length}`);
+if (works.length !== 75) fail(`works: expected 75 top-level works, got ${works.length}`);
 if (works.some(work => work.sample === true || JSON.stringify(work).includes('example.com'))) fail('works: sample/example content is forbidden');
 const validDate = value => value === null || (/^\d{4}-\d{2}-\d{2}$/.test(value) && !Number.isNaN(Date.parse(`${value}T00:00:00Z`)));
 const validSlug = value => typeof value === 'string' && /^[A-Za-z0-9][A-Za-z0-9_-]*$/.test(value);
@@ -71,8 +71,10 @@ for (const [index,work] of works.entries()) {
   if (work.type === 'original' && work.category === 'classical' && work.instrumentation_ja?.includes('ピアノソロ')) fail(`works[${index}]: classical original cannot use ピアノソロ`);
   if (work.type === 'arrangement' && work.category === 'pops' && work.instrumentation_ja?.includes('ピアノ独奏')) fail(`works[${index}]: POPS arrangement cannot use ピアノ独奏`);
   if (work.composition_year !== null && (!Number.isInteger(work.composition_year) || work.composition_year < 0)) fail(`works[${index}]: invalid composition_year`);
+  if ('revision_year' in work && (!Number.isInteger(work.revision_year) || work.revision_year < work.composition_year)) fail(`works[${index}]: invalid revision_year`);
   if (!validDate(work.published_date)) fail(`works[${index}]: invalid published_date`);
   if (work.composition_year !== null && work.published_date && work.composition_year > Number(work.published_date.slice(0,4))) fail(`works[${index}]: composition_year is later than publication year`);
+  if (work.revision_year && work.published_date && work.revision_year > Number(work.published_date.slice(0,4))) fail(`works[${index}]: revision_year is later than publication year`);
   if (!Number.isInteger(work.duration_seconds) || work.duration_seconds < 0) fail(`works[${index}]: invalid duration_seconds`);
   if (!Array.isArray(work.instruments) || !Array.isArray(work.scores) || !Array.isArray(work.other_videos) || !Array.isArray(work.tags)) fail(`works[${index}]: expected arrays`);
   if ('recognitions' in work) {
@@ -106,7 +108,7 @@ for (const [index,work] of works.entries()) {
 }
 for (const ensemble of originalEnsembles) if (!works.some(work => work.type === 'original' && work.ensemble === ensemble)) fail(`works: no original work for ${ensemble}`);
 const publishedOriginals = works.filter(work => work.type === 'original' && work.published), publishedArrangements = works.filter(work => work.type === 'arrangement' && work.published);
-if (publishedOriginals.length !== 52) fail(`works: expected 52 published originals, got ${publishedOriginals.length}`);
+if (publishedOriginals.length !== 57) fail(`works: expected 57 published originals, got ${publishedOriginals.length}`);
 const originalGroupPredicates = {
   solo:work => ['piano','solo'].includes(work.ensemble),
   'solo-piano':work => work.ensemble === 'solo-piano',
@@ -115,7 +117,7 @@ const originalGroupPredicates = {
   vocal:work => ['art-song','choral'].includes(work.ensemble),
   pops:work => work.category === 'pops',
 };
-const expectedOriginalGroupCounts = {solo:6,'solo-piano':5,chamber:14,large:5,vocal:5,pops:17};
+const expectedOriginalGroupCounts = {solo:7,'solo-piano':5,chamber:18,large:5,vocal:5,pops:17};
 for (const [group,predicate] of Object.entries(originalGroupPredicates)) {
   const count = publishedOriginals.filter(predicate).length;
   if (count !== expectedOriginalGroupCounts[group]) fail(`works: original group ${group} count must be ${expectedOriginalGroupCounts[group]}, got ${count}`);
@@ -131,7 +133,7 @@ const originalDurationPredicates = {
   '5-10':work => work.duration_seconds >= 300 && work.duration_seconds < 600,
   '10-plus':work => work.duration_seconds >= 600,
 };
-const expectedOriginalDurationCounts = {'under-3':8,'3-5':20,'5-10':14,'10-plus':10};
+const expectedOriginalDurationCounts = {'under-3':9,'3-5':20,'5-10':18,'10-plus':10};
 for (const [range,predicate] of Object.entries(originalDurationPredicates)) {
   const count = publishedOriginals.filter(predicate).length;
   if (count !== expectedOriginalDurationCounts[range]) fail(`works: original duration ${range} count must be ${expectedOriginalDurationCounts[range]}, got ${count}`);
@@ -144,7 +146,7 @@ const originalInstrumentSets = {
   percussion:['marimba','vibraphone','xylophone','glockenspiel','percussion','cajon'],
   voice:['voice','choir'],
 };
-const expectedOriginalInstrumentCounts = {piano:15,woodwinds:9,brass:4,strings:6,percussion:7,voice:5};
+const expectedOriginalInstrumentCounts = {piano:16,woodwinds:12,brass:5,strings:8,percussion:7,voice:5};
 for (const [group,instruments] of Object.entries(originalInstrumentSets)) {
   const count = publishedOriginals.filter(work => work.category !== 'pops' && work.instruments.some(instrument => instruments.includes(instrument))).length;
   if (count !== expectedOriginalInstrumentCounts[group]) fail(`works: non-POPS original instrument ${group} count must be ${expectedOriginalInstrumentCounts[group]}, got ${count}`);

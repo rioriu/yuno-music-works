@@ -169,8 +169,16 @@ function recognitionMarkup(work) {
   const items = work.recognitions.map(item => `<span class="work-recognition">${esc(label(item,'competition'))}${separator}${esc(label(item,'result'))}</span>`).join('');
   return `<span class="work-recognitions" aria-label="${esc(t('recognitions'))}">${items}</span>`;
 }
+function compositionLabel(work) {
+  if (!Number.isInteger(work.composition_year)) return '';
+  if (!Number.isInteger(work.revision_year)) return `${work.composition_year}${state.lang === 'ja' ? '年' : ''}`;
+  return state.lang === 'ja'
+    ? `${work.composition_year}年作曲／${work.revision_year}年改訂`
+    : `Composed ${work.composition_year} / revised ${work.revision_year}`;
+}
 function metadata(work, partLabel = '') {
-  return `<div class="work-meta"><span class="work-meta-ensemble">${esc(instrumentationShort(work))}</span>${Number.isInteger(work.composition_year) ? `<span>${work.composition_year}${state.lang === 'ja' ? '年' : ''}</span>` : ''}${partLabel ? `<span>${esc(partLabel)}</span>` : ''}</div>`;
+  const composition = compositionLabel(work);
+  return `<div class="work-meta"><span class="work-meta-ensemble">${esc(instrumentationShort(work))}</span>${composition ? `<span>${esc(composition)}</span>` : ''}${partLabel ? `<span>${esc(partLabel)}</span>` : ''}</div>`;
 }
 function originalCard(work) {
   const title = label(work,'title'), multipart = isMultipart(work), links = multipart ? [`<a class="internal-action" href="${detailHref(work)}">${t('viewWork')}</a>`] : actions(work);
@@ -260,7 +268,7 @@ function originalSelectionLabel(group, durationValue, instrument) {
 function originalRow(work) {
   const slug = esc(work.slug), panel = `original-panel-${slug}`, credit = credits(work);
   const meta = [
-    Number.isInteger(work.composition_year) ? `${work.composition_year}${state.lang === 'ja' ? '年' : ''}` : '',
+    compositionLabel(work),
     duration(work.duration_seconds),
     isMultipart(work) ? label(work,'parts_label') : '',
   ].filter(Boolean);

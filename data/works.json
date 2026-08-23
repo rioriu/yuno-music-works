@@ -308,7 +308,7 @@
     "title_ja": "フルートとピアノのためのソナタ　嬰ヘ短調",
     "title_en": "Sonata for Flute and Piano in F-sharp Minor",
     "category": "classical",
-    "composition_year": 2012,
+    "composition_year": 2011,
     "published_date": "2012-04-17",
     "ensemble": "solo-piano",
     "instrumentation_ja": "フルート＋ピアノ",
@@ -323,7 +323,13 @@
       "niconico": null,
       "fallback_url": "https://www.youtube.com/watch?v=3zaN7pvGzM8"
     },
-    "other_videos": [],
+    "other_videos": [
+      {
+        "label_ja": "ニコニコ動画版",
+        "label_en": "Niconico version",
+        "url": "https://www.nicovideo.jp/watch/sm17576874"
+      }
+    ],
     "scores": [],
     "commentary": null,
     "tags": [
@@ -1784,6 +1790,180 @@
     "commentary_source": "https://www.youtube.com/watch?v=mAbUbJd_Fmw",
     "tags": [
       "orchestra"
+    ],
+    "featured": false,
+    "published": true,
+    "sample": false
+  },
+  {
+    "id": "from-five-sketches-woodwind-quintet",
+    "slug": "from-five-sketches-woodwind-quintet",
+    "type": "original",
+    "title_ja": "「5つのスケッチから」―木管五重奏のための",
+    "title_en": "From Five Sketches for Woodwind Quintet",
+    "category": "classical",
+    "composition_year": 2006,
+    "revision_year": 2010,
+    "published_date": "2010-07-27",
+    "ensemble": "woodwinds",
+    "instrumentation_ja": "木管五重奏",
+    "instrumentation_en": "Woodwind quintet",
+    "instruments": [
+      "flute",
+      "oboe",
+      "clarinet",
+      "horn",
+      "bassoon"
+    ],
+    "duration_seconds": 392,
+    "video": {
+      "youtube": null,
+      "niconico": "sm11538457",
+      "fallback_url": "https://www.nicovideo.jp/watch/sm11538457"
+    },
+    "other_videos": [],
+    "scores": [],
+    "commentary": null,
+    "tags": [
+      "flute",
+      "oboe",
+      "clarinet",
+      "horn",
+      "bassoon"
+    ],
+    "featured": false,
+    "published": true,
+    "sample": false
+  },
+  {
+    "id": "capriccio-clarinet-quintet",
+    "slug": "capriccio-clarinet-quintet",
+    "type": "original",
+    "title_ja": "クラリネット五重奏のための奇想曲",
+    "title_en": "Capriccio for Clarinet Quintet",
+    "category": "classical",
+    "composition_year": 2009,
+    "published_date": "2011-07-17",
+    "ensemble": "mixed",
+    "instrumentation_ja": "クラリネット＋弦楽四重奏",
+    "instrumentation_en": "Clarinet and string quartet",
+    "instruments": [
+      "clarinet",
+      "violin",
+      "viola",
+      "cello"
+    ],
+    "duration_seconds": 377,
+    "video": {
+      "youtube": null,
+      "niconico": "sm15034452",
+      "fallback_url": "https://www.nicovideo.jp/watch/sm15034452"
+    },
+    "other_videos": [],
+    "scores": [],
+    "commentary": null,
+    "tags": [
+      "clarinet",
+      "violin",
+      "viola",
+      "cello"
+    ],
+    "featured": false,
+    "published": true,
+    "sample": false
+  },
+  {
+    "id": "string-quartet-2008",
+    "slug": "string-quartet-2008",
+    "type": "original",
+    "title_ja": "弦楽四重奏曲",
+    "title_en": "String Quartet",
+    "category": "classical",
+    "composition_year": 2008,
+    "published_date": "2012-05-03",
+    "ensemble": "strings",
+    "instrumentation_ja": "弦楽四重奏",
+    "instrumentation_en": "String quartet",
+    "instruments": [
+      "violin",
+      "viola",
+      "cello"
+    ],
+    "duration_seconds": 438,
+    "video": {
+      "youtube": null,
+      "niconico": "sm17713601",
+      "fallback_url": "https://www.nicovideo.jp/watch/sm17713601"
+    },
+    "other_videos": [],
+    "scores": [],
+    "commentary": null,
+    "tags": [
+      "violin",
+      "viola",
+      "cello"
+    ],
+    "featured": false,
+    "published": true,
+    "sample": false
+  },
+  {
+    "id": "kumoji-no-hi-yori-izuru",
+    "slug": "kumoji-no-hi-yori-izuru",
+    "type": "original",
+    "title_ja": "「雲路の灯より出づる」4本のフルートのために",
+    "title_en": "Emerging from the Light of the Cloud Path for Four Flutes",
+    "category": "classical",
+    "composition_year": 2009,
+    "published_date": "2009-06-07",
+    "ensemble": "woodwinds",
+    "instrumentation_ja": "フルート四重奏",
+    "instrumentation_en": "Flute quartet",
+    "instruments": [
+      "flute"
+    ],
+    "duration_seconds": 143,
+    "video": {
+      "youtube": null,
+      "niconico": "sm7269301",
+      "fallback_url": "https://www.nicovideo.jp/watch/sm7269301"
+    },
+    "other_videos": [],
+    "scores": [],
+    "commentary": null,
+    "tags": [
+      "flute"
+    ],
+    "featured": false,
+    "published": true,
+    "sample": false
+  },
+  {
+    "id": "waltz-of-the-hidden-ninth",
+    "slug": "waltz-of-the-hidden-ninth",
+    "type": "original",
+    "title_ja": "隠された9度のワルツ",
+    "title_en": "Waltz of the Hidden Ninth",
+    "category": "classical",
+    "composition_year": 2011,
+    "published_date": "2012-12-20",
+    "ensemble": "piano",
+    "instrumentation_ja": "ピアノ独奏",
+    "instrumentation_en": "Piano solo",
+    "instruments": [
+      "piano"
+    ],
+    "duration_seconds": 333,
+    "video": {
+      "youtube": null,
+      "niconico": "sm19622132",
+      "fallback_url": "https://www.nicovideo.jp/watch/sm19622132"
+    },
+    "other_videos": [],
+    "scores": [],
+    "commentary": null,
+    "tags": [
+      "piano"
     ],
     "featured": false,
     "published": true,
