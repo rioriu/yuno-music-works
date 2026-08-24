@@ -2,6 +2,66 @@ const script = document.querySelector('script[src$="assets/js/app.js"]');
 const ROOT = new URL('../../', script.src);
 const DATA = new URL('data/', ROOT);
 const state = {lang: localStorage.getItem('yuno-language') === 'en' ? 'en' : 'ja'};
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+let revealObserver = null;
+
+function revealElements(root = document) {
+  if (!revealObserver || reducedMotion.matches) return;
+  const selector = '.page-heading,.hero>*:not(.hero-image),.hero-image,.intro-grid .entry-link,.section>h2,.update,.arrangement-discovery-group,.arrangement-discovery-link,.arrangement-results-heading,.work,.arrangement-row,.year-group,.prose>p,.prose>h2,.prose>ul,.contact-form,.commentary-body>*';
+  root.querySelectorAll(selector).forEach((element,index) => {
+    if (element.dataset.motionObserved) return;
+    element.dataset.motionObserved = 'true';
+    element.classList.add('motion-reveal');
+    element.style.setProperty('--motion-delay',`${Math.min(index % 5,4) * 55}ms`);
+    revealObserver.observe(element);
+  });
+}
+
+function setupMotion() {
+  document.body.classList.add('motion-enabled');
+  if (!reducedMotion.matches && 'IntersectionObserver' in window) {
+    revealObserver = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-visible');
+      revealObserver.unobserve(entry.target);
+    }),{rootMargin:'0px 0px -7% 0px',threshold:.08});
+    revealElements();
+  }
+  requestAnimationFrame(() => document.body.classList.add('page-ready'));
+  document.addEventListener('click',event => {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    const link = event.target.closest('a[href]');
+    if (!link || link.target || link.hasAttribute('download')) return;
+    const url = new URL(link.href,location.href);
+    if (url.origin !== location.origin || (url.pathname === location.pathname && url.search === location.search && url.hash)) return;
+    event.preventDefault();
+    if (reducedMotion.matches) { location.href = url.href; return; }
+    document.body.classList.add('page-leaving');
+    window.setTimeout(() => { location.href = url.href; },260);
+  });
+  window.addEventListener('pageshow',() => document.body.classList.remove('page-leaving'));
+}
+
+function openAnimatedPanel(panel,markup) {
+  panel.getAnimations().forEach(animation => animation.cancel());
+  panel.dataset.motionState = 'open';
+  panel.hidden = false;
+  panel.innerHTML = markup;
+  if (reducedMotion.matches) return;
+  const height = panel.scrollHeight;
+  const animation = panel.animate([{height:'0px',opacity:0},{height:`${height}px`,opacity:1}],{duration:380,easing:'cubic-bezier(.22,1,.36,1)'});
+  animation.finished.then(() => { if (panel.dataset.motionState === 'open') panel.style.height = 'auto'; }).catch(() => {});
+}
+
+function closeAnimatedPanel(panel) {
+  panel.getAnimations().forEach(animation => animation.cancel());
+  panel.dataset.motionState = 'closed';
+  const finish = () => { if (panel.dataset.motionState === 'closed') { panel.replaceChildren(); panel.hidden = true; panel.style.height = ''; } };
+  if (panel.hidden || reducedMotion.matches) { finish(); return; }
+  const height = panel.getBoundingClientRect().height || panel.scrollHeight;
+  const animation = panel.animate([{height:`${height}px`,opacity:1},{height:'0px',opacity:0}],{duration:260,easing:'cubic-bezier(.4,0,1,1)'});
+  animation.finished.then(finish).catch(() => {});
+}
 
 const C = {
   ja: {home:'ホーム',originals:'オリジナル作品',arrangements:'編曲作品',profile:'プロフィール',contact:'お問い合わせ',updates:'更新情報',menu:'メニュー',skip:'本文へ移動',language:'言語',year:'年',duration:'演奏時間',origin:'原曲',artist:'アーティスト',composer:'作曲',lyricist:'作詞',commentary:'作品解説',footer:'© YUNO / MUSIC & WORKS',noWorks:'条件に合う作品はありません。',noVideo:'動画はありません。',fallbackVideo:'動画を開く',loadingVideo:'動画を読み込んでいます…',videoTitle:'動画プレーヤー',backToWorks:'作品一覧へ戻る',commentaryMissing:'作品解説が見つかりませんでした。',notFound:'この作品は見つかりませんでした。',parts:'曲目',viewWork:'作品を見る',all:'すべて',publishedNewest:'公開日：新しい順',publishedOldest:'公開日：古い順',results:'件',works:'作品',published:'公開日',browseCreators:'アーティスト・作曲家から探す',showing:'表示中',sourceGenre:'原曲ジャンル',filmTv:'映画・ドラマ音楽',pianoSolo:'ピアノソロ',pianoFourHands:'ピアノ連弾',chamberEnsemble:'室内楽',other:'その他',allArrangements:'すべての編曲作品',viewArrangement:'動画・関連リンクを開く',closeArrangement:'閉じる',allOriginals:'すべてのオリジナル作品',viewOriginal:'動画・作品情報を開く',closeOriginal:'閉じる',recognitions:'受賞・入選歴'},
@@ -88,9 +148,24 @@ function renderShell() {
   document.querySelector('[data-site-header]').innerHTML = `<a class="skip-link" href="#main">${t('skip')}</a><a class="brand" href="${rootLink('')}" aria-label="YUNO / MUSIC & WORKS">YUNO / MUSIC &amp; WORKS</a><div class="header-actions"><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="${t('menu')}"><span class="nav-toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span><span class="visually-hidden">${t('menu')}</span></button><nav class="main-nav" id="site-nav" aria-label="${t('menu')}"><ul>${nav.map(([key,url]) => `<li><a href="${rootLink(url)}"${page === key ? ' aria-current="page"' : ''}>${t(key)}</a></li>`).join('')}</ul></nav><div class="language-switch" aria-label="${t('language')}"><button type="button" data-lang="ja" aria-pressed="${state.lang === 'ja'}">日本語</button><button type="button" data-lang="en" aria-pressed="${state.lang === 'en'}">EN</button></div></div>`;
   document.querySelector('[data-site-footer]').innerHTML = `<div class="footer-inner"><span>${t('footer')}</span><a href="${rootLink('updates/')}">${t('updates')}</a></div>`;
   const navEl = document.querySelector('.main-nav'), navToggle = document.querySelector('.nav-toggle'), mobileNav = window.matchMedia('(max-width: 760px)');
-  const setNav = open => { const mobile = mobileNav.matches; navEl.toggleAttribute('hidden', mobile && !open); navToggle.setAttribute('aria-expanded', String(mobile ? open : true)); };
-  setNav(false); navToggle.onclick = () => setNav(navEl.hasAttribute('hidden')); mobileNav.addEventListener('change', () => setNav(false));
-  document.querySelectorAll('[data-lang]').forEach(button => { button.onclick = () => { localStorage.setItem('yuno-language', button.dataset.lang); location.reload(); }; });
+  const setNav = open => {
+    const mobile = mobileNav.matches, expanded = mobile ? open : true;
+    navEl.classList.toggle('is-open',expanded);
+    navEl.setAttribute('aria-hidden',String(!expanded));
+    navEl.inert = !expanded;
+    navToggle.setAttribute('aria-expanded',String(expanded));
+  };
+  setNav(false);
+  navToggle.onclick = () => setNav(navToggle.getAttribute('aria-expanded') !== 'true');
+  mobileNav.addEventListener('change',() => setNav(false));
+  document.addEventListener('keydown',event => { if (event.key === 'Escape' && mobileNav.matches) { setNav(false); navToggle.focus(); } });
+  document.addEventListener('click',event => { if (mobileNav.matches && navToggle.getAttribute('aria-expanded') === 'true' && !event.target.closest('.header-actions')) setNav(false); });
+  document.querySelectorAll('[data-lang]').forEach(button => { button.onclick = () => {
+    localStorage.setItem('yuno-language',button.dataset.lang);
+    if (reducedMotion.matches) { location.reload(); return; }
+    document.body.classList.add('page-leaving');
+    window.setTimeout(() => location.reload(),260);
+  }; });
 }
 async function getJson(name) { const response = await fetch(new URL(name, DATA)); if (!response.ok) throw Error(name); return response.json(); }
 
@@ -316,7 +391,7 @@ async function renderOriginalDiscoveryCatalog(works) {
   if (!showResults) { output.replaceChildren(); return; }
   let expandedSlug = null;
   const closeExpanded = (clearHash = false) => {
-    output.querySelectorAll('[data-original-panel]').forEach(panel => { panel.replaceChildren(); panel.hidden = true; });
+    output.querySelectorAll('[data-original-panel]').forEach(closeAnimatedPanel);
     output.querySelectorAll('[data-original-toggle]').forEach(button => {
       button.setAttribute('aria-expanded','false');
       const buttonLabel = button.querySelector('.original-toggle-label'), icon = button.querySelector('.arrangement-toggle-icon');
@@ -335,8 +410,7 @@ async function renderOriginalDiscoveryCatalog(works) {
     const buttonLabel = button.querySelector('.original-toggle-label'), icon = button.querySelector('.arrangement-toggle-icon');
     if (buttonLabel) buttonLabel.textContent = t('closeOriginal');
     if (icon) icon.textContent = '−';
-    panel.hidden = false;
-    panel.innerHTML = originalExpandedMarkup(work);
+    openAnimatedPanel(panel,originalExpandedMarkup(work));
     panel.querySelectorAll('[data-video-src]').forEach(mountVideo);
     expandedSlug = slug;
     if (updateHash && readHash() !== slug) { const next = new URL(location.href); next.hash = slug; history.replaceState(null,'',next); }
@@ -357,6 +431,7 @@ async function renderOriginalDiscoveryCatalog(works) {
       return dateDifference || label(a,'title').localeCompare(label(b,'title'),state.lang);
     });
     output.innerHTML = items.length ? items.map(originalRow).join('') : `<p class="empty-state">${t('noWorks')}</p>`;
+    revealElements(output);
     const count = document.querySelector('[data-original-count]'), status = document.querySelector('[data-original-status]'), title = document.querySelector('[data-original-results-title]');
     if (title) title.textContent = originalSelectionLabel(selectedGroup,selectedDuration,selectedInstrument);
     if (count) count.textContent = originalCountText(items.length);
@@ -447,14 +522,14 @@ async function renderArrangementCatalog(works) {
   if (results) results.hidden = !showResults;
   if (!showResults) { output.replaceChildren(); return; }
   let expandedSlug = null;
-  const closeExpanded = (clearHash = false) => { output.querySelectorAll('[data-arrangement-panel]').forEach(panel => { panel.replaceChildren(); panel.hidden = true; }); output.querySelectorAll('[data-arrangement-toggle]').forEach(button => { button.setAttribute('aria-expanded','false'); const label = button.querySelector('.arrangement-toggle-label'), icon = button.querySelector('.arrangement-toggle-icon'); if (label) label.textContent = t('viewArrangement'); if (icon) icon.textContent = '＋'; }); expandedSlug = null; if (clearHash) clearLocationHash(); };
+  const closeExpanded = (clearHash = false) => { output.querySelectorAll('[data-arrangement-panel]').forEach(closeAnimatedPanel); output.querySelectorAll('[data-arrangement-toggle]').forEach(button => { button.setAttribute('aria-expanded','false'); const label = button.querySelector('.arrangement-toggle-label'), icon = button.querySelector('.arrangement-toggle-icon'); if (label) label.textContent = t('viewArrangement'); if (icon) icon.textContent = '＋'; }); expandedSlug = null; if (clearHash) clearLocationHash(); };
   const openExpanded = (slug, updateHash = true) => {
     const row = document.getElementById(slug), work = all.find(item => item.slug === slug);
     if (!row?.matches('[data-arrangement-row]')) return false;
     if (!row || !work) return false;
     if (expandedSlug && expandedSlug !== slug) closeExpanded(false);
     const button = row.querySelector('[data-arrangement-toggle]'), panel = row.querySelector('[data-arrangement-panel]');
-    button.setAttribute('aria-expanded','true'); const buttonLabel = button.querySelector('.arrangement-toggle-label'), icon = button.querySelector('.arrangement-toggle-icon'); if (buttonLabel) buttonLabel.textContent = t('closeArrangement'); if (icon) icon.textContent = '−'; panel.hidden = false; panel.innerHTML = arrangementExpandedMarkup(work); const video = panel.querySelector('[data-video-src]'); if (video) mountVideo(video); expandedSlug = slug;
+    button.setAttribute('aria-expanded','true'); const buttonLabel = button.querySelector('.arrangement-toggle-label'), icon = button.querySelector('.arrangement-toggle-icon'); if (buttonLabel) buttonLabel.textContent = t('closeArrangement'); if (icon) icon.textContent = '−'; openAnimatedPanel(panel,arrangementExpandedMarkup(work)); const video = panel.querySelector('[data-video-src]'); if (video) mountVideo(video); expandedSlug = slug;
     if (updateHash && readHash() !== slug) { const next = new URL(location.href); next.hash = slug; history.replaceState(null,'',next); }
     return true;
   };
@@ -464,6 +539,7 @@ async function renderArrangementCatalog(works) {
     const items = all.filter(work => (!selectedCreator || (selectedCreator === 'other' ? !ARRANGEMENT_FEATURED_CREATORS.includes(arrangementCreator(work)) : arrangementCreator(work) === selectedCreator)) && (!selectedGenre || work.category === selectedGenre) && (!selectedEnsemble || work.ensemble === selectedEnsemble));
     items.sort((a,b) => { if (selectedSort === 'title') return label(a,'title').localeCompare(label(b,'title'),state.lang); return selectedSort === 'oldest' ? a.published_date.localeCompare(b.published_date) : b.published_date.localeCompare(a.published_date); });
     output.innerHTML = items.length ? items.map(arrangementRow).join('') : `<p class="empty-state">${t('noWorks')}</p>`;
+    revealElements(output);
     const count = document.querySelector('[data-arrangement-count]'), status = document.querySelector('[data-arrangement-status]'), title = document.querySelector('[data-arrangement-results-title]');
     if (title) title.textContent = arrangementSelectionLabel(selectedCreator,selectedGenre,selectedEnsemble);
     if (count) count.textContent = originalCountText(items.length);
@@ -494,6 +570,7 @@ async function renderCatalog() {
     const items = all.filter(work => !selectedEnsemble || work.ensemble === selectedEnsemble);
     items.sort((a,b) => { if (selectedSort === 'title') return label(a,'title').localeCompare(label(b,'title'),state.lang); if (!a.published_date && !b.published_date) return 0; if (!a.published_date) return 1; if (!b.published_date) return -1; return selectedSort === 'oldest' ? a.published_date.localeCompare(b.published_date) : b.published_date.localeCompare(a.published_date); });
     output.innerHTML = items.length ? items.map(originalCard).join('') : `<p class="empty-state">${t('noWorks')}</p>`;
+    revealElements(output);
     const summary = document.querySelector('[data-filter-summary]'); if (summary) summary.textContent = selectedEnsemble && ENSEMBLES[selectedEnsemble] ? ENSEMBLES[selectedEnsemble][state.lang] : t('all');
     lazyVideos(); requestAnimationFrame(focusHash);
   };
@@ -527,4 +604,5 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderShell(); localizeStatic(); renderPageMeta();
   try { await Promise.all([renderCatalog(),renderWorkDetail(),renderUpdates(),renderCommentary()]); }
   catch (error) { console.error(error); document.querySelectorAll('[data-work-list],[data-work-detail],[data-updates],[data-commentary-page]').forEach(element => { if (!element.innerHTML) element.innerHTML = `<p class="empty-state">${state.lang === 'ja' ? 'コンテンツを読み込めませんでした。' : 'Content could not be loaded.'}</p>`; }); }
+  finally { setupMotion(); }
 });
