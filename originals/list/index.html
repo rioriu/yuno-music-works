@@ -8,12 +8,14 @@
   <meta name="description" content="YUNOのオリジナル作品一覧。編成で絞り込めます。">
   <title>オリジナル作品一覧 — YUNO</title>
   <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
-  <link rel="stylesheet" href="../../assets/css/styles.css?v=20260825-3">
-  <script type="module" src="../../assets/js/app.js"></script>
+  <link rel="stylesheet" href="../../assets/css/styles.css?v=20260905-1">
+  <script type="module" src="../../assets/js/app.js?v=20260905-3"></script>
 </head>
 <body data-page="originals" data-page-meta="original-list" data-catalog="original">
-  <header class="site-header" data-site-header></header>
+  <header class="site-header" data-site-header><nav aria-label="基本ナビゲーション / Navigation"><a href="../../">ホーム / Home</a> · <a href="../../originals/">オリジナル作品 / Originals</a> · <a href="../../arrangements/">編曲作品 / Arrangements</a> · <a href="../../contact/">お問い合わせ / Contact</a></nav></header>
   <main class="shell" id="main">
+    <div class="load-status" data-load-status="[data-work-list]" role="status" aria-live="polite" hidden></div>
+    <noscript><p>作品・更新情報の表示には JavaScript を有効にしてください。 / Enable JavaScript to view works and updates.</p></noscript>
     <header class="page-heading catalog-heading">
       <div class="eyebrow">Original Works / <span data-filter-summary>すべて</span></div>
       <h1 data-ja="オリジナル作品一覧" data-en="Original Works">オリジナル作品一覧</h1>
@@ -22,7 +24,7 @@
     <form class="controls" aria-label="Work filters">
       <label class="control"><span data-ja="編成" data-en="Instrumentation">編成</span><select name="ensemble">
         <option value="" data-ja="すべて" data-en="All">すべて</option>
-        <option value="piano">Piano / ピアノ</option><option value="solo">Solo / 独奏</option><option value="solo-piano">Solo &amp; Piano / 独奏＋ピアノ</option>
+        <option value="piano">Piano / ピアノ</option><option value="solo">Solo / 独奏</option><option value="solo-piano" data-ja="ピアノを含む二重奏" data-en="Duo Including Piano">Duo Including Piano / ピアノを含む二重奏</option>
         <option value="strings">String Ensemble / 弦楽</option><option value="woodwinds">Woodwind Ensemble / 木管</option><option value="brass">Brass Ensemble / 金管</option>
         <option value="percussion">Percussion Ensemble / 打楽器</option><option value="mixed">Mixed Ensemble / 混成</option><option value="orchestra">Orchestra / オーケストラ</option>
         <option value="wind">Wind Ensemble / 吹奏楽</option><option value="art-song">Art Song / 歌曲</option><option value="choral">Choral Works / 合唱</option><option value="pops">POPS</option>

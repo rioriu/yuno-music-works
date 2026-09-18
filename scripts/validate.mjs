@@ -1,3 +1,4 @@
+import {validateShape,validDate} from './catalog-validation.mjs';
 import {createHash} from 'node:crypto';
 import {existsSync,statSync} from 'node:fs';
 import {readFile,readdir} from 'node:fs/promises';
@@ -5,9 +6,10 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+export async function validateSite({readText = file => readFile(file,'utf8')} = {}) {
 const errors = [];
 const fail = message => errors.push(message);
-const read = file => readFile(path.join(root,file),'utf8');
+const read = file => readText(path.join(root,file));
 const json = async file => { try { return JSON.parse(await read(file)); } catch (error) { fail(`${file}: invalid JSON (${error.message})`); return []; } };
 const existsFile = file => existsSync(file) && statSync(file).isFile();
 const localTarget = (file, url) => {
@@ -23,6 +25,8 @@ async function htmlFiles(dir = root) {
 const pages = await htmlFiles();
 const works = await json('data/works.json');
 const updates = await json('data/updates.json');
+errors.push(...validateShape(works,updates));
+if (errors.length) return {errors};
 const appSource = await read('assets/js/app.js');
 const originalSource = await read('originals/index.html');
 const arrangementSource = await read('arrangements/index.html');
@@ -50,9 +54,7 @@ const validateJapanese = (value, location = 'works') => {
 };
 validateJapanese(works);
 if (!Array.isArray(works) || !works.length) fail('works: expected a non-empty array');
-if (works.length !== 75) fail(`works: expected 75 top-level works, got ${works.length}`);
 if (works.some(work => work.sample === true || JSON.stringify(work).includes('example.com'))) fail('works: sample/example content is forbidden');
-const validDate = value => value === null || (/^\d{4}-\d{2}-\d{2}$/.test(value) && !Number.isNaN(Date.parse(`${value}T00:00:00Z`)));
 const validSlug = value => typeof value === 'string' && /^[A-Za-z0-9][A-Za-z0-9_-]*$/.test(value);
 const validVideo = video => video && (!video.youtube || /^[\w-]{11}$/.test(video.youtube)) && (!video.niconico || /^(sm|so)\d+$/.test(video.niconico)) && (!video.soundcloud || /^https:\/\/(?:www\.)?soundcloud\.com\/[^?#\s]+$/.test(video.soundcloud));
 for (const [index,work] of works.entries()) {
@@ -62,6 +64,7 @@ for (const [index,work] of works.entries()) {
   if (!['original','arrangement'].includes(work.type)) fail(`works[${index}]: invalid type`);
   if (work.type === 'original' && !originalEnsembles.includes(work.ensemble)) fail(`works[${index}]: invalid original ensemble`);
   if (work.type === 'arrangement') {
+    if (!arrangementEnsembles.has(work.ensemble)) fail(`works[${index}]: invalid arrangement ensemble`);
     if (!arrangementGenres.has(work.category)) fail(`works[${index}]: arrangement category must be pops|screen`);
     if (work.published && (typeof work.composer_name !== 'string' || !work.composer_name.trim())) fail(`works[${index}]: published arrangement requires composer_name`);
     if (work.artist_name?.includes('\u3000') || work.composer_name?.includes('\u3000')) fail(`works[${index}]: artist/composer contains U+3000`);
@@ -106,64 +109,12 @@ for (const [index,work] of works.entries()) {
     if (work.published_date !== newest) fail(`works[${index}]: parent published_date must equal newest part`);
   }
 }
-for (const ensemble of originalEnsembles) if (!works.some(work => work.type === 'original' && work.ensemble === ensemble)) fail(`works: no original work for ${ensemble}`);
-const publishedOriginals = works.filter(work => work.type === 'original' && work.published), publishedArrangements = works.filter(work => work.type === 'arrangement' && work.published);
-if (publishedOriginals.length !== 57) fail(`works: expected 57 published originals, got ${publishedOriginals.length}`);
-const originalGroupPredicates = {
-  solo:work => ['piano','solo'].includes(work.ensemble),
-  'solo-piano':work => work.ensemble === 'solo-piano',
-  chamber:work => ['strings','woodwinds','brass','percussion','mixed'].includes(work.ensemble),
-  large:work => ['wind','orchestra'].includes(work.ensemble),
-  vocal:work => ['art-song','choral'].includes(work.ensemble),
-  pops:work => work.category === 'pops',
-};
-const expectedOriginalGroupCounts = {solo:7,'solo-piano':5,chamber:18,large:5,vocal:5,pops:17};
-for (const [group,predicate] of Object.entries(originalGroupPredicates)) {
-  const count = publishedOriginals.filter(predicate).length;
-  if (count !== expectedOriginalGroupCounts[group]) fail(`works: original group ${group} count must be ${expectedOriginalGroupCounts[group]}, got ${count}`);
-}
+const publishedOriginals = works.filter(work => work.type === 'original' && work.published);
 const publishedPopsOriginals = publishedOriginals.filter(work => work.category === 'pops');
 if (publishedPopsOriginals.some(work => /^(?:ボーカル|Vocal)$/i.test(work.instrumentation_ja) || /^(?:ボーカル|Vocal)$/i.test(work.instrumentation_en))) fail('works: POPS originals require a named singing character');
 if (publishedPopsOriginals.some(work => !/^(?:CeVIO|VoiSona)\s+/.test(work.instrumentation_ja) || !/^(?:CeVIO|VoiSona)\s+/.test(work.instrumentation_en))) fail('works: POPS originals require a singing-software name');
 for (const required of ['function singingCharacterShort',"work.category !== 'pops'",'replace(/\\bIA English\\b/gi']) if (!appSource.includes(required)) fail(`app.js: POPS singing-character display missing ${required}`);
 if (appSource.includes("replace(/^(?:CeVIO|VoiSona)\\s+/i,''")) fail('app.js: POPS display must retain the singing-software name');
-const originalDurationPredicates = {
-  'under-3':work => work.duration_seconds < 180,
-  '3-5':work => work.duration_seconds >= 180 && work.duration_seconds < 300,
-  '5-10':work => work.duration_seconds >= 300 && work.duration_seconds < 600,
-  '10-plus':work => work.duration_seconds >= 600,
-};
-const expectedOriginalDurationCounts = {'under-3':9,'3-5':20,'5-10':18,'10-plus':10};
-for (const [range,predicate] of Object.entries(originalDurationPredicates)) {
-  const count = publishedOriginals.filter(predicate).length;
-  if (count !== expectedOriginalDurationCounts[range]) fail(`works: original duration ${range} count must be ${expectedOriginalDurationCounts[range]}, got ${count}`);
-}
-const originalInstrumentSets = {
-  piano:['piano'],
-  woodwinds:['flute','oboe','clarinet','bassoon','saxophone','alto-saxophone'],
-  brass:['horn','trumpet','trombone','tuba'],
-  strings:['violin','viola','cello'],
-  percussion:['marimba','vibraphone','xylophone','glockenspiel','percussion','cajon'],
-  voice:['voice','choir'],
-};
-const expectedOriginalInstrumentCounts = {piano:16,woodwinds:12,brass:5,strings:8,percussion:7,voice:5};
-for (const [group,instruments] of Object.entries(originalInstrumentSets)) {
-  const count = publishedOriginals.filter(work => work.category !== 'pops' && work.instruments.some(instrument => instruments.includes(instrument))).length;
-  if (count !== expectedOriginalInstrumentCounts[group]) fail(`works: non-POPS original instrument ${group} count must be ${expectedOriginalInstrumentCounts[group]}, got ${count}`);
-}
-if (publishedArrangements.length !== 18) fail(`works: expected 18 published arrangements, got ${publishedArrangements.length}`);
-if (publishedArrangements.filter(work => work.category === 'pops').length !== 15 || publishedArrangements.filter(work => work.category === 'screen').length !== 3) fail('works: arrangement category counts must be pops=15 and screen=3');
-if (publishedArrangements.filter(work => work.artist_name === 'キリンジ').length !== 10) fail('works: Kirinji creator count mismatch');
-const arrangementCreator = work => work.artist_name || work.composer_name || '';
-if (publishedArrangements.filter(work => arrangementCreator(work) === '久石 譲').length !== 2) fail('works: Hisaishi creator count mismatch');
-if (publishedArrangements.filter(work => !['キリンジ','久石 譲'].includes(arrangementCreator(work))).length !== 6) fail('works: other creator count mismatch');
-if (publishedArrangements.filter(work => work.ensemble === 'solo').length !== 14 || publishedArrangements.filter(work => work.ensemble === 'duo').length !== 1 || publishedArrangements.filter(work => work.ensemble === 'ensemble').length !== 3) fail('works: arrangement ensemble counts must be solo=14, duo=1, ensemble=3');
-if (publishedArrangements.some(work => work.lyricist_name && !work.lyricist_name.endsWith('様'))) fail('works: lyricist honorific missing');
-if (works.find(work => work.id === 'evarlasting-nightmare')?.title_ja !== 'Everlasting Nightmare') fail('works: Everlasting Nightmare correction missing');
-if (works.find(work => work.id === 'sonata-string-quartet')?.composition_year !== 2016) fail('works: sonata composition year correction missing');
-if (!Array.isArray(updates) || updates.length !== 1) fail(`data/updates.json: expected one update`);
-for (const [index,update] of updates.entries()) { if (!/^\d{4}-\d{2}-\d{2}$/.test(update.date) || !update.text_ja || !update.text_en) fail(`updates[${index}]: ISO date and bilingual text required`); if (update.link && !existsFile(path.join(root,update.link,'index.html'))) fail(`updates[${index}]: missing linked route ${update.link}`); }
-
 const securityCsp = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-src https://www.youtube-nocookie.com https://embed.nicovideo.jp https://w.soundcloud.com; form-action https://formspree.io; base-uri 'self'; object-src 'none'";
 const securityCsp404 = "default-src 'self'; script-src 'self' 'sha256-FZle6OXos+3f3ug6BjmOoAoRSxzst3tGXeOgv541flg='; style-src 'self' 'sha256-WEgh/1LeHk6RuhyrbXjs13j9FrZFoATLZ6f0KC3y/CA='; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-src https://www.youtube-nocookie.com https://embed.nicovideo.jp https://w.soundcloud.com; form-action https://formspree.io; base-uri 'self'; object-src 'none'";
 const allowedOrigins = new Set(['https://www.youtube.com','https://www.nicovideo.jp','https://soundcloud.com','https://www.soundcloud.com','https://store.piascore.com','https://www.mymusic5.com']);
@@ -171,9 +122,39 @@ const validExternal = value => { try { const url = new URL(value); return url.pr
 const validRoute = value => typeof value === 'string' && /^(?:[A-Za-z0-9_-]+\/)*[A-Za-z0-9_-]*\/?$/.test(value) && !value.includes('..');
 const routeSet = new Set(['index.html','404.html','originals/index.html','originals/list/index.html','originals/work/index.html','arrangements/index.html','commentary/index.html','profile/index.html','contact/index.html','updates/index.html']);
 for (const route of routeSet) if (!existsFile(path.join(root,route))) fail(`missing route ${route}`);
+async function checkLocalReference(page, ref, at) {
+  let url;
+  try { url = new URL(ref,`https://local.test/${path.relative(root,page).replaceAll('\\','/')}`); }
+  catch { fail(`${at}: invalid local URL ${ref}`); return; }
+  if (url.origin !== 'https://local.test') { fail(`${at}: unsupported local URL ${ref}`); return; }
+  let pathname, hash;
+  try { pathname = decodeURIComponent(url.pathname); hash = decodeURIComponent(url.hash.slice(1)); }
+  catch { fail(`${at}: invalid URL encoding ${ref}`); return; }
+  const target = localTarget(path.join(root,'index.html'),pathname.slice(1));
+  if (!target.startsWith(root + path.sep) || !existsFile(target)) { fail(`${at}: missing local target ${ref}`); return; }
+  const route = path.relative(root,target).replaceAll('\\','/');
+  const records = works.flatMap(work => [{work,parent:null},...(work.parts || []).map(part => ({work:part,parent:work}))]);
+  const workId = url.searchParams.get('work');
+  const hit = records.find(item => item.work.id === workId && (item.parent || item.work).published);
+  if (workId !== null) {
+    if (!hit || (route === 'commentary/index.html' && !hit.work.commentary) || (route === 'originals/work/index.html' && (hit.parent || !hit.work.parts?.length))) {
+      fail(`${at}: invalid work reference ${ref}`); return;
+    }
+  } else if (['commentary/index.html','originals/work/index.html'].includes(route)) {
+    fail(`${at}: missing work query ${ref}`); return;
+  }
+  if (!hash) return;
+  const targetSource = await readText(target);
+  if ([...targetSource.matchAll(/\bid=["']([^"']+)["']/g)].some(match => match[1] === hash)) return;
+  const hashHit = records.find(item => item.work.slug === hash && (item.parent || item.work).published);
+  const type = (hashHit?.parent || hashHit?.work)?.type;
+  const catalogMatch = (['originals/index.html','originals/list/index.html'].includes(route) && type === 'original') || (route === 'arrangements/index.html' && type === 'arrangement');
+  const detailMatch = route === 'originals/work/index.html' && hit && hit.work.parts?.some(part => part.slug === hash);
+  if (!catalogMatch && !detailMatch) fail(`${at}: missing local hash ${ref}`);
+}
 let internalLinks = 0;
 for (const page of pages) {
-  const source = await readFile(page,'utf8'), relative = path.relative(root,page).replaceAll('\\','/'), notFound = relative === '404.html';
+  const source = await readText(page), relative = path.relative(root,page).replaceAll('\\','/'), notFound = relative === '404.html';
   if (!notFound) {
     if (!source.includes('data-site-header') || !source.includes('data-site-footer')) fail(`${relative}: missing shared shell mount`);
     if (!source.match(/<meta\s+name="description"\s+content="[^"]+"/i)) fail(`${relative}: missing fallback meta description`);
@@ -182,10 +163,10 @@ for (const page of pages) {
   }
   if (!notFound && /\b(?:href|src)=["']\/(?!\/)/.test(source)) fail(`${relative}: root-absolute local URL`);
   for (const pattern of ['example.com','sample','demo','placeholder','prepublication','replace before publishing','サンプル','デモ','例示','プレースホルダー','公開前','公開準備中','要差し替え']) if (source.toLocaleLowerCase().includes(pattern.toLocaleLowerCase())) fail(`${relative}: public placeholder content matches "${pattern}"`);
-  for (const ref of [...source.matchAll(/\b(?:href|src)=["']([^"'#?]+)["']/g)].map(match => match[1])) {
-    if (notFound || /^(https?:|mailto:|data:)/.test(ref)) continue;
+  for (const ref of [...source.matchAll(/\b(?:href|src)=["']([^"']*)["']/gi)].map(match => match[1].replaceAll('&amp;','&'))) {
+    if (notFound || /^(?:https?:|mailto:|data:|\/\/)/i.test(ref)) continue;
     internalLinks++;
-    if (!existsSync(localTarget(page,ref))) fail(`${relative}: missing local target ${ref}`);
+    await checkLocalReference(page,ref,relative);
   }
   if (!source.includes(`http-equiv="Content-Security-Policy" content="${notFound ? securityCsp404 : securityCsp}"`)) fail(`${relative}: missing or weakened CSP`);
   if (!source.includes('name="referrer" content="strict-origin-when-cross-origin"')) fail(`${relative}: missing referrer policy`);
@@ -233,5 +214,12 @@ for (const [index,work] of works.entries()) {
 for (const update of updates) if (update.link && !validRoute(update.link)) fail('updates: link must stay within the site');
 const contact = await read('contact/index.html');
 if (!contact.includes('action="https://formspree.io/f/meajewlw"')) fail('contact: unexpected form endpoint');
-if (errors.length) { console.error('Validation failed:'); errors.forEach(error => console.error(`- ${error}`)); process.exit(1); }
-console.log(`Validated ${pages.length} pages, ${works.length} top-level works, ${updates.length} update, ${commentaryCount} commentary references, and ${internalLinks} internal links.`);
+for (const [i,update] of updates.entries()) if (update.link) await checkLocalReference(path.join(root,'index.html'),update.link,`updates[${i}].link`);
+return {errors, summary:`Validated ${pages.length} pages, ${works.length} top-level works, ${updates.length} updates, ${commentaryCount} commentary references, and ${internalLinks} internal links.`};
+}
+
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  const result = await validateSite();
+  if (result.errors.length) { console.error('Validation failed:'); result.errors.forEach(error => console.error(`- ${error}`)); process.exitCode = 1; }
+  else console.log(result.summary);
+}

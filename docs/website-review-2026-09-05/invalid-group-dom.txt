@@ -1,0 +1,24 @@
+- banner:
+  - link "Skip to content":
+    - /url: "#main"
+  - link "YUNO / MUSIC & WORKS":
+    - /url: http://127.0.0.1:8765/
+  - button "Menu":
+    - generic: Menu
+  - generic "Language":
+    - button "日本語"
+    - button "EN" [pressed]
+- main:
+  - generic: ORIGINAL WORKS
+  - heading "Original Works" [level=1]
+  - region:
+    - link "← Choose another way to browse":
+      - /url: ./
+    - heading [level=2]
+    - paragraph
+    - paragraph
+    - paragraph: Content could not be loaded.
+- contentinfo:
+  - text: © YUNO / MUSIC & WORKS
+  - link "Updates":
+    - /url: http://127.0.0.1:8765/updates/

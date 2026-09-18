@@ -1264,7 +1264,10 @@
         },
         "other_videos": [],
         "scores": [],
-        "commentary": null
+        "commentary": null,
+        "featured": true,
+        "featured_intro_ja": "第３回おとつくらぼの演奏会で初演された歌曲集からの１曲。色彩的な和声、詩に寄り添ったメロディになっています",
+        "featured_intro_en": "One song from the song cycle premiered at the third Ototsuku Lab concert. It features colorful harmony and a melody shaped closely around the poem."
       },
       {
         "id": "portrait-sketch",

@@ -11,6 +11,10 @@ body.page-leaving{opacity:0;transition-duration:.24s}
 a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:3px}
 a:hover{opacity:.72}
 a:focus-visible,button:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.load-status:not([hidden]){margin-bottom:2rem;padding:1rem;border:1px solid var(--rule);border-left:3px solid var(--accent)}
+.load-status p{margin:0 0 1rem}
+.load-status button{min-height:44px;padding:.5rem 1rem;border:1px solid var(--accent);border-radius:3px;background:var(--bg);color:var(--accent);font:inherit;cursor:pointer}
+.video-fallback{margin:.75rem 0 0}
 .skip-link{position:absolute;left:1rem;top:-5rem;background:var(--text);color:var(--bg);padding:.5rem .75rem;z-index:5}
 .skip-link:focus{top:1rem}
 .site-header,.site-footer,.shell{max-width:1080px;margin:auto;padding-left:1.5rem;padding-right:1.5rem}
@@ -53,6 +57,11 @@ a:focus-visible,button:focus-visible,select:focus-visible{outline:3px solid var(
 .intro-grid .entry-link:hover:after{background:var(--accent);color:var(--bg);transform:translateY(-50%) translateX(.15rem)}
 .intro-grid .entry-link:active{transform:translateY(-.05rem)}
 .intro-grid .entry-link strong{font-size:clamp(1.5rem,2.7vw,2rem)}
+.featured-works{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2rem}
+.featured-work{min-width:0;padding:1.4rem;border:1px solid var(--rule);border-top:3px solid var(--accent);background:#fffdf8}
+.featured-work h3{font:clamp(1.35rem,2.4vw,1.8rem)/1.25 var(--serif);margin:0}
+.featured-intro{margin:.85rem 0 0;line-height:1.8}
+.featured-work .video-wrap{max-width:none}
 .text-link{font-weight:600}
 .updates{border-top:1px solid var(--rule)}
 .update{display:grid;grid-template-columns:7.5rem 1fr;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--rule)}
@@ -212,6 +221,7 @@ select{max-width:100%;background:var(--bg);border:1px solid var(--text);border-r
   .hero{margin-bottom:3rem}
   .hero-image{height:17rem}
   .intro-grid{grid-template-columns:1fr;gap:2.5rem}
+  .featured-works{grid-template-columns:1fr}
   .work-heading{display:block}
   .update{grid-template-columns:1fr;gap:0}
   .update time{font-size:.85rem}

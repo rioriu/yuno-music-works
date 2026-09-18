@@ -1,13 +1,29 @@
-const script = document.querySelector('script[src$="assets/js/app.js"]');
+const script = document.querySelector('script[src*="assets/js/app.js"]');
 const ROOT = new URL('../../', script.src);
 const DATA = new URL('data/', ROOT);
-const state = {lang: localStorage.getItem('yuno-language') === 'en' ? 'en' : 'ja'};
+function readLanguage() {
+  const language = new URLSearchParams(location.search).get('lang');
+  if (['ja','en'].includes(language)) return language;
+  try { return localStorage.getItem('yuno-language') === 'en' ? 'en' : 'ja'; }
+  catch { return 'ja'; }
+}
+function saveLanguage(language) {
+  try { localStorage.setItem('yuno-language',language); } catch { /* Storage is optional. */ }
+}
+function changeLanguage(language) {
+  saveLanguage(language);
+  const next = new URL(location.href); next.searchParams.set('lang',language);
+  if (reducedMotion.matches) { location.href = next.href; return; }
+  document.body.classList.add('page-leaving');
+  window.setTimeout(() => { location.href = next.href; },260);
+}
+const state = {lang: readLanguage()};
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 let revealObserver = null;
 
 function revealElements(root = document) {
   if (!revealObserver || reducedMotion.matches) return;
-  const selector = '.page-heading,.hero>*:not(.hero-image),.hero-image,.intro-grid .entry-link,.section>h2,.update,.arrangement-discovery-group,.arrangement-discovery-link,.arrangement-results-heading,.work,.arrangement-row,.year-group,.prose>p,.prose>h2,.prose>ul,.contact-form,.commentary-body>*';
+  const selector = '.page-heading,.hero>*:not(.hero-image),.hero-image,.intro-grid .entry-link,.section>h2,.featured-work,.update,.arrangement-discovery-group,.arrangement-discovery-link,.arrangement-results-heading,.work,.arrangement-row,.year-group,.prose>p,.prose>h2,.prose>ul,.contact-form,.commentary-body>*';
   root.querySelectorAll(selector).forEach((element,index) => {
     if (element.dataset.motionObserved) return;
     element.dataset.motionObserved = 'true';
@@ -78,11 +94,11 @@ const PAGE_META = {
   contact: {ja:{title:'お問い合わせ — YUNO',description:'YUNOへのお問い合わせフォームと公式公開チャンネルの案内です。'},en:{title:'Contact — YUNO',description:'Contact YUNO through the inquiry form or official public channels.'}},
   updates: {ja:{title:'更新情報 — YUNO',description:'YUNO / MUSIC & WORKSの作品公開情報とサイト更新履歴です。'},en:{title:'Updates — YUNO',description:'Publications and site updates for YUNO / MUSIC & WORKS.'}},
 };
-const ENSEMBLES = {piano:{ja:'ピアノ',en:'Piano'},solo:{ja:'独奏',en:'Solo'},'solo-piano':{ja:'独奏＋ピアノ',en:'Solo & Piano'},strings:{ja:'弦楽アンサンブル',en:'String Ensemble'},woodwinds:{ja:'木管アンサンブル',en:'Woodwind Ensemble'},brass:{ja:'金管アンサンブル',en:'Brass Ensemble'},percussion:{ja:'打楽器アンサンブル',en:'Percussion Ensemble'},mixed:{ja:'混成アンサンブル',en:'Mixed Ensemble'},orchestra:{ja:'オーケストラ',en:'Orchestra'},wind:{ja:'吹奏楽',en:'Wind Ensemble'},'art-song':{ja:'歌曲',en:'Art Song'},pops:{ja:'POPS',en:'POPS'},choral:{ja:'合唱',en:'Choral Works'}};
+const ENSEMBLES = {piano:{ja:'ピアノ',en:'Piano'},solo:{ja:'独奏',en:'Solo'},'solo-piano':{ja:'ピアノを含む二重奏',en:'Duo Including Piano'},strings:{ja:'弦楽アンサンブル',en:'String Ensemble'},woodwinds:{ja:'木管アンサンブル',en:'Woodwind Ensemble'},brass:{ja:'金管アンサンブル',en:'Brass Ensemble'},percussion:{ja:'打楽器アンサンブル',en:'Percussion Ensemble'},mixed:{ja:'混成アンサンブル',en:'Mixed Ensemble'},orchestra:{ja:'オーケストラ',en:'Orchestra'},wind:{ja:'吹奏楽',en:'Wind Ensemble'},'art-song':{ja:'歌曲',en:'Art Song'},pops:{ja:'POPS',en:'POPS'},choral:{ja:'合唱',en:'Choral Works'}};
 const ORIGINAL_ENSEMBLES = Object.keys(ENSEMBLES);
 const ORIGINAL_GROUPS = {
   solo:{ja:'ソロ（ピアノを含む）',en:'Solo (including piano)',ensembles:['piano','solo']},
-  'solo-piano':{ja:'独奏＋ピアノ',en:'Solo & Piano',ensembles:['solo-piano']},
+  'solo-piano':{ja:'ピアノを含む二重奏',en:'Duo Including Piano',ensembles:['solo-piano']},
   chamber:{ja:'室内楽・アンサンブル',en:'Chamber Music & Ensembles',ensembles:['strings','woodwinds','brass','percussion','mixed']},
   large:{ja:'吹奏楽・オーケストラ',en:'Wind Ensemble & Orchestra',ensembles:['wind','orchestra']},
   vocal:{ja:'声楽・合唱',en:'Vocal & Choral',ensembles:['art-song','choral']},
@@ -107,7 +123,7 @@ const ARRANGEMENT_ENSEMBLES = ['solo','duo','ensemble'];
 const ARRANGEMENT_SORTS = ['newest','oldest','title'];
 const ORIGINAL_SORTS = ['newest','oldest','title'];
 const t = key => C[state.lang][key] || key;
-const rootLink = path => new URL(path, ROOT).href;
+const rootLink = path => { const url = new URL(path, ROOT); if (state.lang === 'en') url.searchParams.set('lang','en'); return url.href; };
 const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 const TRUSTED_EXTERNAL_ORIGINS = new Set(['https://www.youtube.com','https://www.nicovideo.jp','https://soundcloud.com','https://www.soundcloud.com','https://store.piascore.com','https://www.mymusic5.com']);
 const trustedExternalUrl = value => {
@@ -141,6 +157,12 @@ function renderPageMeta() {
 function localizeStatic() {
   document.documentElement.lang = state.lang;
   document.querySelectorAll('[data-ja][data-en]').forEach(element => { element.textContent = element.dataset[state.lang]; });
+  document.querySelectorAll('a[href]').forEach(link => {
+    const url = new URL(link.href,location.href);
+    if (url.origin === ROOT.origin && url.pathname.startsWith(ROOT.pathname) && state.lang === 'en') {
+      url.searchParams.set('lang','en'); link.href = url.href;
+    }
+  });
 }
 function renderShell() {
   const page = document.body.dataset.page;
@@ -160,14 +182,15 @@ function renderShell() {
   mobileNav.addEventListener('change',() => setNav(false));
   document.addEventListener('keydown',event => { if (event.key === 'Escape' && mobileNav.matches) { setNav(false); navToggle.focus(); } });
   document.addEventListener('click',event => { if (mobileNav.matches && navToggle.getAttribute('aria-expanded') === 'true' && !event.target.closest('.header-actions')) setNav(false); });
-  document.querySelectorAll('[data-lang]').forEach(button => { button.onclick = () => {
-    localStorage.setItem('yuno-language',button.dataset.lang);
-    if (reducedMotion.matches) { location.reload(); return; }
-    document.body.classList.add('page-leaving');
-    window.setTimeout(() => location.reload(),260);
-  }; });
+  document.querySelectorAll('[data-lang]').forEach(button => { button.onclick = () => changeLanguage(button.dataset.lang); });
 }
-async function getJson(name) { const response = await fetch(new URL(name, DATA)); if (!response.ok) throw Error(name); return response.json(); }
+async function getJson(name) {
+  const response = await fetch(new URL(name, DATA),{cache:'no-cache'});
+  if (!response.ok) throw Error(`${name}: HTTP ${response.status}`);
+  const data = await response.json();
+  if (!Array.isArray(data)) throw Error(`${name}: expected an array`);
+  return data;
+}
 
 function buildWorkIndex(works) {
   const byId = new Map(), bySlug = new Map();
@@ -184,6 +207,12 @@ function originalGroupValue(work) { return work.category === 'pops' ? 'pops' : o
 function catalogHref(work) { return rootLink(`originals/?group=${encodeURIComponent(originalGroupValue(work))}`); }
 function commentaryHref(work) { return rootLink(`${String(work.commentary).replace(/^\/+|\/+$/g,'')}/?work=${encodeURIComponent(work.id)}`); }
 
+function featuredHref(work, parent = null) {
+  if (parent) return detailHref(parent,work.slug);
+  const base = work.type === 'arrangement' ? rootLink('arrangements/') : catalogHref(work);
+  return `${base}#${encodeURIComponent(work.slug)}`;
+}
+
 function videoSource(work) {
   const video = work.video || {};
   if (video.youtube) return `https://www.youtube-nocookie.com/embed/${encodeURIComponent(video.youtube)}?rel=0`;
@@ -195,9 +224,14 @@ function videoSource(work) {
   return null;
 }
 function videoMarkup(work) {
-  const src = videoSource(work), fallback = trustedExternalUrl(work.video?.fallback_url), title = `${label(work,'title')} — ${t('videoTitle')}`;
+  const video = work.video || {};
+  const fallback = trustedExternalUrl(video.fallback_url)
+    || (video.youtube ? `https://www.youtube.com/watch?v=${encodeURIComponent(video.youtube)}` : null)
+    || (video.niconico ? `https://www.nicovideo.jp/watch/${encodeURIComponent(video.niconico)}` : null)
+    || trustedExternalUrl(video.soundcloud);
+  const src = videoSource(work), title = `${label(work,'title')} — ${t('videoTitle')}`;
   if (!src) return `<p class="no-video">${t('noVideo')}${fallback ? ` <a target="_blank" rel="noopener" href="${esc(fallback)}">${t('fallbackVideo')}</a>` : ''}</p>`;
-  return `<div class="video-wrap" data-video-src="${esc(src)}" data-video-title="${esc(title)}"><p class="video-pending">${t('loadingVideo')}</p><noscript>${fallback ? `<a target="_blank" rel="noopener" href="${esc(fallback)}">${t('fallbackVideo')}</a>` : ''}</noscript></div>`;
+  return `<div class="video-wrap" data-video-src="${esc(src)}" data-video-title="${esc(title)}"><p class="video-pending">${t('loadingVideo')}</p></div>${fallback ? `<p class="video-fallback"><a target="_blank" rel="noopener" href="${esc(fallback)}">${t('fallbackVideo')}</a></p>` : ''}`;
 }
 function mountVideo(element) {
   if (!element || element.dataset.loaded) return;
@@ -303,23 +337,24 @@ function normalizeOriginalListUrl(ensemble, sort) {
 function originalCountText(count) { return state.lang === 'ja' ? `${count}${t('works')}` : `${count} ${t('works')}`; }
 
 function originalMatchesGroup(work, value) {
-  const group = ORIGINAL_GROUPS[value];
+  const group = Object.hasOwn(ORIGINAL_GROUPS,value) ? ORIGINAL_GROUPS[value] : null;
   if (!group) return false;
   if (group.category) return work.category === group.category;
   return group.ensembles.includes(work.ensemble);
 }
 function originalMatchesDuration(work, value) {
-  const range = ORIGINAL_DURATIONS[value];
+  const range = Object.hasOwn(ORIGINAL_DURATIONS,value) ? ORIGINAL_DURATIONS[value] : null;
   return Boolean(range && work.duration_seconds >= range.min && work.duration_seconds < range.max);
 }
 function originalMatchesInstrument(work, value) {
-  const group = ORIGINAL_INSTRUMENTS[value];
+  const group = Object.hasOwn(ORIGINAL_INSTRUMENTS,value) ? ORIGINAL_INSTRUMENTS[value] : null;
   if (!group || work.category === 'pops') return false;
   return work.instruments.some(instrument => group.instruments.includes(instrument));
 }
 function originalBrowseHref(key, value) {
   const params = new URLSearchParams(); params.set(key,value);
-  return `${rootLink('originals/')}?${params}`;
+  if (state.lang === 'en') params.set('lang','en');
+  return `${new URL('originals/',ROOT).href}?${params}`;
 }
 function originalBrowseLink(text, count, key, value) {
   return `<a class="arrangement-discovery-link" href="${esc(originalBrowseHref(key,value))}"><span>${esc(text)}</span><strong>${count}</strong><span class="arrangement-discovery-arrow" aria-hidden="true">→</span></a>`;
@@ -363,22 +398,21 @@ async function renderOriginalDiscoveryCatalog(works) {
   const output = document.querySelector('[data-work-list]'); if (!output) return;
   const discovery = document.querySelector('[data-original-discovery]'), results = document.querySelector('[data-original-results]'), all = works.filter(work => work.published && work.type === 'original');
   renderOriginalDiscovery(all);
-  const params = new URLSearchParams(location.search), legacyEnsemble = params.get('ensemble');
+  const params = new URLSearchParams(location.search), legacyEnsemble = ORIGINAL_ENSEMBLES.includes(params.get('ensemble')) ? params.get('ensemble') : '';
   let selectedGroup = params.get('group') || '', selectedDuration = params.get('duration') || '', selectedInstrument = params.get('instrument') || '', showAll = params.get('view') === 'all';
-  if (!selectedGroup && ORIGINAL_ENSEMBLES.includes(legacyEnsemble)) selectedGroup = originalGroupFromEnsemble(legacyEnsemble);
-  if (!ORIGINAL_GROUPS[selectedGroup]) selectedGroup = '';
-  if (!ORIGINAL_DURATIONS[selectedDuration]) selectedDuration = '';
-  if (!ORIGINAL_INSTRUMENTS[selectedInstrument]) selectedInstrument = '';
+  if (!Object.hasOwn(ORIGINAL_GROUPS,selectedGroup)) selectedGroup = '';
+  if (!Object.hasOwn(ORIGINAL_DURATIONS,selectedDuration)) selectedDuration = '';
+  if (!Object.hasOwn(ORIGINAL_INSTRUMENTS,selectedInstrument)) selectedInstrument = '';
   if (params.has('view') && !showAll) params.delete('view');
   const index = buildWorkIndex(all), hashSlug = readHash(), hashHit = index.bySlug.get(hashSlug);
   if (hashHit?.parent) { location.replace(detailHref(hashHit.parent,hashHit.work.slug)); return; }
   const hashWork = hashHit && !hashHit.parent ? hashHit.work : null;
   if (hashSlug && !hashWork) clearLocationHash();
-  const showResults = showAll || Boolean(selectedGroup || selectedDuration || selectedInstrument || hashWork);
-  if (selectedGroup || selectedDuration || selectedInstrument) showAll = false;
+  const showResults = !all.length || showAll || Boolean(selectedGroup || selectedDuration || selectedInstrument || legacyEnsemble || hashWork);
+  if (selectedGroup || selectedDuration || selectedInstrument || legacyEnsemble) showAll = false;
   const normalize = () => {
     const next = new URLSearchParams(location.search);
-    next.delete('ensemble'); next.delete('category'); next.delete('sort');
+    legacyEnsemble ? next.set('ensemble',legacyEnsemble) : next.delete('ensemble'); next.delete('category'); next.delete('sort');
     selectedGroup ? next.set('group',selectedGroup) : next.delete('group');
     selectedDuration ? next.set('duration',selectedDuration) : next.delete('duration');
     selectedInstrument ? next.set('instrument',selectedInstrument) : next.delete('instrument');
@@ -423,7 +457,7 @@ async function renderOriginalDiscoveryCatalog(works) {
   };
   const render = () => {
     const priorSlug = expandedSlug || readHash();
-    const items = all.filter(work => (!selectedGroup || originalMatchesGroup(work,selectedGroup)) && (!selectedDuration || originalMatchesDuration(work,selectedDuration)) && (!selectedInstrument || originalMatchesInstrument(work,selectedInstrument)));
+    const items = all.filter(work => (!legacyEnsemble || work.ensemble === legacyEnsemble) && (!selectedGroup || originalMatchesGroup(work,selectedGroup)) && (!selectedDuration || originalMatchesDuration(work,selectedDuration)) && (!selectedInstrument || originalMatchesInstrument(work,selectedInstrument)));
     items.sort((a,b) => {
       const yearDifference = (Number.isInteger(b.composition_year) ? b.composition_year : -Infinity) - (Number.isInteger(a.composition_year) ? a.composition_year : -Infinity);
       if (yearDifference) return yearDifference;
@@ -433,7 +467,9 @@ async function renderOriginalDiscoveryCatalog(works) {
     output.innerHTML = items.length ? items.map(originalRow).join('') : `<p class="empty-state">${t('noWorks')}</p>`;
     revealElements(output);
     const count = document.querySelector('[data-original-count]'), status = document.querySelector('[data-original-status]'), title = document.querySelector('[data-original-results-title]');
-    if (title) title.textContent = originalSelectionLabel(selectedGroup,selectedDuration,selectedInstrument);
+    if (title) title.textContent = legacyEnsemble && !selectedGroup && !selectedDuration && !selectedInstrument
+      ? ENSEMBLES[legacyEnsemble][state.lang]
+      : [legacyEnsemble ? ENSEMBLES[legacyEnsemble][state.lang] : '',originalSelectionLabel(selectedGroup,selectedDuration,selectedInstrument)].filter(Boolean).join(' / ');
     if (count) count.textContent = originalCountText(items.length);
     if (status) status.textContent = state.lang === 'ja' ? `${items.length}件のオリジナル作品を表示` : `${t('showing')} ${items.length} original work${items.length === 1 ? '' : 's'}`;
     output.querySelectorAll('[data-original-toggle]').forEach(button => button.addEventListener('click', () => {
@@ -455,7 +491,8 @@ function arrangementCreatorCounts(works) {
 const ARRANGEMENT_FEATURED_CREATORS = ['キリンジ','久石 譲'];
 function arrangementBrowseHref(key, value) {
   const params = new URLSearchParams(); params.set(key,value);
-  return `${rootLink('arrangements/')}?${params}`;
+  if (state.lang === 'en') params.set('lang','en');
+  return `${new URL('arrangements/',ROOT).href}?${params}`;
 }
 function arrangementBrowseLink(text, count, key, value) {
   return `<a class="arrangement-discovery-link" href="${esc(arrangementBrowseHref(key,value))}"><span>${esc(text)}</span><strong>${count}</strong><span class="arrangement-discovery-arrow" aria-hidden="true">→</span></a>`;
@@ -514,7 +551,7 @@ async function renderArrangementCatalog(works) {
   if (params.has('view') && !showAll) params.delete('view');
   const hashSlug = readHash(), hashWork = all.find(work => work.slug === hashSlug);
   if (hashSlug && !hashWork) clearLocationHash();
-  const showResults = showAll || Boolean(selectedCreator || selectedGenre || selectedEnsemble || selectedSort !== 'newest' || hashWork);
+  const showResults = !all.length || showAll || Boolean(selectedCreator || selectedGenre || selectedEnsemble || selectedSort !== 'newest' || hashWork);
   if (selectedCreator || selectedGenre || selectedEnsemble) showAll = false;
   const normalize = () => { const next = new URLSearchParams(location.search); next.delete('category'); selectedCreator ? next.set('creator',selectedCreator) : next.delete('creator'); selectedGenre ? next.set('genre',selectedGenre) : next.delete('genre'); selectedEnsemble ? next.set('ensemble',selectedEnsemble) : next.delete('ensemble'); selectedSort !== 'newest' ? next.set('sort',selectedSort) : next.delete('sort'); showAll ? next.set('view','all') : next.delete('view'); replaceUrl(next); };
   normalize();
@@ -537,7 +574,7 @@ async function renderArrangementCatalog(works) {
   const render = () => {
     const priorSlug = expandedSlug || readHash();
     const items = all.filter(work => (!selectedCreator || (selectedCreator === 'other' ? !ARRANGEMENT_FEATURED_CREATORS.includes(arrangementCreator(work)) : arrangementCreator(work) === selectedCreator)) && (!selectedGenre || work.category === selectedGenre) && (!selectedEnsemble || work.ensemble === selectedEnsemble));
-    items.sort((a,b) => { if (selectedSort === 'title') return label(a,'title').localeCompare(label(b,'title'),state.lang); return selectedSort === 'oldest' ? a.published_date.localeCompare(b.published_date) : b.published_date.localeCompare(a.published_date); });
+    items.sort((a,b) => { if (selectedSort === 'title') return label(a,'title').localeCompare(label(b,'title'),state.lang); if (!a.published_date && !b.published_date) return 0; if (!a.published_date) return 1; if (!b.published_date) return -1; return selectedSort === 'oldest' ? a.published_date.localeCompare(b.published_date) : b.published_date.localeCompare(a.published_date); });
     output.innerHTML = items.length ? items.map(arrangementRow).join('') : `<p class="empty-state">${t('noWorks')}</p>`;
     revealElements(output);
     const count = document.querySelector('[data-arrangement-count]'), status = document.querySelector('[data-arrangement-status]'), title = document.querySelector('[data-arrangement-results-title]');
@@ -590,8 +627,24 @@ async function renderWorkDetail() {
   lazyVideos(); requestAnimationFrame(focusHash);
 }
 async function renderUpdates() {
-  const output = document.querySelector('[data-updates]'); if (!output) return; let updates = await getJson('updates.json'); const limit = Number(output.dataset.limit || 0); if (limit) updates = updates.slice(0,limit);
-  output.innerHTML = updates.map(update => `<article class="update"><time datetime="${esc(update.date)}">${new Intl.DateTimeFormat(state.lang === 'ja' ? 'ja-JP' : 'en-GB',{year:'numeric',month:'short',day:'numeric',timeZone:'UTC'}).format(new Date(`${update.date}T00:00:00Z`))}</time><p>${update.link ? `<a href="${rootLink(update.link)}">${esc(label(update,'text'))}</a>` : esc(label(update,'text'))}</p></article>`).join('');
+  const output = document.querySelector('[data-updates]'); if (!output) return; let updates = (await getJson('updates.json')).slice().sort((a,b) => b.date.localeCompare(a.date)); const limit = Number(output.dataset.limit || 0); if (limit) updates = updates.slice(0,limit);
+  output.innerHTML = updates.length ? updates.map(update => `<article class="update"><time datetime="${esc(update.date)}">${new Intl.DateTimeFormat(state.lang === 'ja' ? 'ja-JP' : 'en-GB',{year:'numeric',month:'short',day:'numeric',timeZone:'UTC'}).format(new Date(`${update.date}T00:00:00Z`))}</time><p>${update.link ? `<a href="${rootLink(update.link)}">${esc(label(update,'text'))}</a>` : esc(label(update,'text'))}</p></article>`).join('') : `<p class="empty-state">${state.lang === 'ja' ? '更新情報はありません。' : 'No updates yet.'}</p>`;
+}
+function featuredCard(work, parent = null) {
+  const introduction = label(work,'featured_intro');
+  return `<article class="featured-work"><h3>${esc(label(work,'title'))}</h3>${introduction ? `<p class="featured-intro">${esc(introduction)}</p>` : ''}${videoMarkup(work)}<div class="work-actions"><a class="internal-action" href="${featuredHref(work,parent)}">${t('viewWork')}</a></div></article>`;
+}
+async function renderFeaturedWorks() {
+  const output = document.querySelector('[data-featured-works]'); if (!output) return;
+  const works = await getJson('works.json'), featured = [];
+  works.filter(work => work.published).forEach(work => {
+    if (work.featured) featured.push({work,parent:null});
+    if (isMultipart(work)) work.parts.filter(part => part.featured).forEach(part => featured.push({work:part,parent:work}));
+  });
+  const section = document.querySelector('[data-featured-section]');
+  if (section) section.hidden = featured.length === 0;
+  output.innerHTML = featured.map(item => featuredCard(item.work,item.parent)).join('');
+  lazyVideos();
 }
 async function renderCommentary() {
   const output = document.querySelector('[data-commentary-page]'); if (!output) return;
@@ -600,9 +653,43 @@ async function renderCommentary() {
   const work = hit.work, back = hit.parent ? detailHref(hit.parent,work.slug) : catalogHref(work), paragraphs = (work[`commentary_${state.lang}`] || work.commentary_ja).split(/\n\n+/).map(text => `<p>${esc(text)}</p>`).join('');
   document.title = `${label(work,'title')} — YUNO`; setDescription(state.lang === 'ja' ? `${label(work,'title')}の作品解説。` : `Commentary for ${label(work,'title')}.`); output.innerHTML = `<div class="eyebrow">${t('commentary')}</div><h1>${esc(label(work,'title'))}</h1><p class="commentary-lead">${esc(instrumentationShort(hit.parent || work))}</p><div class="commentary-body">${paragraphs}</div><div class="commentary-links"><a href="${back}">${t('backToWorks')}</a></div>`;
 }
+// Each region owns its status, so one failed request cannot hide another region's content.
+async function renderRegion(selector, render, focusStatus = false) {
+  const output = document.querySelector(selector); if (!output) return;
+  const status = document.querySelector(`[data-load-status="${selector}"]`);
+  if (status) {
+    status.hidden = false;
+    status.textContent = state.lang === 'ja' ? '読み込んでいます…' : 'Loading…';
+  }
+  output.setAttribute('aria-busy','true');
+  try {
+    await render();
+    if (status) { status.textContent = ''; status.hidden = true; }
+    if (focusStatus) {
+      const target = output.closest('[data-original-results],[data-arrangement-results]')?.hidden
+        ? document.querySelector('[data-original-discovery],[data-arrangement-discovery]') : output;
+      target.setAttribute('tabindex','-1'); target.focus();
+    }
+  } catch (error) {
+    console.error(error);
+    if (status) {
+      status.hidden = false;
+      status.innerHTML = `<p>${state.lang === 'ja' ? 'コンテンツを読み込めませんでした。通信環境を確認して再試行してください。' : 'Content could not be loaded. Check your connection and try again.'}</p><button type="button">${state.lang === 'ja' ? '再試行' : 'Try again'}</button>`;
+      status.querySelector('button').addEventListener('click',() => renderRegion(selector,render,true));
+      if (focusStatus) status.querySelector('button').focus();
+    }
+  } finally { output.setAttribute('aria-busy','false'); }
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
   renderShell(); localizeStatic(); renderPageMeta();
-  try { await Promise.all([renderCatalog(),renderWorkDetail(),renderUpdates(),renderCommentary()]); }
-  catch (error) { console.error(error); document.querySelectorAll('[data-work-list],[data-work-detail],[data-updates],[data-commentary-page]').forEach(element => { if (!element.innerHTML) element.innerHTML = `<p class="empty-state">${state.lang === 'ja' ? 'コンテンツを読み込めませんでした。' : 'Content could not be loaded.'}</p>`; }); }
-  finally { setupMotion(); }
+  setupMotion();
+  await Promise.all([
+    renderRegion('[data-work-list]',renderCatalog),
+    renderRegion('[data-work-detail]',renderWorkDetail),
+    renderRegion('[data-featured-works]',renderFeaturedWorks),
+    renderRegion('[data-updates]',renderUpdates),
+    renderRegion('[data-commentary-page]',renderCommentary),
+  ]);
+  revealElements();
 });

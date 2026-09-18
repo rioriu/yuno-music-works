@@ -1,0 +1,8 @@
+[
+  {
+    "level": "error",
+    "message": "TypeError: Cannot read properties of undefined (reading 'includes')\n    at originalMatchesGroup (http://127.0.0.1:8765/assets/js/app.js:309:26)\n    at http://127.0.0.1:8765/assets/js/app.js:426:57\n    at Array.filter (<anonymous>)\n    at render (http://127.0.0.1:8765/assets/js/app.js:426:23)\n    at renderOriginalDiscoveryCatalog (http://127.0.0.1:8765/assets/js/app.js:447:3)\n    at renderCatalog (http://127.0.0.1:8765/assets/js/app.js:557:71)\n    at async Promise.all (index 0)\n    at async HTMLDocument.<anonymous> (http://127.0.0.1:8765/assets/js/app.js:605:9)",
+    "timestamp": "2026-09-04T21:32:15.936Z",
+    "url": "http://127.0.0.1:8765/assets/js/app.js"
+  }
+]
