@@ -263,13 +263,16 @@ function credits(work) {
   return [['artist_name','artist'],['composer_name','composer'],['lyricist_name','lyricist']].filter(([field]) => work[field]).map(([field,key]) => `${t(key)}: ${esc(work[field])}`).join(' · ');
 }
 function arrangementCredits(work) {
+  const artist = state.lang === 'en' ? work.artist_name_en || work.artist_name : work.artist_name;
+  const composer = state.lang === 'en' ? work.composer_name_en || work.composer_name : work.composer_name;
+  const lyricist = state.lang === 'en' ? work.lyricist_name_en || work.lyricist_name : work.lyricist_name;
   const parts = [];
-  if (work.artist_name && work.artist_name === work.composer_name) parts.push(`${t('composer')}: ${esc(work.composer_name)}`);
+  if (artist && artist === composer) parts.push(`${t('composer')}: ${esc(composer)}`);
   else {
-    if (work.artist_name) parts.push(`${t('artist')}: ${esc(work.artist_name)}`);
-    if (work.composer_name) parts.push(`${t('composer')}: ${esc(work.composer_name)}`);
+    if (artist) parts.push(`${t('artist')}: ${esc(artist)}`);
+    if (composer) parts.push(`${t('composer')}: ${esc(composer)}`);
   }
-  if (work.lyricist_name) parts.push(`${t('lyricist')}: ${esc(work.lyricist_name)}`);
+  if (lyricist) parts.push(`${t('lyricist')}: ${esc(lyricist)}`);
   return parts.join(' · ');
 }
 function recognitionMarkup(work) {
@@ -489,6 +492,11 @@ function arrangementCreatorCounts(works) {
   return [...counts.entries()].sort(([a,countA],[b,countB]) => countB - countA || a.localeCompare(b,state.lang === 'ja' ? 'ja-JP' : 'en',{sensitivity:'base'}));
 }
 const ARRANGEMENT_FEATURED_CREATORS = ['キリンジ','久石 譲'];
+function arrangementCreatorLabel(creator) {
+  if (creator === 'キリンジ' && state.lang === 'en') return 'KIRINJI';
+  if (creator === '久石 譲' && state.lang === 'en') return 'Joe Hisaishi';
+  return creator;
+}
 function arrangementBrowseHref(key, value) {
   const params = new URLSearchParams(); params.set(key,value);
   if (state.lang === 'en') params.set('lang','en');
@@ -501,8 +509,8 @@ function renderArrangementDiscovery(works) {
   const creatorMount = document.querySelector('[data-arrangement-creator-links]'), genreMount = document.querySelector('[data-arrangement-genre-links]'), ensembleMount = document.querySelector('[data-arrangement-ensemble-links]'), allMount = document.querySelector('[data-arrangement-all-link]');
   const creatorCount = creator => works.filter(work => arrangementCreator(work) === creator).length;
   const creatorLinks = [
-    ['キリンジ',creatorCount('キリンジ'),'キリンジ'],
-    [state.lang === 'ja' ? '久石 譲' : 'Joe Hisaishi',creatorCount('久石 譲'),'久石 譲'],
+    [arrangementCreatorLabel('キリンジ'),creatorCount('キリンジ'),'キリンジ'],
+    [arrangementCreatorLabel('久石 譲'),creatorCount('久石 譲'),'久石 譲'],
     [t('other'),works.filter(work => !ARRANGEMENT_FEATURED_CREATORS.includes(arrangementCreator(work))).length,'other'],
   ];
   if (creatorMount) creatorMount.innerHTML = creatorLinks.map(([text,count,value]) => arrangementBrowseLink(text,count,'creator',value)).join('');
@@ -519,7 +527,7 @@ function renderArrangementDiscovery(works) {
 }
 function arrangementSelectionLabel(creator, genre, ensemble) {
   const labels = [];
-  if (creator) labels.push(creator === 'other' ? t('other') : creator === '久石 譲' && state.lang === 'en' ? 'Joe Hisaishi' : creator);
+  if (creator) labels.push(creator === 'other' ? t('other') : arrangementCreatorLabel(creator));
   if (genre) labels.push(genre === 'pops' ? (state.lang === 'ja' ? 'ポップス' : 'POPS') : t('filmTv'));
   if (ensemble) labels.push({solo:t('pianoSolo'),duo:t('pianoFourHands'),ensemble:t('chamberEnsemble')}[ensemble]);
   if (!labels.length) return t('allArrangements');
