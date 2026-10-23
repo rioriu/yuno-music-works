@@ -1025,8 +1025,8 @@
       }
     ],
     "commentary": "commentary",
-    "commentary_ja": "第33回TIAA全日本作曲家コンクール審査員賞受賞作品。すべての音が前後いずれかの音と長9度または短9度の関係を持つこと、同時に2音以上を打鍵しないこと、右手だけで演奏できること、という3つの制約のもとに作曲されている。和音はアルペジオ、装飾音、サステインペダルの余韻によってのみ示される。",
-    "commentary_en": "A Jury Prize winner at the 33rd TIAA All Japan Composers Competition. The work follows three constraints: every note forms a major or minor ninth with at least one adjacent note; no two notes are struck simultaneously; and the piece is playable by the right hand alone. Harmony is implied only through arpeggios, ornaments, and pedal resonance.",
+    "commentary_ja": "2018~2020年頃にかけて意識的に独奏曲の創作を多く試みていた時期があり、その時の作品のうちの一つ。通常のピアノ曲では、他の管・弦の独奏曲に比べてあまりに自由すぎると感じたため、片手ピアノのために書こうと考えた。左手はすでに多くの先例があるので、右手にしようと考えた。\n\n作曲にあたり、以下の3点の制約を設けている。\n\n○右手だけで演奏可能\n\n広い跳躍を片手で奏することにより生まれる緊張感を意識している。ただしあまり難度が上がりすぎないように。\n\n○すべての音は、前後に鳴った音の少なくともいずれかと長９度ないし短９度（記譜上増８度も含む）の音程関係を持つ\n\n題名の由来となる制約。\n\n○同時に２つ以上の音を打鍵しない\n\nすべての和音としての音響はアルペジオおよび装飾音、そしてサステインペダルによる余韻でのみ表現される。同時に鳴ってしまうと前述の9度音程の制約の判定が難しくなるため、必然的に付与することになった制約とも言える。",
+    "commentary_en": "From around 2018 to 2020 I deliberately wrote a large number of solo pieces, and this is one of them. An ordinary piano piece felt far too unconstrained compared with solo works for wind or string instruments, so I decided to write for one-handed piano. Since there are already many precedents for the left hand, I chose the right.\n\nThe piece is written under three constraints.\n\n- Playable by the right hand alone\n\nI wanted the tension that comes from playing wide leaps with a single hand, while keeping the difficulty from climbing too high.\n\n- Every note forms a major or minor ninth (including a notated augmented octave) with at least one of the notes sounded immediately before or after it\n\nThis is the constraint that gives the piece its title.\n\n- No two notes are struck at the same time\n\nAll chordal sonority is expressed only through arpeggios, ornaments, and the resonance of the sustain pedal. Because simultaneous notes would make it hard to judge the ninth constraint above, this rule followed almost as a matter of course.",
     "commentary_source": "https://www.youtube.com/watch?v=pN967FyL5OM",
     "tags": [
       "piano"
@@ -1640,8 +1640,8 @@
       }
     ],
     "commentary": "commentary",
-    "commentary_ja": "「和」と「色彩」をテーマに、和歌に詠まれた色という二つの要素を結び付けた作品。「朱華（はねず）」は黄色がかった淡い赤色で、褪色しやすい染色だったことから『万葉集』では移ろいやすい心に重ねて詠まれた。物憂げで神秘的な前半と、拍節感の強い躍動的な後半の対照によって、心情の変化を描いている。",
-    "commentary_en": "Responding to themes of “Japan/harmony” and “color,” the work connects both ideas through a color named in waka poetry. Hanezu is a pale yellowish red whose fugitive dye became associated in the Man’yōshū with a changeable heart. The contrast between a wistful, mysterious opening and a rhythmically vivid second half suggests an emotional change.",
+    "commentary_ja": "第1回TrioIris作曲コンペティションへの応募のため作曲。2023年5月13日、20日にTrio Iris Concert Vol.3「和」-音楽×色彩-にて初演。\n\nコンサートのテーマとなっている「和」「色彩」にちなんだ曲をということで、和歌に詠まれた色という、2つのキーワードを含んだコンセプトにしようと考えた。\n\n「朱華」（はねず）とは、黄色がかった薄い赤色（淡いオレンジ色）である。朱華の染色は褪色しやすかったようで、『万葉集』には「移ろいやすい心」にかけて詠まれた歌がいくつかみられる。\n\n曲の構成としては、少し物憂げで神秘めいた前半と、拍節が強調され躍動的な後半で大きく曲調が異なる。これをどう捉えるかは聴き手に委ねられるが、何かしらの「心変わり」、すなわち心情の変化を描くようなイメージで作曲した。",
+    "commentary_en": "Written as an entry for the 1st Trio Iris Composition Competition, and premiered on May 13 and 20, 2023 at Trio Iris Concert Vol.3 “Wa” – Music × Color.\n\nSince the piece was to relate to the concert’s themes of “wa” (Japan/harmony) and “color,” I decided on a concept that would hold both keywords: a color sung of in waka poetry.\n\nHanezu (朱華) is a pale, yellowish red (a soft orange). The dye seems to have faded easily, and the Man’yōshū contains several poems that link it to “a heart that easily changes.”\n\nThe piece divides into two contrasting halves: a somewhat wistful, mysterious first half and a dynamic second half with a strongly marked pulse. How to hear this is left to the listener, but I composed it with the image of some kind of “change of heart” — a shift in feeling — in mind.",
     "commentary_source": "https://www.youtube.com/watch?v=wR_jO5B66cc",
     "tags": [
       "flute",
