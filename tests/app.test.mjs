@@ -136,6 +136,13 @@ test('latest update is selected by date and empty updates are visible',async () 
   await state.run('renderUpdates()');
   assert.match(output.innerHTML,/更新情報はありません/);
 });
+test('update text can link parts of the sentence',async () => {
+  const state = app(), output = element();
+  state.mounts.set('[data-updates]',output);
+  state.context.fetch = async () => ({ok:true,json:async () => [{date:'2026-01-01',text_ja:'[曲A](commentary/?work=a)と<b>の解説',link:null}]});
+  await state.run('renderUpdates()');
+  assert.match(output.innerHTML,/<a href="[^"]*commentary\/\?work=a">曲A<\/a>と&lt;b&gt;の解説/);
+});
 
 test('empty catalogs show a visible empty result instead of empty discovery',async () => {
   const state = catalog('https://local.test/originals/');

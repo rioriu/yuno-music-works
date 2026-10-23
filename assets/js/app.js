@@ -634,9 +634,14 @@ async function renderWorkDetail() {
   output.innerHTML = `<header class="page-heading"><div class="eyebrow">${state.lang === 'ja' ? 'オリジナル作品' : 'Original Works'}</div><h1>${esc(label(work,'title'))}</h1>${credits(work) ? `<p>${credits(work)}</p>` : ''}${recognitionMarkup(work)}${metadata(work,label(work,'parts_label'))}${compositionPeriod ? `<p>${esc(compositionPeriod)}</p>` : ''}</header><section class="parts">${work.parts.map(part => partMarkup(work,part)).join('')}</section><p class="catalog-back"><a href="${catalogHref(work)}">${t('backToWorks')}</a></p>`;
   lazyVideos(); requestAnimationFrame(focusHash);
 }
+function updateText(update) {
+  const text = label(update,'text'); if (update.link) return `<a href="${rootLink(update.link)}">${esc(text)}</a>`;
+  let html = '', last = 0; for (const match of text.matchAll(/\[([^\]]+)\]\(([^)\s]+)\)/g)) { html += `${esc(text.slice(last,match.index))}<a href="${rootLink(match[2])}">${esc(match[1])}</a>`; last = match.index + match[0].length; }
+  return html + esc(text.slice(last));
+}
 async function renderUpdates() {
   const output = document.querySelector('[data-updates]'); if (!output) return; let updates = (await getJson('updates.json')).slice().sort((a,b) => b.date.localeCompare(a.date)); const limit = Number(output.dataset.limit || 0); if (limit) updates = updates.slice(0,limit);
-  output.innerHTML = updates.length ? updates.map(update => `<article class="update"><time datetime="${esc(update.date)}">${new Intl.DateTimeFormat(state.lang === 'ja' ? 'ja-JP' : 'en-GB',{year:'numeric',month:'short',day:'numeric',timeZone:'UTC'}).format(new Date(`${update.date}T00:00:00Z`))}</time><p>${update.link ? `<a href="${rootLink(update.link)}">${esc(label(update,'text'))}</a>` : esc(label(update,'text'))}</p></article>`).join('') : `<p class="empty-state">${state.lang === 'ja' ? '更新情報はありません。' : 'No updates yet.'}</p>`;
+  output.innerHTML = updates.length ? updates.map(update => `<article class="update"><time datetime="${esc(update.date)}">${new Intl.DateTimeFormat(state.lang === 'ja' ? 'ja-JP' : 'en-GB',{year:'numeric',month:'short',day:'numeric',timeZone:'UTC'}).format(new Date(`${update.date}T00:00:00Z`))}</time><p>${updateText(update)}</p></article>`).join('') : `<p class="empty-state">${state.lang === 'ja' ? '更新情報はありません。' : 'No updates yet.'}</p>`;
 }
 function featuredCard(work, parent = null) {
   const introduction = label(work,'featured_intro');
